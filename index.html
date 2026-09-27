@@ -1,5 +1,4 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>
-<title>app do eduardo</title>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body><title>app do eduardo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap">
@@ -10,9 +9,9 @@
   --line:rgba(237,237,238,.09); --line2:rgba(237,237,238,.16);
   --text:#EDEDEE; --muted:#9A9FA8; --zero:#484D57;
   --weekend:#17191C; --today-bg:#FFFFFF; --today-fg:#1D1F23; --today-line:#FFFFFF;
-  --accent:#FF5917; --accent-soft:rgba(255,89,23,.14);
-  --pos:#A07A00; --neg1:#A34C4E; --neg2:#8B1E20; --on-color:#FFFFFF;
-  --c-entrada:#34C26B; --c-saida:#EF4B4F; --c-diario:#EC5DA8; --c-economia:#B7E22A; --c-cartao:#9C6BFF;
+  --accent:#A77EF0; --accent-soft:rgba(167,126,240,.16);
+  --pos:#2F62C8; --zero-s:#A07A00; --neg1:#A34C4E; --neg2:#8B1E20; --on-color:#FFFFFF;
+  --c-entrada:#4C8DFF; --c-saida:#EF4B4F; --c-diario:#EC5DA8; --c-economia:#38BDF8; --c-cartao:#9C6BFF;
   --shadow:0 18px 50px rgba(0,0,0,.45);
   --overlay:rgba(8,9,11,.6);
   --r-lg:20px; --r-md:14px; --r-sm:10px;
@@ -24,7 +23,7 @@
   --line:rgba(29,31,35,.09); --line2:rgba(29,31,35,.16);
   --text:#1D1F23; --muted:#686D76; --zero:#B8BCC4;
   --weekend:#E4E5E9; --today-bg:#1D1F23; --today-fg:#FFFFFF; --today-line:#1D1F23;
-  --c-economia:#7FA80E;
+  --c-economia:#0891B2; --c-entrada:#2F6FE0; --accent:#8B5CF6; --accent-soft:rgba(139,92,246,.12);
   --shadow:0 18px 50px rgba(29,31,35,.18);
   --overlay:rgba(29,31,35,.35);
 }
@@ -108,7 +107,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .cell.z{color:var(--zero)}
 .cell.z .ti{display:none}
 .c-saldo{min-width:110px;font-weight:600;cursor:pointer;color:var(--on-color)}
-.s-pos{background:var(--pos)} .s-neg1{background:var(--neg1)} .s-neg2{background:var(--neg2)}
+.s-pos{background:var(--pos)} .s-zero{background:var(--zero-s)} .s-neg1{background:var(--neg1)} .s-neg2{background:var(--neg2)}
 .c-saldo:hover{filter:brightness(1.12)}
 tr.blank .c-saldo{background:transparent}
 .mtable tfoot{position:sticky;bottom:0;z-index:2}
@@ -276,24 +275,103 @@ textarea.input{height:auto;min-height:120px;padding:12px 14px;resize:vertical}
 .hint{font-size:12px;color:var(--muted)}
 .full-screen{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center}
 
-/* mobile gate */
-#mobile-gate{display:none;background:#FF5917;color:#fff}
-#mobile-gate h2{margin:0;font-size:30px;line-height:1.1;max-width:14ch}
-#mobile-gate p{margin:0;opacity:.9;max-width:30ch}
-.store{display:flex;align-items:center;gap:10px;background:#1D1F23;color:#fff;height:56px;padding:0 22px;border-radius:16px;text-decoration:none;min-width:220px}
-.store small{display:block;font-size:10px;opacity:.75}
-.store b{font-size:16px}
-@media (max-width:700px){
-  .sidebar{width:72px}
-  .sidebar .nav-btn span.t,.sidebar .logo .t{opacity:0}
-  .sidebar .nav-label{visibility:hidden}
-  .topbar{padding:12px 16px}
-  .board{padding:0 12px}
-}
-@media (max-width:900px){
+
+:root{--m-pos:rgba(76,141,255,.18);--m-pos-fg:#A9C8FF;--m-zero:rgba(160,122,0,.24);--m-zero-fg:#E9C75C;--m-neg:rgba(200,70,72,.24);--m-neg-fg:#F29C9E}
+:root.light{--m-pos:#DCE8FF;--m-pos-fg:#1F4FAE;--m-zero:#FBE7B5;--m-zero-fg:#1D1F23;--m-neg:#F9D6D7;--m-neg-fg:#8B1E20}
+.tl{display:flex;align-items:center;gap:10px}
+.bottom-nav{display:none}
+@media (max-width:900px) and (min-width:701px){
   .topbar{grid-template-columns:1fr;justify-items:start}
   .top-right{justify-self:start}
 }
+/* ---------- celular: tudo na vertical ---------- */
+@media (max-width:700px){
+  body{overflow-x:hidden}
+  .sidebar{display:none}
+  .topbar{grid-template-columns:56px 1fr 56px;padding:10px 16px;min-height:68px;gap:8px;padding-top:calc(10px + env(safe-area-inset-top,0px))}
+  .topbar h1{display:none}
+  .top-right{justify-self:end}
+  .period{justify-content:center;gap:14px}
+  .period .icon-btn{background:none}
+  .m-label{min-width:0;font-size:24px;font-weight:700}
+  .bottom-nav{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;align-items:center;border-top:1px solid var(--line);background:var(--surface);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .bn{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 0 10px;font-weight:600;font-size:13px;color:var(--text)}
+  .bn svg{width:24px;height:24px}
+  .bn.active{color:var(--accent)}
+  .bn.active::before{content:"";position:absolute;top:-1px;left:0;right:0;height:3px;background:var(--accent)}
+  .bn-add{justify-self:center;width:56px;height:56px;border-radius:99px;background:var(--text);color:var(--bg);display:grid;place-items:center;margin:4px 0}
+  .bn-add svg{width:24px;height:24px}
+  .page{padding:0 0 24px}
+  .page-inner{gap:20px}
+  .section-title{padding:18px 16px 0;margin:0 0 10px;color:var(--muted);font-weight:600;font-size:15px}
+  .list{border-radius:0;border-left:0;border-right:0}
+  .calc-grid{grid-template-columns:1fr;gap:0;border-top:1px solid var(--line)}
+  .card.calc{border:0;border-radius:0;border-bottom:1px solid var(--line);background:transparent;display:grid;grid-template-columns:1fr auto;grid-template-areas:"h big" "f st" "bar bar";gap:6px 12px;padding:18px 16px;align-items:center}
+  .calc h3{grid-area:h;font-size:17px}
+  .calc .formula{grid-area:f}
+  .calc .big{grid-area:big;font-size:18px;font-weight:600;text-align:right}
+  .calc .status{grid-area:st;justify-self:end;background:none!important;padding:0;font-size:13px;font-weight:500}
+  .calc .bar{grid-area:bar}
+  .profile-card{margin:16px 16px 0;flex-wrap:wrap}
+  .page-inner>.hint{padding:0 16px}
+}
+.m-cal{position:relative;width:44px;height:44px;border-radius:12px;background:var(--surface2);display:grid;place-items:center;overflow:hidden}
+.m-cal::before{content:"";position:absolute;top:0;left:0;right:0;height:10px;background:var(--accent)}
+.m-cal b{font-size:16px;padding-top:8px}
+.m-grid{width:44px;height:44px;border-radius:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:6px;background:var(--surface2)}
+.m-grid i{background:var(--muted);opacity:.35;border-radius:2px}
+.m-grid[aria-pressed="true"]{background:var(--m-zero)}
+.m-grid[aria-pressed="true"] i{background:var(--accent);opacity:.7}
+.m-headrow{position:sticky;top:0;z-index:2;background:var(--bg);display:grid;grid-template-columns:64px 1fr 40%;align-items:center;gap:0;border-bottom:1px solid var(--line2);padding:10px 0}
+.m-headrow.h2{grid-template-columns:64px 1fr}
+.m-headrow>span{color:var(--muted);font-weight:600;font-size:15px}
+.m-headrow>span:first-child{text-align:center}
+.m-headrow>span:last-child{text-align:right;padding-right:14px}
+.m-sel{display:flex;align-items:center;gap:8px;height:42px;padding:0 14px;border:2px solid var(--line2);border-radius:999px;font-weight:600;font-size:15px;margin-right:8px;justify-self:start}
+.m-sel svg{width:16px;height:16px;color:var(--muted)}
+.m-day{display:grid;grid-template-columns:64px 1fr 40%;border-bottom:1px solid var(--line2)}
+.m-day.h2{grid-template-columns:64px 1fr}
+.m-dia{position:relative;display:flex;justify-content:center;align-items:flex-start;padding-top:13px;font-size:16px;font-weight:600;border-right:1px solid var(--line)}
+.m-day.we .m-dia{background:var(--weekend)}
+.m-day.today .m-dia{background:var(--today-bg);color:var(--today-fg)}
+.m-day.today{border-bottom:2px solid var(--today-line)}
+.m-vals{display:flex;flex-direction:column;min-width:0}
+.m-cell{display:flex;align-items:center;justify-content:space-between;gap:8px;height:46px;padding:0 14px;border-bottom:1px solid var(--line);font-size:15px;width:100%}
+.m-cell:last-child{border-bottom:0}
+.m-cell.z{color:var(--zero)}
+.m-cell.z .ti{filter:grayscale(1);opacity:.45}
+.m-saldo{display:flex;justify-content:flex-end;align-items:flex-start;padding:13px 14px 12px;font-size:15px;font-weight:600;min-height:46px}
+.m-pos{background:var(--m-pos);color:var(--m-pos-fg)}
+.m-zero{background:var(--m-zero);color:var(--m-zero-fg)}
+.m-neg{background:var(--m-neg);color:var(--m-neg-fg)}
+
+:root{--h-pos:rgba(76,141,255,.2);--h-pos-fg:#A9C8FF;--h-neg1:rgba(240,120,125,.22);--h-neg1-fg:#F4A6A9;--h-neg2:#B8454A;--h-neg2-fg:#FFFFFF;--hz-cur:#EDEDEE;--hz-cur-fg:#1D1F23}
+:root.light{--h-pos:#DCE8FF;--h-pos-fg:#1F4FAE;--h-neg1:#F7BDBF;--h-neg1-fg:#1D1F23;--h-neg2:#F06B6E;--h-neg2-fg:#1D1F23;--hz-cur:#222222;--hz-cur-fg:#FFFFFF}
+.hz{display:flex;flex-direction:column}
+.hz-head,.hz-row{display:grid;grid-template-columns:repeat(3,minmax(0,.6fr) minmax(0,1fr))}
+.hz-head{position:sticky;top:0;z-index:2;background:var(--bg);border-bottom:1px solid var(--line2)}
+.hz-mh{grid-column:span 2;text-align:center;font-weight:700;font-size:16px;padding:14px 0;border-right:1px solid var(--line)}
+.hz-mh:last-child{border-right:0}
+.hz-mh.cur{background:var(--hz-cur);color:var(--hz-cur-fg)}
+.hz-row{border-bottom:1px solid var(--line)}
+.hz-d,.hz-v{height:48px;display:flex;align-items:center;font-size:16px}
+.hz-d{justify-content:center;font-weight:500}
+.hz-d.we{background:var(--weekend)}
+.hz-d.today{background:var(--today-bg);color:var(--today-fg);font-weight:700}
+.hz-v{justify-content:flex-end;padding-right:12px;font-weight:500}
+.hz-v.h-zero{background:var(--m-zero);color:var(--m-zero-fg)}
+.hz-v.h-pos{background:var(--h-pos);color:var(--h-pos-fg)}
+.hz-v.h-neg1{background:var(--h-neg1);color:var(--h-neg1-fg)}
+.hz-v.h-neg2{background:var(--h-neg2);color:var(--h-neg2-fg)}
+@media (max-width:700px){
+  .m-hz .topbar{grid-template-columns:1fr auto}
+  .m-hz .topbar h1{display:block;font-size:22px}
+  .m-hz .period{display:none}
+  .m-hz .bottom-nav{display:none}
+}
+.m-foot .m-dia{font-size:13px;color:var(--muted);font-weight:500}
+.m-foot .m-cell{font-weight:700}
+.m-foot .m-cell.z{font-weight:500}
 </style>
 
 <div id="app" class="app">
@@ -310,11 +388,12 @@ textarea.input{height:auto;min-height:120px;padding:12px 14px;resize:vertical}
   </aside>
   <main class="main">
     <header class="topbar">
-      <h1 id="title">saldos</h1>
+      <div class="tl"><div id="top-left"></div><h1 id="title">saldos</h1></div>
       <div class="period" id="period"></div>
       <div class="top-right" id="top-right"></div>
     </header>
     <section class="view" id="view" aria-live="polite"></section>
+    <nav class="bottom-nav" id="bottom-nav" aria-label="navegação principal"></nav>
   </main>
 </div>
 <div id="drawer-root"></div>
@@ -361,7 +440,7 @@ const NOW = new Date();
 const TODAY = ymd(NOW);
 const CUR = miOf(NOW);
 const MIN_MI = CUR - 60, MAX_MI = CUR + 60;
-const NEG_SMALL = 1000; // negativo "pequeno": até R$ 1.000,00
+const NEG_SMALL = 500; // negativo "pequeno": até R$ 500,00
 
 /* ================= tipos ================= */
 const TYPE_ORDER = ["entrada", "saida", "diario", "economia", "cartao"];
@@ -385,16 +464,17 @@ const TAG_COLORS = ["cinza", "azul", "amarelo", "verde", "vermelho", "roxo", "ro
 const PARTS = [["saldos", "saldos"], ["performance", "performance"], ["economizado", "economizado"], ["custo", "custo de vida"], ["diarioMedio", "diário médio"]];
 
 /* ================= estado ================= */
-const DEFAULT_PROFILE = { nome: "Eduardo", sobrenome: "Levy Santos Portella", email: "eduardo.portella@bnpsolucoes.com.br", theme: "dark", pix: "" };
+const DEFAULT_PROFILE = { nome: "Eduardo", sobrenome: "Levy Santos Portella", email: "eduardo.portella@bnpsolucoes.com.br", pix: "" };
 const S = { txs: [], tags: [], cards: [], prev: [], profile: null, checkins: {}, loaded: false, mode: "local" };
 const UI = {
   tab: "saldos",
   sideCollapsed: lsGet("ae.side", false),
   hiddenCols: lsGet("ae.cols", {}),
-  pMode: "current", pStart: CUR,
+  bStart: Math.max(CUR - 60, CUR - 6), bEnd: CUR + 11, mCol: "all",
   tMonth: CUR, tagMonth: CUR, tagFilter: "",
   signedOut: false,
 };
+const isMobile = () => matchMedia("(max-width: 700px)").matches;
 const prof = () => ({ ...DEFAULT_PROFILE, ...(S.profile || {}) });
 
 /* ================= armazenamento ================= */
@@ -521,7 +601,7 @@ function calc() {
   return CALC;
 }
 const saldoOf = d => { const c = calc(); return c.saldo[d] ?? 0; };
-const saldoCls = v => v >= -0.004 ? "s-pos" : (v > -NEG_SMALL ? "s-neg1" : "s-neg2");
+const saldoCls = v => Math.abs(v) < 0.005 ? "s-zero" : v > 0 ? "s-pos" : (v > -NEG_SMALL ? "s-neg1" : "s-neg2");
 
 function prevTotal() { return r2(S.prev.reduce((a, p) => a + (+p.value || 0), 0)); }
 
@@ -678,7 +758,7 @@ document.addEventListener("keydown", e => {
 
 /* ================= shell ================= */
 function applyTheme() {
-  const pref = prof().theme || "dark";
+  const pref = prof().theme || (isMobile() ? "light" : "dark");
   let t = pref;
   if (pref === "system") {
     const vt = document.documentElement.getAttribute("data-theme");
@@ -689,10 +769,10 @@ function applyTheme() {
 matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", applyTheme);
 new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
-const TITLES = { saldos: "saldos", horizonte: "horizonte", totais: "totais", tags: "tags", menu: "menu" };
+const TITLES = { saldos: "saldos", horizonte: "horizonte", totais: "totais", menu: "menu" };
 function renderSidebar() {
   const nb = (tab, label) => `<button class="nav-btn ${UI.tab === tab ? "active" : ""}" data-tab="${tab}" aria-label="${label}" ${UI.tab === tab ? 'aria-current="page"' : ""}>${I[tab]}<span class="t">${label}</span></button>`;
-  $("#nav-main").innerHTML = nb("saldos", "saldos") + nb("totais", "totais") + nb("tags", "tags") + nb("menu", "menu");
+  $("#nav-main").innerHTML = nb("saldos", "saldos") + nb("totais", "totais") + nb("menu", "menu");
   $("#nav-short").innerHTML =
     `<button class="nav-btn" id="btn-add" aria-label="adicionar movimentação" aria-haspopup="menu">${I.add}<span class="t">adicionar</span></button>
      <button class="nav-btn" id="btn-today" aria-label="ir pra hoje, dia ${NOW.getDate()}"><span class="cal-ico">${I.cal}<b>${NOW.getDate()}</b></span><span class="t">ir pra hoje</span></button>` +
@@ -707,16 +787,17 @@ $("#sidebar").addEventListener("click", e => {
   if (e.target.closest("#btn-today")) goToday();
   if (e.target.closest("#btn-collapse")) { UI.sideCollapsed = !UI.sideCollapsed; lsSet("ae.side", UI.sideCollapsed); render(); }
 });
-function goTab(tab) { UI.tab = tab; closePopover(); $("#view").dataset.tab = ""; render(); }
+function resetBoard() { UI.bStart = Math.max(MIN_MI, CUR - 6); UI.bEnd = CUR + 11; }
+function goTab(tab) { UI.tab = tab; closePopover(); resetBoard(); $("#view").dataset.tab = ""; render(); }
 function goToday() {
-  UI.tab = "saldos"; UI.pMode = "current"; UI.pStart = CUR; $("#view").dataset.tab = "";
+  UI.tab = "saldos"; UI.tMonth = CUR; resetBoard(); $("#view").dataset.tab = "";
   renderAll();
-  const row = $(`#view tr[data-row="${TODAY}"]`), board = $("#board");
-  if (row && board) {
-    const card = row.closest(".mcard");
-    board.scrollLeft = Math.max(0, card.offsetLeft - 24);
-    board.scrollTop = Math.max(0, row.offsetTop - board.clientHeight / 2);
-  }
+  const row = $(`#view [data-row="${TODAY}"]`);
+  if (!row) return;
+  if (isMobile()) { row.scrollIntoView({ block: "center" }); return; }
+  const board = $("#board");
+  scrollToMonth(CUR);
+  board.scrollTop = Math.max(0, row.offsetTop - board.clientHeight / 2);
 }
 function openAddMenu(anchor) {
   const html = TYPE_ORDER.map(t => `<button class="pop-item" data-type="${t}" role="menuitem">${ti(t)}<span>${TYPES[t].label}</span></button>`).join("");
@@ -726,56 +807,115 @@ function openAddMenu(anchor) {
   });
 }
 
+function visibleMi() {
+  const board = $("#board"); if (!board) return UI.bStart;
+  for (const c of $$(".mcard", board)) if (c.offsetLeft + c.offsetWidth - 24 > board.scrollLeft + 10) return +c.dataset.mi;
+  return UI.bStart;
+}
+function rangeLabel(s) { const e = Math.min(MAX_MI, s + 11); return `${MON3[miM(s)]}/${String(miY(s)).slice(2)} – ${MON3[miM(e)]}/${String(miY(e)).slice(2)}`; }
 function periodHTML() {
-  if (UI.tab === "saldos" || UI.tab === "horizonte") {
-    const s = UI.pStart, e = s + 11;
-    const lab = `${MON3[miM(s)]}/${String(miY(s)).slice(2)} – ${MON3[miM(e)]}/${String(miY(e)).slice(2)}`;
-    return `<button class="icon-btn" data-p="-12" aria-label="ano anterior" ${s <= MIN_MI ? "disabled" : ""}>${I.dleft}</button>
-      <button class="icon-btn" data-p="-1" aria-label="mês anterior" ${s <= MIN_MI ? "disabled" : ""}>${I.left}</button>
-      <select class="pill-select" id="p-mode" aria-label="escolher período">
-        <option value="current" ${UI.pMode === "current" ? "selected" : ""}>mês atual + 11 meses</option>
-        <option value="prev" ${UI.pMode === "prev" ? "selected" : ""}>mês anterior + 11 meses</option>
-        <option value="year" ${UI.pMode === "year" ? "selected" : ""}>ano atual</option>
-      </select>
-      <span class="period-label num" aria-live="polite">${lab}</span>
-      <button class="icon-btn" data-p="1" aria-label="próximo mês" ${e >= MAX_MI ? "disabled" : ""}>${I.right}</button>
-      <button class="icon-btn" data-p="12" aria-label="próximo ano" ${e >= MAX_MI ? "disabled" : ""}>${I.dright}</button>`;
+  if (isMobile()) {
+    if (UI.tab === "menu" || UI.tab === "horizonte") return "";
+    const mi = UI.tMonth;
+    return `<button class="icon-btn" data-m="-1" aria-label="mês anterior" ${mi <= MIN_MI ? "disabled" : ""}>${I.left}</button>
+      <span class="period-label m-label">${MON3[miM(mi)]}/${String(miY(mi)).slice(2)}</span>
+      <button class="icon-btn" data-m="1" aria-label="próximo mês" ${mi >= MAX_MI ? "disabled" : ""}>${I.right}</button>`;
   }
-  if (UI.tab === "totais" || UI.tab === "tags") {
-    const k = UI.tab === "totais" ? "tMonth" : "tagMonth", mi = UI[k];
+  if (UI.tab === "saldos" || UI.tab === "horizonte") {
+    return `<button class="icon-btn" data-scroll="-1" aria-label="mês anterior">${I.left}</button>
+      <span class="period-label num" id="vis-label">${rangeLabel(CUR)}</span>
+      <button class="icon-btn" data-scroll="1" aria-label="próximo mês">${I.right}</button>`;
+  }
+  if (UI.tab === "totais") {
+    const mi = UI.tMonth;
     return `<button class="icon-btn" data-m="-1" aria-label="mês anterior" ${mi <= MIN_MI ? "disabled" : ""}>${I.left}</button>
       <span class="period-label">${MONTHS[miM(mi)]} ${miY(mi)}</span>
       <button class="icon-btn" data-m="1" aria-label="próximo mês" ${mi >= MAX_MI ? "disabled" : ""}>${I.right}</button>`;
   }
   return "";
 }
+function changeMonth(d) { const n = Math.min(MAX_MI, Math.max(MIN_MI, UI.tMonth + d)); if (n === UI.tMonth) return; UI.tMonth = n; renderAll(); const pg = $("#view .page"); if (pg) pg.scrollTop = 0; }
+function scrollToMonth(mi, smooth) {
+  const board = $("#board"); if (!board) return;
+  if (mi < UI.bStart || mi > UI.bEnd) { UI.bStart = Math.max(MIN_MI, Math.min(UI.bStart, mi - 3)); UI.bEnd = Math.min(MAX_MI, Math.max(UI.bEnd, mi + 11)); renderAll(); }
+  const c = $(`#board .mcard[data-mi="${mi}"]`); if (!c) return;
+  $("#board").scrollTo({ left: c.offsetLeft - 24, behavior: smooth ? "smooth" : "auto" });
+}
 $("#period").addEventListener("click", e => {
-  const p = e.target.closest("[data-p]"), m = e.target.closest("[data-m]");
-  if (p) { UI.pStart = Math.min(MAX_MI - 11, Math.max(MIN_MI, UI.pStart + +p.dataset.p)); render(); }
-  if (m) { const k = UI.tab === "totais" ? "tMonth" : "tagMonth"; UI[k] = Math.min(MAX_MI, Math.max(MIN_MI, UI[k] + +m.dataset.m)); render(); }
+  const s = e.target.closest("[data-scroll]"), m = e.target.closest("[data-m]");
+  if (s) scrollToMonth(Math.min(MAX_MI, Math.max(MIN_MI, visibleMi() + +s.dataset.scroll)), true);
+  if (m) changeMonth(+m.dataset.m);
 });
-$("#period").addEventListener("change", e => {
-  if (e.target.id !== "p-mode") return;
-  UI.pMode = e.target.value;
-  UI.pStart = UI.pMode === "current" ? CUR : UI.pMode === "prev" ? CUR - 1 : miY(CUR) * 12;
-  render();
+let extending = false;
+function onBoardScroll() {
+  const board = $("#board"); if (!board || extending) return;
+  const lab = $("#vis-label"); if (lab) lab.textContent = rangeLabel(visibleMi());
+  if (board.scrollLeft < 300 && UI.bStart > MIN_MI) {
+    extending = true;
+    const oldW = board.scrollWidth, oldL = board.scrollLeft;
+    UI.bStart = Math.max(MIN_MI, UI.bStart - 6); renderAll();
+    const b = $("#board"); b.scrollLeft = oldL + (b.scrollWidth - oldW);
+    extending = false;
+  } else if (board.scrollLeft + board.clientWidth > board.scrollWidth - 300 && UI.bEnd < MAX_MI) {
+    extending = true; UI.bEnd = Math.min(MAX_MI, UI.bEnd + 6); renderAll(); extending = false;
+  }
+}
+/* celular: arrastar o dedo pro lado troca o mês */
+let touch0 = null;
+$("#view").addEventListener("touchstart", e => { if (isMobile() && e.touches.length === 1) touch0 = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }, { passive: true });
+$("#view").addEventListener("touchend", e => {
+  if (!touch0 || !isMobile() || UI.tab === "menu") { touch0 = null; return; }
+  const t = e.changedTouches[0], dx = t.clientX - touch0.x, dy = t.clientY - touch0.y; touch0 = null;
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) changeMonth(dx < 0 ? 1 : -1);
 });
+$(".topbar").addEventListener("click", e => {
+  if (e.target.closest("[data-mtoday]")) goToday();
+  if (e.target.closest("[data-mgrid]")) goTab("horizonte");
+  if (e.target.closest("[data-mback]")) goTab("saldos");
+  const ad = e.target.closest("[data-madd]"); if (ad) openAddMenu(ad);
+});
+function renderMobileChrome() {
+  const mob = isMobile();
+  const hz = mob && UI.tab === "horizonte";
+  document.body.classList.toggle("m-hz", hz);
+  $("#top-left").innerHTML = hz ? `<button class="icon-btn" data-mback aria-label="voltar para saldos" style="background:none">${I.back}</button>`
+    : mob && UI.tab !== "menu" ? `<button class="m-cal" data-mtoday aria-label="ir pra hoje, dia ${NOW.getDate()}"><b class="num">${NOW.getDate()}</b></button>` : "";
+  $(".topbar").hidden = mob && UI.tab === "menu";
+  const bn = (tab, label, ic) => `<button class="bn ${UI.tab === tab || (tab === "saldos" && UI.tab === "horizonte") ? "active" : ""}" data-tab="${tab}" aria-label="${label}">${ic}<span>${label}</span></button>`;
+  $("#bottom-nav").innerHTML = mob ? bn("saldos", "saldos", I.saldos) + bn("totais", "totais", I.totais) + `<button class="bn" id="bn-add" aria-label="adicionar movimentação" aria-haspopup="menu">${I.add}<span>adicionar</span></button>` + bn("menu", "menu", I.menu) : "";
+}
+$("#bottom-nav").addEventListener("click", e => {
+  const t = e.target.closest("[data-tab]"); if (t) { goTab(t.dataset.tab); return; }
+  const a = e.target.closest("#bn-add"); if (a) openAddMenu(a);
+});
+matchMedia("(max-width: 700px)").addEventListener?.("change", () => { $("#view").dataset.tab = ""; render(); });
 
 function renderAll() {
   applyTheme();
   if (UI.signedOut) { renderSignedOut(); return; }
+  if (UI.tab === "tags") UI.tab = "saldos";
+  const mob = isMobile();
   renderSidebar();
-  $("#title").textContent = TITLES[UI.tab];
+  renderMobileChrome();
+  $("#title").textContent = mob && UI.tab === "horizonte" ? "horizonte de saldos" : TITLES[UI.tab];
   $("#period").innerHTML = periodHTML();
-  $("#top-right").innerHTML = S.loaded ? "" : `<span>carregando…</span>`;
+  $("#top-right").innerHTML = mob ? (UI.tab === "saldos" ? `<button class="m-grid" data-mgrid aria-label="abrir horizonte de saldos">${"<i></i>".repeat(9)}</button>` : UI.tab === "horizonte" ? `<button class="icon-btn" data-madd aria-label="adicionar movimentação" aria-haspopup="menu" style="background:none">${I.plus}</button>` : "") : (S.loaded ? "" : `<span>carregando…</span>`);
   const v = $("#view");
-  const keep = v.dataset.tab === UI.tab;
+  const vkey = UI.tab + (mob ? ":m" : "");
+  const keep = v.dataset.tab === vkey;
   const sc = $(".board,.page", v);
   const pos = keep && sc ? [sc.scrollLeft, sc.scrollTop] : null;
-  v.dataset.tab = UI.tab;
-  v.innerHTML = UI.tab === "saldos" ? saldosHTML(false) : UI.tab === "horizonte" ? saldosHTML(true) : UI.tab === "totais" ? totaisHTML() : UI.tab === "tags" ? tagsHTML() : menuHTML();
+  v.dataset.tab = vkey;
+  const isBoard = UI.tab === "saldos" || UI.tab === "horizonte";
+  v.innerHTML = isBoard ? (mob ? (UI.tab === "horizonte" ? mobileHorizonHTML() : mobileMonthHTML(false)) : saldosHTML(UI.tab === "horizonte")) : UI.tab === "totais" ? totaisHTML() : menuHTML();
   const sc2 = $(".board,.page", v);
   if (pos && sc2) { sc2.scrollLeft = pos[0]; sc2.scrollTop = pos[1]; }
+  const board = $("#board", v);
+  if (board) {
+    if (!keep) { const c = $(`.mcard[data-mi="${CUR}"]`, board); if (c) board.scrollLeft = c.offsetLeft - 24; }
+    board.addEventListener("scroll", onBoardScroll, { passive: true });
+    const lab = $("#vis-label"); if (lab) lab.textContent = rangeLabel(visibleMi());
+  }
   if (UI.tab === "totais") requestAnimationFrame(() => $$(".bar i", v).forEach(b => b.style.width = b.dataset.w + "%"));
   if (PANEL.open) renderPanel();
 }
@@ -783,7 +923,7 @@ function renderAll() {
 /* ================= saldos / horizonte ================= */
 function saldosHTML(horizon) {
   let h = `<div class="board" id="board"><div class="board-row">`;
-  for (let mi = UI.pStart; mi < UI.pStart + 12; mi++) h += monthCard(mi, horizon);
+  for (let mi = UI.bStart; mi <= UI.bEnd; mi++) h += monthCard(mi, horizon);
   return h + `</div></div>`;
 }
 function monthCard(mi, horizon) {
@@ -807,7 +947,7 @@ function monthCard(mi, horizon) {
   const head = `<thead><tr class="mtitle"><th colspan="${cols.length + 2}">${MONTHS[m]}<span class="yr">${y}</span></th></tr>
     <tr class="mcols"><th class="c-dia">dia</th>${cols.map(t => `<th data-col="${t}" class="${hid[t] ? "col-min" : ""}" title="${hid[t] ? "mostrar" : "recolher"} coluna" aria-label="${hid[t] ? "mostrar" : "recolher"} coluna ${TYPES[t].col}"><span class="h">${ti(t)}<span class="lbl">${TYPES[t].col}</span></span></th>`).join("")}<th class="c-dia" style="text-align:${horizon ? "center" : "right"};padding-right:8px">saldos</th></tr></thead>`;
   const foot = `<tfoot><tr><td class="c-dia">total</td>${cols.map(t => `<td class="cell num ${tot[t] ? "" : "z"} ${hid[t] ? "col-min" : ""}"><span class="in">${ti(t)}<span class="v">${fmt(tot[t])}</span></span></td>`).join("")}<td class="c-saldo num ${saldoCls(endS)}" style="cursor:default">${horizon ? abbr(endS) : fmt(endS)}</td></tr></tfoot>`;
-  return `<div class="mcard ${horizon ? "hcard" : ""}"><table class="mtable">${head}<tbody>${body}</tbody>${foot}</table></div>`;
+  return `<div class="mcard ${horizon ? "hcard" : ""}" data-mi="${mi}"><table class="mtable">${head}<tbody>${body}</tbody>${foot}</table></div>`;
 }
 function boardAct(el) {
   const act = el.dataset.act, d = el.dataset.d;
@@ -819,12 +959,67 @@ $("#view").addEventListener("click", e => {
   const th = e.target.closest("th[data-col]");
   if (th) { UI.hiddenCols = { ...UI.hiddenCols, [th.dataset.col]: !UI.hiddenCols[th.dataset.col] }; lsSet("ae.cols", UI.hiddenCols); render(); return; }
   const a = e.target.closest("[data-act]");
-  if (a && a.closest(".mtable tbody")) boardAct(a);
+  if (a && a.closest(".mtable tbody, .m-list, .hz")) boardAct(a);
 });
 $("#view").addEventListener("keydown", e => {
   if (e.key !== "Enter" && e.key !== " ") return;
   const a = e.target.closest("[data-act]");
-  if (a && a.closest(".mtable tbody")) { e.preventDefault(); boardAct(a); }
+  if (a && a.closest(".mtable tbody, .m-list, .hz")) { e.preventDefault(); boardAct(a); }
+});
+
+/* ================= saldos no celular: um mês, só vertical ================= */
+const mSaldoCls = v => Math.abs(v) < 0.005 ? "m-zero" : v > 0 ? "m-pos" : "m-neg";
+function mobileMonthHTML(horizon) {
+  const mi = UI.tMonth, y = miY(mi), m = miM(mi), n = dim(y, m), c = calc();
+  const cols = horizon ? [] : UI.mCol === "all" ? TYPE_ORDER : [UI.mCol];
+  const h2 = horizon ? "h2" : "";
+  const tot = { entrada: 0, saida: 0, diario: 0, economia: 0, cartao: 0 };
+  const selLabel = UI.mCol === "all" ? `<span class="ti" style="color:var(--muted)">${"•"}</span>todas` : `${ti(UI.mCol)}${TYPES[UI.mCol].col}`;
+  let h = `<div class="page"><div class="m-list"><div class="m-headrow ${h2}"><span>dia</span>${horizon ? `<span>saldos</span>` : `<button class="m-sel" id="m-col" aria-haspopup="menu" aria-label="escolher coluna, atual: ${UI.mCol === "all" ? "todas" : TYPES[UI.mCol].col}">${selLabel}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button><span>saldos</span>`}</div>`;
+  for (let d = 1; d <= n; d++) {
+    const ds = `${y}-${pad(m + 1)}-${pad(d)}`, o = c.day[ds], wd = new Date(y, m, d).getDay(), s = c.saldo[ds] ?? 0;
+    const cls = [(wd === 0 || wd === 6) ? "we" : "", ds === TODAY ? "today" : ""].join(" ");
+    h += `<div class="m-day ${h2} ${cls}" data-row="${ds}"><button class="m-dia num" data-act="check" data-d="${ds}" aria-label="dia ${d}: ${S.checkins[ds] ? "desmarcar" : "marcar"} check-in">${d}${S.checkins[ds] ? `<span class="check" aria-hidden="true">${I.checkW}</span>` : ""}</button>`;
+    if (!horizon) {
+      h += `<div class="m-vals">`;
+      for (const t of cols) {
+        const v = o ? o[t] : 0; tot[t] = r2(tot[t] + v);
+        h += `<button class="m-cell num ${v ? "" : "z"}" data-act="cell" data-d="${ds}" data-t="${t}" aria-label="${TYPES[t].col} no dia ${d}: ${fmt(v)}${v ? ", ver detalhes" : ", adicionar"}">${ti(t)}<span>${brl(v)}</span></button>`;
+      }
+      h += `</div>`;
+    }
+    h += `<button class="m-saldo num ${mSaldoCls(s)}" data-act="saldo" data-d="${ds}" aria-label="saldo no dia ${d}: ${fmt(s)}">${brl(s)}</button></div>`;
+  }
+  const endS = c.saldo[miLast(mi)] ?? 0;
+  h += `<div class="m-day m-foot ${h2}"><div class="m-dia">total</div>${horizon ? "" : `<div class="m-vals">${cols.map(t => `<div class="m-cell num ${tot[t] ? "" : "z"}">${ti(t)}<span>${brl(tot[t])}</span></div>`).join("")}</div>`}<div class="m-saldo num ${mSaldoCls(endS)}">${brl(endS)}</div></div>`;
+  return h + `</div></div>`;
+}
+/* horizonte no celular: 3 meses lado a lado, só a coluna de saldos */
+const hzCls = v => Math.abs(v) < 0.005 ? "h-zero" : v > 0 ? "h-pos" : v > -NEG_SMALL ? "h-neg1" : "h-neg2";
+function mobileHorizonHTML() {
+  const c = calc();
+  const start = Math.min(UI.tMonth, MAX_MI - 2);
+  const ms = [start, start + 1, start + 2];
+  let h = `<div class="page"><div class="hz" role="grid" aria-label="horizonte de saldos"><div class="hz-head">${ms.map(mi => `<div class="hz-mh ${mi === CUR ? "cur" : ""}">${MON3[miM(mi)]}/${String(miY(mi)).slice(2)}</div>`).join("")}</div>`;
+  for (let d = 1; d <= 31; d++) {
+    h += `<div class="hz-row">`;
+    for (const mi of ms) {
+      const y = miY(mi), m = miM(mi);
+      if (d > dim(y, m)) { h += `<span class="hz-d blank"></span><span class="hz-v blank"></span>`; continue; }
+      const ds = `${y}-${pad(m + 1)}-${pad(d)}`, wd = new Date(y, m, d).getDay(), s = c.saldo[ds] ?? 0;
+      const we = wd === 0 || wd === 6 ? "we" : "", td = ds === TODAY ? "today" : "";
+      h += `<button class="hz-d num ${we} ${td}" data-act="saldo" data-d="${ds}" aria-label="${d} de ${MONTHS[m]}">${d}</button><button class="hz-v num ${hzCls(s)}" data-act="saldo" data-d="${ds}" aria-label="saldo em ${d} de ${MONTHS[m]}: ${fmt(s)}">${abbr(s)}</button>`;
+    }
+    h += `</div>`;
+  }
+  return h + `</div></div>`;
+}
+$("#view").addEventListener("click", e => {
+  const b = e.target.closest("#m-col"); if (!b) return;
+  const opt = (k, lbl, ic) => `<button class="pop-item" data-col="${k}" ${UI.mCol === k ? 'style="color:var(--accent)"' : ""}>${ic}${lbl}</button>`;
+  openPopover(b, `<div role="menu" aria-label="escolher coluna">${opt("all", "todas", '<span class="ti" style="color:var(--muted)">•</span>')}${TYPE_ORDER.map(t => opt(t, TYPES[t].col, ti(t))).join("")}</div>`, {
+    width: 230, onMount: el => el.addEventListener("click", ev => { const o = ev.target.closest("[data-col]"); if (o) { UI.mCol = o.dataset.col; closePopover(); renderAll(); } })
+  });
 });
 
 /* ================= totais ================= */
@@ -864,38 +1059,6 @@ function openMonthList(mi, type) {
   m.el.addEventListener("click", e => { const it = e.target.closest("[data-item]"); if (it) { m.close(); openPanel(it.dataset.date, null, { tx: it.dataset.item, date: it.dataset.date }); } });
 }
 
-/* ================= tags ================= */
-function tagsHTML() {
-  const mi = UI.tagMonth, list = occs(miFirst(mi), miLast(mi));
-  const f = UI.tagFilter.trim().toLowerCase();
-  const tags = S.tags.filter(t => !f || t.name.toLowerCase().includes(f)).sort((a, b) => a.name.localeCompare(b.name));
-  let h = `<div class="page"><div class="page-inner" style="max-width:820px">
-    <div style="display:flex;gap:10px;flex-wrap:wrap"><div class="input-wrap" style="flex:1;min-width:200px"><input class="input" id="tag-filter" placeholder="filtrar tags" aria-label="filtrar tags" value="${esc(UI.tagFilter)}"><span class="eye" aria-hidden="true">${I.search}</span></div>
-    <button class="btn primary" id="new-tag" aria-label="criar nova tag">${I.plus.replace("<svg", '<svg width="18" height="18"')} nova tag</button></div>
-    <div class="hint">${S.tags.length} de 100 tags</div>`;
-  if (!tags.length) h += `<div class="empty"><button class="plus" id="new-tag2" aria-label="criar nova tag">${I.plus.replace("<svg", '<svg width="26" height="26"')}</button><span>${S.tags.length ? "nenhuma tag com esse nome" : "nenhuma tag criada ainda"}</span></div>`;
-  else {
-    h += `<div class="list">`;
-    for (const t of tags) {
-      const mine = list.filter(x => (x.tx.tags || []).includes(t.id));
-      const by = {}; for (const x of mine) by[x.tx.type] = r2((by[x.tx.type] || 0) + x.value);
-      const parts = TYPE_ORDER.filter(k => by[k]).map(k => `<span style="display:inline-flex;gap:5px;align-items:center">${ti(k)}<span class="num">${fmt(by[k])}</span></span>`).join("");
-      const ign = PARTS.filter(([k]) => t.ignore && t.ignore[k]).map(p => p[1]);
-      h += `<button class="row tag-row" data-tag="${t.id}"><span class="tag-chip tg-${t.color || "cinza"}"><span class="ellip">${esc(t.name)}</span></span>
-        <span class="grow"><span class="muted">${mine.length} ${mine.length === 1 ? "movimentação" : "movimentações"} no mês</span>${ign.length ? `<span class="hint" style="display:block">ignorada em: ${ign.join(", ")}</span>` : ""}</span>
-        <span style="display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end">${parts}</span>${I.chev}</button>`;
-    }
-    h += `</div>`;
-  }
-  return h + `</div></div>`;
-}
-$("#view").addEventListener("input", e => {
-  if (e.target.id === "tag-filter") { UI.tagFilter = e.target.value; const pos = e.target.selectionStart; renderAll(); const i = $("#tag-filter"); i.focus(); i.setSelectionRange(pos, pos); }
-});
-$("#view").addEventListener("click", e => {
-  if (e.target.closest("#new-tag,#new-tag2")) openTagModal(null);
-  const t = e.target.closest("[data-tag]"); if (t) openTagModal(S.tags.find(x => x.id === t.dataset.tag));
-});
 
 /* ================= painel do dia ================= */
 const PANEL = { open: false, date: TODAY, filter: null, detail: null };
@@ -936,7 +1099,6 @@ function renderPanel() {
       <dt>data</dt><dd class="num">${dBR(occ.date)}</dd>
       <dt>repetição</dt><dd>${repText(occ)}</dd>
       ${tx.type === "cartao" ? `<dt>cartão</dt><dd>${esc(S.cards.find(c => c.id === tx.cardId)?.name || "sem cartão")}</dd>` : ""}
-      ${(tx.tags || []).filter(id => tm[id]).length ? `<dt>tags</dt><dd style="flex-wrap:wrap">${tx.tags.filter(id => tm[id]).map(id => `<span class="tag-chip tg-${tm[id].color}">${esc(tm[id].name)}</span>`).join("")}</dd>` : ""}
       <dt>criada em</dt><dd class="num">${created ? `${pad(created.getDate())}/${pad(created.getMonth() + 1)}/${created.getFullYear()} às ${pad(created.getHours())}:${pad(created.getMinutes())}` : "—"}</dd>
     </dl>`;
   } else {
@@ -1041,7 +1203,6 @@ function openForm({ type = "saida", date = TODAY, tx = null } = {}) {
   const tm = () => tagMap();
   function draw() {
     const inst = f.rep === "installment", repeats = ["monthly", "weekly", "daily"].includes(f.rep);
-    const tagsSel = f.tags.map(id => tm()[id]).filter(Boolean);
     const card = S.cards.find(c => c.id === f.cardId);
     m.setBody(`
       <div class="field"><span class="flabel" id="lbl-val">${inst ? "valor total" : "valor"}</span>
@@ -1060,7 +1221,6 @@ function openForm({ type = "saida", date = TODAY, tx = null } = {}) {
         <div class="seg" role="group" aria-label="até quando"><button data-until="forever" aria-pressed="${f.until === "forever"}">a perder de vista</button><button data-until="count" aria-pressed="${f.until === "count"}">número de repetições</button></div>
         ${f.until === "count" ? `<div class="stepper"><button class="icon-btn" data-cnt="-1" aria-label="menos uma repetição">−</button><b class="num" aria-live="polite">${f.count}</b><button class="icon-btn" data-cnt="1" aria-label="mais uma repetição">+</button><span class="muted">vezes</span></div>` : ""}</div>` : ""}
       ${inst ? `<div class="field"><span class="flabel">parcelas</span><div class="stepper"><button class="icon-btn" data-inst="-1" aria-label="menos uma parcela">−</button><b class="num" aria-live="polite">${f.installments}</b><button class="icon-btn" data-inst="1" aria-label="mais uma parcela">+</button><span class="muted num">parcelas mensais de ${brl(f.value / f.installments)}</span></div></div>` : ""}
-      <div class="field"><span class="flabel">tags</span><button class="selectbox" id="f-tags" aria-haspopup="dialog" aria-label="escolher tags"><span class="grow">${tagsSel.length ? tagsSel.map(t => `<span class="tag-chip tg-${t.color}">${esc(t.name)}</span>`).join("") : '<span class="muted">nenhuma tag</span>'}</span>${I.tags.replace("<svg", '<svg width="18" height="18"')}</button></div>
     `);
     const b = $("#f-submit", el);
     b.className = `btn block btn-t-${f.type}`;
@@ -1090,7 +1250,6 @@ function openForm({ type = "saida", date = TODAY, tx = null } = {}) {
     }
     if (t.closest("#f-date")) datePicker(t.closest("#f-date"), f.date, v => { f.date = v; draw(); });
     if (t.closest("#f-card")) cardPicker(t.closest("#f-card"), f, draw);
-    if (t.closest("#f-tags")) tagPicker(t.closest("#f-tags"), f, draw);
     if (t.closest("#f-submit")) submit();
   });
   async function submit() {
@@ -1162,84 +1321,12 @@ function readCardFields(el, p) {
   return { name, closing, due, createdAt: Date.now() };
 }
 
-function tagPicker(anchor, f, draw) {
-  let q = "";
-  const opts = () => {
-    const ql = q.trim().toLowerCase();
-    const list = S.tags.filter(t => !ql || t.name.toLowerCase().includes(ql)).sort((a, b) => a.name.localeCompare(b.name));
-    const exact = S.tags.some(t => t.name.toLowerCase() === ql);
-    return list.map(t => `<label class="chk-row"><input type="checkbox" class="chk" data-tg="${t.id}" ${f.tags.includes(t.id) ? "checked" : ""}><span class="tag-chip tg-${t.color}">${esc(t.name)}</span></label>`).join("")
-      + (!list.length && !ql ? `<div class="hint" style="padding:8px 0">nenhuma tag criada ainda</div>` : "")
-      + (ql && !exact ? `<button class="pop-item" data-mk style="color:var(--accent);padding:0 4px">${I.plus.replace("<svg", '<svg width="18" height="18"')}criar tag "${esc(q.trim())}"</button>` : "");
-  };
-  openPopover(anchor, `<div class="tag-pop"><div class="input-wrap"><input class="input" id="tg-q" placeholder="buscar tag" aria-label="buscar tag"><span class="eye" aria-hidden="true">${I.search}</span></div><div class="opts">${opts()}</div>
-    <button class="btn sm primary" data-done>pronto</button></div>`, {
-    width: Math.max(300, anchor.offsetWidth), onMount: el => {
-      setTimeout(() => $("#tg-q", el).focus(), 20);
-      el.addEventListener("input", e => { if (e.target.id === "tg-q") { q = e.target.value; $(".opts", el).innerHTML = opts(); } });
-      el.addEventListener("change", e => { const id = e.target.dataset.tg; if (!id) return; f.tags = e.target.checked ? [...f.tags, id] : f.tags.filter(x => x !== id); });
-      el.addEventListener("click", async e => {
-        if (e.target.closest("[data-done]")) { closePopover(); draw(); }
-        if (e.target.closest("[data-mk]")) {
-          if (S.tags.length >= 100) { toast("limite de 100 tags atingido", true); return; }
-          const id = uid("g"); await backend.put("tags", id, { name: q.trim().slice(0, 30), color: "cinza", ignore: {}, createdAt: Date.now() });
-          f.tags = [...f.tags, id]; q = ""; $("#tg-q", el).value = ""; $(".opts", el).innerHTML = opts(); toast("tag criada");
-        }
-      });
-    }
-  });
-}
-
-/* ================= tag: nova / editar ================= */
-function openTagModal(tag) {
-  if (!tag && S.tags.length >= 100) { toast("limite de 100 tags atingido", true); return; }
-  const st = { name: tag?.name || "", color: tag?.color || "cinza", ignore: { ...(tag?.ignore || {}) }, adv: false };
-  const m = openModal({
-    title: tag ? "editar tag" : "nova tag", body: "",
-    foot: (tag ? `<button class="btn danger" data-deltag aria-label="apagar tag">${I.trash.replace("<svg", '<svg width="18" height="18"')}</button>` : "") + `<button class="btn primary block" data-savetag>${tag ? "salvar edição" : "criar tag"}</button>`
-  });
-  const draw = () => {
-    m.setBody(`<div class="field"><label for="tg-name">nome</label><input class="input" id="tg-name" maxlength="30" value="${esc(st.name)}" placeholder="ex.: casa"></div>
-      <div class="field"><span class="flabel">cor de fundo</span><div class="swatches" role="group" aria-label="cor de fundo">${TAG_COLORS.map(c => `<button class="swatch tg-${c}" data-color="${c}" aria-pressed="${st.color === c}" aria-label="${c}"></button>`).join("")}</div></div>
-      <div><span class="flabel">prévia</span><div style="padding-top:8px"><span class="tag-chip tg-${st.color}">${esc(st.name || "nome da tag")}</span></div></div>
-      <button class="row" data-adv style="padding:12px 0;border:0;border-top:1px solid var(--line)"><span class="grow" style="font-weight:600">configurações avançadas</span><span style="transform:rotate(${st.adv ? 90 : 0}deg);display:inline-flex">${I.chev}</span></button>
-      ${st.adv ? `<div><p class="hint" style="margin:0 0 6px">escolha se as movimentações com essa tag entram ou não em cada cálculo.</p>${PARTS.map(([k, lbl]) => `<div class="adv-row"><span>${lbl}</span><div class="seg" role="group" aria-label="${lbl}"><button data-ig="${k}" data-v="0" aria-pressed="${!st.ignore[k]}">calcular</button><button data-ig="${k}" data-v="1" aria-pressed="${!!st.ignore[k]}">ignorar</button></div></div>`).join("")}</div>` : ""}`);
-  };
-  draw();
-  m.el.addEventListener("input", e => { if (e.target.id === "tg-name") { st.name = e.target.value; const p = $(".modal-body .tag-chip", m.el); if (p) p.textContent = st.name || "nome da tag"; } });
-  m.el.addEventListener("click", async e => {
-    const c = e.target.closest("[data-color]"); if (c) { st.color = c.dataset.color; draw(); return; }
-    if (e.target.closest("[data-adv]")) { st.adv = !st.adv; draw(); return; }
-    const ig = e.target.closest("[data-ig]"); if (ig) { st.ignore[ig.dataset.ig] = ig.dataset.v === "1"; draw(); return; }
-    if (e.target.closest("[data-savetag]")) {
-      const name = st.name.trim();
-      if (!name) { toast("dá um nome pra tag", true); return; }
-      if (S.tags.some(t => t.name.toLowerCase() === name.toLowerCase() && t.id !== tag?.id)) { toast("já existe uma tag com esse nome", true); return; }
-      m.close();
-      await backend.put("tags", tag ? tag.id : uid("g"), { name, color: st.color, ignore: st.ignore, createdAt: tag?.createdAt || Date.now() });
-      toast(tag ? "tag salva" : "tag criada");
-    }
-    if (e.target.closest("[data-deltag]")) {
-      m.close();
-      if (!(await confirmBox({ title: "apagar tag?", text: `a tag "${esc(tag.name)}" sai de todas as movimentações. as movimentações continuam.`, ok: "apagar tag" }))) return;
-      await backend.del("tags", tag.id); toast("tag apagada");
-    }
-  });
-}
 
 /* ================= menu ================= */
 const MENU = [
   ["perfil", "editar perfil", "user"],
   ["prev", "previsão de diário", null],
-  ["cartoes", "cartões de crédito", "card"],
   ["config", "configurações", "gear"],
-  ["sugestoes", "mandar sugestões", "chat"],
-  ["ajuda", "ajuda", "help"],
-  ["indicar", "indicar a escola do eduardo", "gift"],
-  ["comunidade", "ir pra comunidade", "people"],
-  ["novo", "o que há de novo", "spark"],
-  ["termos", "termos de uso", "doc"],
-  ["privacidade", "política de privacidade", "lock"],
   ["sair", "sair", "out"],
 ];
 function menuHTML() {
@@ -1247,8 +1334,7 @@ function menuHTML() {
   const ini = ((p.nome || "?")[0] + ((p.sobrenome || "")[0] || "")).toUpperCase();
   let h = `<div class="page"><div class="page-inner" style="max-width:720px">
     <div class="card profile-card"><div class="avatar" aria-hidden="true">${esc(ini)}</div><div style="min-width:0;flex:1">
-      <div style="font-weight:700;font-size:18px" class="ellip">${esc(p.nome)} ${esc(p.sobrenome)}</div><div class="muted ellip">${esc(p.email)}</div></div>
-      <span class="badge">assinatura ativa</span></div><div class="list">`;
+      <div style="font-weight:700;font-size:18px" class="ellip">${esc(p.nome)} ${esc(p.sobrenome)}</div><div class="muted ellip">${esc(p.email)}</div></div></div><div class="list">`;
   for (const [k, lbl, ic] of MENU) {
     h += `<button class="row" data-menu="${k}" ${k === "comunidade" ? 'aria-label="ir pra comunidade, abre em nova aba"' : ""}><span class="menu-ico" ${k === "sair" ? 'style="color:var(--c-saida)"' : ""}>${ic ? I[ic] : ti("prev")}</span><span class="grow" ${k === "sair" ? 'style="color:var(--c-saida)"' : ""}>${lbl}</span>${k === "comunidade" ? I.ext : k === "sair" ? "" : I.chev}</button>`;
   }
@@ -1259,9 +1345,8 @@ $("#view").addEventListener("click", e => {
   const b = e.target.closest("[data-menu]"); if (!b) return;
   const k = b.dataset.menu;
   ({
-    perfil: openProfile, prev: openPrevModal, cartoes: openCards, config: openConfig, sugestoes: openSuggest, ajuda: openHelp,
-    indicar: openRefer, comunidade: () => toast("o link da comunidade ainda não foi configurado"), novo: openNews,
-    termos: () => openText("termos de uso", TERMS), privacidade: () => openText("política de privacidade", PRIV), sair: signOut,
+    perfil: openProfile, prev: openPrevModal, config: openConfig,
+    sair: signOut,
   })[k]();
 });
 
@@ -1357,8 +1442,8 @@ function openConfig() {
     const th = prof().theme || "dark";
     m.setBody(`<div class="field"><span class="flabel">aparência</span><div class="list">${[["light", "modo claro"], ["dark", "modo escuro"], ["system", "usar configuração do sistema"]].map(([k, l]) => `<label class="row" style="cursor:pointer"><input type="radio" name="theme" value="${k}" ${th === k ? "checked" : ""} style="accent-color:var(--accent);width:18px;height:18px;margin:0"><span class="grow">${l}</span></label>`).join("")}</div></div>
       <div class="field"><span class="flabel">conta</span><div class="list">
-        <button class="row" data-zerar><span class="grow"><span style="display:block;font-weight:600">zerar minha conta</span><span class="hint">apaga todas as movimentações. tags, cartões e perfil continuam.</span></span>${I.chev}</button>
-        <button class="row" data-apagar><span class="grow"><span style="display:block;font-weight:600;color:var(--c-saida)">apagar minha conta</span><span class="hint">exclui tudo de vez: movimentações, tags, cartões, previsão e perfil.</span></span>${I.chev}</button></div></div>`);
+        <button class="row" data-zerar><span class="grow"><span style="display:block;font-weight:600">zerar minha conta</span><span class="hint">apaga todas as movimentações. cartões, previsão e perfil continuam.</span></span>${I.chev}</button>
+        <button class="row" data-apagar><span class="grow"><span style="display:block;font-weight:600;color:var(--c-saida)">apagar minha conta</span><span class="hint">exclui tudo de vez: movimentações, cartões, previsão e perfil.</span></span>${I.chev}</button></div></div>`);
   };
   draw();
   m.el.addEventListener("change", e => { if (e.target.name === "theme") { saveProfile({ theme: e.target.value }); toast("aparência alterada"); } });
@@ -1370,7 +1455,7 @@ function openConfig() {
     if (e.target.closest("[data-apagar]")) {
       if (!(await confirmBox({ title: "apagar minha conta?", text: "tudo o que você cadastrou vai ser excluído de vez.", ok: "apagar conta" }))) return;
       m.close();
-      await wipe(["tx", "tags", "cards", "prev"]); backend.putCheckins({}); await backend.putProfile({ ...DEFAULT_PROFILE, deleted: true });
+      await wipe(["tx", "cards", "prev"]); backend.putCheckins({}); await backend.putProfile({ ...DEFAULT_PROFILE, deleted: true });
       UI.signedOut = "deleted"; render();
     }
   });
@@ -1461,7 +1546,6 @@ renderAll();
 initStore().then(() => {
   if (S.profile && S.profile.deleted) UI.signedOut = "deleted";
   render();
-  setTimeout(() => { if (S.loaded && !S.txs.length && !UI.signedOut) toast("dica: comece adicionando seu saldo atual como uma entrada de hoje"); }, 1200);
 });
 
 </script>
