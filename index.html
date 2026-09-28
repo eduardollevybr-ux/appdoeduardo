@@ -632,6 +632,9 @@ input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:tex
 .pager.dragging .m-cell:active,.pager.dragging .m-saldo:active,.pager.dragging .hz-v:active{transform:none}
 @media (max-width:700px){ .page{overflow-x:hidden} }
 @supports not (overflow-x: clip){ .pager{overflow:hidden} .page.page-flush{overflow-x:hidden} }
+/* destaque do dia de hoje ao chegar nele */
+@keyframes todayFlash{0%{box-shadow:inset 0 0 0 0 transparent}30%{box-shadow:inset 0 0 0 3px var(--accent);background-color:var(--accent-soft)}100%{box-shadow:inset 0 0 0 0 transparent}}
+.today-flash>*,.today-flash>td{animation:todayFlash 1.2s var(--ease-out) 1}
 </style>
 
 <div id="app" class="app">
@@ -1136,7 +1139,17 @@ function goToday() {
   renderAll();
   scrollToToday(true);
 }
-function scrollToToday(smooth) {
+/* rolagem animada própria (funciona igual em qualquer celular) */
+function glide(get, set, to, dur, done) {
+  const from = get(), t0 = performance.now();
+  if (Math.abs(to - from) < 2) { set(to); done && done(); return; }
+  const ease = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+  const step = now => { const k = Math.min(1, (now - t0) / dur); set(from + (to - from) * ease(k)); if (k < 1) requestAnimationFrame(step); else done && done(); };
+  requestAnimationFrame(step);
+}
+function flashToday(el) { if (!el) return; el.classList.remove("today-flash"); void el.offsetWidth; el.classList.add("today-flash"); }
+function scrollToToday(smooth, delay = 0) {
+  const dur = smooth ? 750 : 1100;
   if (isMobile()) {
     const pg = $("#view .page"), row = $(`#view .pane.cur [data-row="${TODAY}"]`);
     if (!pg || !row) return;
@@ -1144,21 +1157,22 @@ function scrollToToday(smooth) {
     const go = () => {
       const r = row.getBoundingClientRect(), pr = pg.getBoundingClientRect();
       if (pg.scrollHeight > pg.clientHeight + 2) {
-        const top = Math.max(0, r.top - pr.top + pg.scrollTop - pg.clientHeight / 2 + r.height / 2);
-        if (smooth && "scrollBehavior" in document.documentElement.style) pg.scrollTo({ top, behavior: "smooth" }); else pg.scrollTop = top;
+        const top = Math.max(0, Math.min(pg.scrollHeight - pg.clientHeight, r.top - pr.top + pg.scrollTop - pg.clientHeight / 2 + r.height / 2));
+        glide(() => pg.scrollTop, v => { pg.scrollTop = v; }, top, dur, () => flashToday(row));
       } else { // aparelhos em que a página inteira rola, e não a área do app
         const top = Math.max(0, r.top + (window.scrollY || 0) - innerHeight / 2 + r.height / 2);
-        window.scrollTo(0, top);
+        glide(() => window.scrollY || 0, v => window.scrollTo(0, v), top, dur, () => flashToday(row));
       }
     };
-    requestAnimationFrame(() => requestAnimationFrame(go)); // espera o celular terminar de montar a tela
+    setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(go)), delay); // espera o celular terminar de montar a tela
     return;
   }
   const row = $(`#view [data-row="${TODAY}"]`);
   if (!row) return;
   const board = $("#board");
   scrollToMonth(CUR);
-  board.scrollTop = Math.max(0, row.offsetTop - board.clientHeight / 2);
+  const top = Math.max(0, row.offsetTop - board.clientHeight / 2);
+  setTimeout(() => glide(() => board.scrollTop, v => { board.scrollTop = v; }, top, dur, () => flashToday(row)), delay);
 }
 function openAddMenu(anchor) {
   const html = TYPE_ORDER.map(t => `<button class="pop-item" data-type="${t}" role="menuitem">${ti(t)}<span>${TYPES[t].label}</span></button>`).join("");
@@ -1356,7 +1370,7 @@ function renderAll() {
   if (PANEL.open) renderPanel();
   placeFab();
   // ao abrir o app (ou entrar na conta), já vai direto para o dia de hoje
-  if (UI.autoToday && S.loaded && UI.tab === "saldos" && !$("#auth")) { UI.autoToday = false; scrollToToday(false); }
+  if (UI.autoToday && S.loaded && UI.tab === "saldos" && !$("#auth")) { UI.autoToday = false; scrollToToday(false, 350); }
 }
 /* ================= animações de entrada ================= */
 function stagger(els, step = 38, max = 18) {
@@ -1585,9 +1599,8 @@ function renderPanel() {
     const tx = S.txs.find(t => t.id === PANEL.detail.tx);
     const occ = tx ? occInfo(tx, PANEL.detail.date) : null;
     if (!occ) { PANEL.detail = null; return renderPanel(); }
-    const created = tx.createdAt ? new Date(tx.createdAt) : null;
     const x = { tx, ...occ };
-    head = `<button class="icon-btn flat" data-pback aria-label="voltar">${I.back}</button><div class="ph-mid"><span class="ph-title">detalhes</span></div>
+    head = `<button class="icon-btn flat" data-pback aria-label="voltar">${I.back}</button><div class="ph-mid"></div>
       <div class="ph-right"><button class="icon-btn flat" data-pedit aria-label="editar movimentação">${I.pencil}</button><button class="icon-btn flat" data-pdel aria-label="apagar movimentação" style="color:var(--c-saida)">${I.trash}</button></div>`;
     body = `<dl class="detail-grid">
       <dt>tipo</dt><dd>${ti(tx.type, true)} ${TYPES[tx.type].label}</dd>
@@ -1595,7 +1608,6 @@ function renderPanel() {
       <dt>valor</dt><dd class="num">${brl(occ.value)}</dd>
       <dt>data</dt><dd class="num">${dBR(occ.date)}</dd>
       <dt>repetição</dt><dd>${repText(x) || "não repete"}</dd>
-      <dt>criada em</dt><dd class="num">${created ? `${pad(created.getDate())}/${pad(created.getMonth() + 1)}/${created.getFullYear()} às ${pad(created.getHours())}:${pad(created.getMinutes())}` : "—"}</dd>
     </dl>`;
   } else {
     const day = PANEL.mode === "day";
