@@ -462,9 +462,14 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .profile-card{margin:16px 16px 0;flex-wrap:wrap}
   .page-inner>.hint{padding:0 16px}
 }
-.m-cal{position:relative;width:44px;height:44px;border-radius:12px;background:var(--surface2);display:grid;place-items:center;overflow:hidden}
-.m-cal::before{content:"";position:absolute;top:0;left:0;right:0;height:10px;background:var(--accent)}
-.m-cal b{font-size:16px;padding-top:8px}
+.m-cal{position:relative;width:44px;height:50px;display:block;padding:0}
+.mc-body{position:absolute;left:0;right:0;top:6px;bottom:0;border-radius:9px;background:var(--cal-bg);overflow:hidden;display:grid;place-items:center;padding-top:9px}
+.mc-body::before{content:"";position:absolute;top:0;left:0;right:0;height:9px;background:var(--accent)}
+.mc-body b{font-size:18px;font-weight:700;color:var(--text)}
+.mc-ring{position:absolute;top:1px;width:5px;height:11px;border-radius:1.5px;background:var(--cal-ring)}
+.mc-ring.l{left:10px}.mc-ring.r{right:10px}
+:root{--cal-bg:#3A3E46;--cal-ring:#101114}
+:root.light{--cal-bg:#E2E4E9;--cal-ring:#1D1F23}
 .m-grid{width:44px;height:44px;border-radius:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:6px;background:var(--surface2)}
 .m-grid i{background:var(--muted);opacity:.35;border-radius:2px}
 .m-grid[aria-pressed="true"]{background:var(--m-zero)}
@@ -1016,9 +1021,12 @@ function openPopover(anchor, html, { width, onMount, align = "below" } = {}) {
   else { left = r.left; top = r.bottom + 6; }
   if (left + w > vw - m) left = Math.max(m, (align === "right" ? r.left - w - 8 : r.right - w));
   // cabe abaixo? se não, sobe; se ainda não couber, limita a altura com rolagem interna
-  if (top + h > vh - m) top = Math.max(m, vh - m - h);
+  // nunca cobre a barra de baixo do celular
+  const nav = $("#bottom-nav"), navTop = nav && nav.offsetHeight && !modals.length ? nav.getBoundingClientRect().top : vh;
+  const bottom = Math.min(vh - m, navTop - 10);
+  if (top + h > bottom) top = Math.max(m, bottom - h);
   el.style.left = left + "px"; el.style.top = top + "px";
-  el.style.maxHeight = (vh - top - m) + "px";
+  el.style.maxHeight = (bottom - top) + "px";
   const off = e => { if (!el.contains(e.target) && !anchor.contains(e.target)) closePopover(); };
   setTimeout(() => document.addEventListener("pointerdown", off), 0);
   popClose = () => { document.removeEventListener("pointerdown", off); el.remove(); popClose = null; };
@@ -1251,7 +1259,7 @@ function renderMobileChrome() {
   const hz = mob && UI.tab === "horizonte";
   document.body.classList.toggle("m-hz", hz);
   $("#top-left").innerHTML = hz ? `<button class="icon-btn" data-mback aria-label="voltar para saldos" style="background:none">${I.back}</button>`
-    : mob && UI.tab !== "menu" ? `<button class="m-cal" data-mtoday aria-label="ir pra hoje, dia ${NOW.getDate()}"><b class="num">${NOW.getDate()}</b></button>` : "";
+    : mob && UI.tab !== "menu" ? `<button class="m-cal" data-mtoday aria-label="ir pra hoje, dia ${NOW.getDate()}"><span class="mc-body"><b class="num">${NOW.getDate()}</b></span><i class="mc-ring l"></i><i class="mc-ring r"></i></button>` : "";
   $(".topbar").hidden = mob && UI.tab === "menu";
   const bn = (tab, label, ic) => `<button class="bn ${UI.tab === tab || (tab === "saldos" && UI.tab === "horizonte") ? "active" : ""}" data-tab="${tab}" aria-label="${label}">${ic}<span>${label}</span></button>`;
   const nav = $("#bottom-nav");
