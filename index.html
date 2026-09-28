@@ -59,6 +59,93 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .logo-tile{display:inline-flex;flex:none}
 .logo .t{letter-spacing:.06em;color:var(--logo-a)}
 .drawer-head .dt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.dt-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;border-radius:999px;padding:0 12px}
+.dt-btn:hover{background:var(--surface2)}
+.dt-btn svg{flex:none;color:var(--muted)}
+/* tela do dia / do mês */
+.drawer.screen{width:min(480px,100%)}
+.ph{display:grid!important;grid-template-columns:48px 1fr auto;align-items:center;padding:calc(12px + env(safe-area-inset-top,0px)) 12px 8px;border-bottom:0}
+.ph-mid{display:flex;align-items:center;justify-content:center;gap:10px;min-width:0}
+.ph-right{display:flex;justify-content:flex-end;gap:4px;min-width:48px}
+.ph-title{font-size:26px;font-weight:700;white-space:nowrap}
+.ph-date{border-radius:12px;padding:2px 8px}
+.ph-date:hover{background:var(--surface2)}
+.icon-btn.flat{background:transparent}
+.icon-btn.flat:hover{background:var(--surface2)}
+.icon-btn.flat svg{width:22px;height:22px}
+.pb{padding:0!important;gap:0!important}
+.pbar{padding:6px 16px 16px;border-bottom:1px solid var(--line2)}
+.pill-dd{display:flex;align-items:center;gap:10px;width:100%;height:48px;padding:0 18px;border:2px solid var(--line2);border-radius:999px;font-weight:600;font-size:16px}
+.pill-dd span:not(.ti){flex:1;text-align:left}
+.pill-dd svg{color:var(--muted);flex:none}
+.lrows{display:flex;flex-direction:column}
+.lrow{display:flex;flex-direction:column;gap:6px;padding:18px 16px;border-bottom:1px solid var(--line);text-align:left;width:100%}
+.lrow:hover{background:var(--surface2)}
+.lrow-top{display:flex;align-items:center;gap:12px;min-width:0}
+.lrow-top .ti{width:22px;height:22px;border-radius:99px}
+.lrow-top b{flex:1;min-width:0;font-size:17px}
+.lrow-val{font-size:17px;white-space:nowrap}
+.lrow-sub{color:var(--muted);font-size:14px;padding-left:34px}
+.pb .detail-grid{padding:16px}
+.pb .skel{margin:12px 16px}
+.form-err{margin:0;padding:10px 14px;border-radius:var(--r-sm);background:color-mix(in srgb,var(--c-saida) 14%,transparent);color:var(--c-saida);font-weight:600;font-size:13px}
+.toasts{display:none!important}
+/* formulário no estilo lista */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.form-modal .modal-body{padding:0 0 12px;gap:0}
+.f-money{display:flex;align-items:baseline;gap:8px;padding:8px 20px 18px}
+.f-cur{font-size:34px;font-weight:700}
+.f-money input{border:0;background:none;outline:none;font-size:44px!important;font-weight:700;width:100%;min-width:0;padding:0}
+.f-hint{margin:-12px 20px 12px;color:var(--muted);font-size:13px}
+.frows{border-top:1px solid var(--line2)}
+.frow{display:flex;align-items:center;gap:14px;width:100%;min-height:66px;padding:0 20px;border-bottom:1px solid var(--line2);text-align:left;cursor:pointer}
+button.frow:hover{background:var(--surface2)}
+.frow .ti.lg{border-radius:99px}
+.fr-ico{width:28px;display:grid;place-items:center;color:var(--text);flex:none}
+.fr-main{flex:1;font-weight:600;font-size:17px;min-width:0}
+.fr-val{font-size:16px;color:var(--text)}
+.fr-chev{color:var(--muted);flex:none}
+.fr-input{flex:1;border:0;background:none;outline:none;font-size:17px;min-width:0;height:64px}
+.fr-input::placeholder{color:var(--muted)}
+@media (max-width:700px){
+  .overlay:has(.form-modal){padding:0}
+  .modal.form-modal{width:100%;height:100%;max-height:none;border-radius:0;border:0}
+  .form-modal .modal-head{padding-top:calc(14px + env(safe-area-inset-top,0px))}
+  .form-modal .modal-foot{padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));border-top:0}
+}
+/* folhas que sobem de baixo */
+.overlay.ov-sheet{place-items:end center;padding:0}
+.modal.sheet{width:min(560px,100%);border-radius:28px 28px 0 0;border-bottom:0;max-height:88vh;animation:sheetUp .24s cubic-bezier(.2,.8,.2,1)}
+@keyframes sheetUp{from{transform:translateY(100%)}}
+.sheet .modal-head{padding:22px 20px 16px;border-bottom:1px solid var(--line2)}
+.sheet .modal-head h2{font-size:24px}
+.sheet .modal-head .icon-btn{background:transparent}
+.sheet .modal-body{padding:0 0 calc(18px + env(safe-area-inset-bottom,0px));gap:0}
+.sheet .modal-body>.btn{margin:8px 20px 0;width:calc(100% - 40px);height:52px}
+.slist{display:flex;flex-direction:column}
+.sitem{display:flex;align-items:center;gap:14px;width:100%;padding:18px 20px;border-bottom:1px solid var(--line2);text-align:left;cursor:pointer}
+.sitem:hover{background:var(--surface2)}
+.sitem.on .si-txt b{color:var(--accent)}
+.si-txt{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}
+.si-txt b{font-size:17px}
+.si-txt span{color:var(--muted);font-size:15px}
+.cal2{padding:18px 20px 8px}
+.cal2-head{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.cal2-head b{flex:1;font-size:18px}
+.cal2-grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:4px;text-align:center}
+.cal2-grid .wd{font-size:13px;color:var(--text);padding:6px 0}
+.cal2-grid button{height:48px;width:48px;margin:0 auto;border-radius:99px;font-size:16px}
+.cal2-grid button:hover{background:var(--surface2)}
+.cal2-grid button.out{color:var(--zero)}
+.cal2-grid button.tdy{box-shadow:inset 0 0 0 1.5px var(--line2)}
+.cal2-grid button.sel{background:var(--accent);color:#fff;font-weight:700}
+.scope-list{display:flex;flex-direction:column;gap:8px}
+.scope{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px 16px;border-radius:var(--r-md);border:1px solid var(--line2);background:var(--surface2);text-align:left;width:100%}
+.scope:hover{border-color:var(--accent)}
+.scope b{font-size:15px}
+.scope span{font-size:12.5px;color:var(--muted)}
+.scope:disabled{opacity:.45;cursor:default;border-color:var(--line2)}
+.scope.danger b{color:var(--c-saida)}
 .drawer .filters{flex-wrap:nowrap;gap:5px;padding:8px}
 .sr{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
 .fchip{position:relative;display:inline-flex;align-items:center;justify-content:center;height:36px;min-width:36px;padding:0 6px;border-radius:999px;border:1.5px solid var(--line2);cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);flex:none;opacity:.55}
@@ -533,7 +620,7 @@ function ti(type, lg) {
   const inner = type === "entrada" ? ARROW_IN : type === "saida" ? ARROW_OUT : type === "diario" || type === "prev" ? "D" : type === "economia" ? "E" : "C";
   return `<span class="${c}" role="img" aria-label="${lbl}">${inner}</span>`;
 }
-const REP_LABEL = { none: "não repete", monthly: "mensalmente", weekly: "semanalmente", daily: "diariamente", installment: "parcelado" };
+const REP_LABEL = { none: "não repete", monthly: "mensalmente", weekly: "semanalmente", daily: "diariamente", yearly: "anualmente", installment: "parcelado" };
 const TAG_COLORS = ["cinza", "azul", "amarelo", "verde", "vermelho", "roxo", "rosa", "marrom"];
 const PARTS = [["saldos", "saldos"], ["performance", "performance"], ["economizado", "economizado"], ["custo", "custo de vida"], ["diarioMedio", "diário médio"]];
 
@@ -682,11 +769,13 @@ function expand(tx, from, to, cb) {
     if (rep === "daily") i0 = Math.max(0, Math.round((f - start) / 864e5) - 1);
     else if (rep === "weekly") i0 = Math.max(0, Math.floor((f - start) / (864e5 * 7)) - 1);
     else if (rep === "monthly") i0 = Math.max(0, miOf(f) - miOf(start) - 1);
+    else if (rep === "yearly") i0 = Math.max(0, f.getFullYear() - start.getFullYear() - 1);
   }
   for (let i = i0; i < count; i++) {
     let d;
     if (rep === "none") d = start;
     else if (rep === "monthly" || inst) d = addMonthsClamp(start, i, od);
+    else if (rep === "yearly") d = addMonthsClamp(start, 12 * i, od);
     else if (rep === "weekly") d = addDays(start, 7 * i);
     else d = addDays(start, i);
     const s = ymd(d);
@@ -694,7 +783,7 @@ function expand(tx, from, to, cb) {
     if (tx.endBefore && s >= tx.endBefore) break;
     if (s < from || (skip && skip.has(s))) continue;
     const v = inst && i === count - 1 ? r2(tx.value - per * (count - 1)) : per;
-    cb(s, v, i + 1, count);
+    if (cb(s, v, i + 1, count) === false) break;
   }
 }
 function occs(from, to) {
@@ -817,12 +906,14 @@ const I = {
 };
 
 /* ================= toasts, popovers, modais ================= */
+/* sem avisos flutuantes: só erros aparecem, dentro da janela aberta */
 function toast(msg, err) {
-  const el = document.createElement("div");
-  el.className = "toast" + (err ? " err" : "");
-  el.innerHTML = `<i></i><span>${esc(msg)}</span>`;
-  $("#toasts").appendChild(el);
-  setTimeout(() => el.remove(), 2800);
+  if (!err) return;
+  const m = modals[modals.length - 1];
+  if (!m) { console.warn(msg); return; }
+  let box = $(".form-err", m.el);
+  if (!box) { box = document.createElement("p"); box.className = "form-err"; box.setAttribute("role", "alert"); $(".modal-body", m.el).prepend(box); }
+  box.textContent = msg; box.scrollIntoView({ block: "nearest" });
 }
 
 let popClose = null;
@@ -854,10 +945,10 @@ function openPopover(anchor, html, { width, onMount, align = "below" } = {}) {
 function closePopover() { popClose && popClose(); }
 
 const modals = [];
-function openModal({ title, body, foot, wide, onMount, onClose, headExtra }) {
+function openModal({ title, body, foot, wide, onMount, onClose, headExtra, cls }) {
   const ov = document.createElement("div");
-  ov.className = "overlay";
-  ov.innerHTML = `<div class="modal ${wide ? "wide" : ""}" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+  ov.className = "overlay" + (cls === "sheet" ? " ov-sheet" : "");
+  ov.innerHTML = `<div class="modal ${wide ? "wide" : ""} ${cls || ""}" role="dialog" aria-modal="true" aria-label="${esc(title)}">
     <div class="modal-head"><h2>${esc(title)}</h2>${headExtra || ""}<button class="icon-btn" data-close aria-label="fechar janela">${I.x}</button></div>
     <div class="modal-body">${body}</div>${foot ? `<div class="modal-foot">${foot}</div>` : ""}</div>`;
   $("#modal-root").appendChild(ov);
@@ -873,6 +964,7 @@ function openModal({ title, body, foot, wide, onMount, onClose, headExtra }) {
   const f = $("input,textarea,select", api.el); if (f && !f.readOnly) setTimeout(() => f.focus(), 30);
   return api;
 }
+function openSheet(opts) { return openModal({ ...opts, cls: "sheet" }); }
 function confirmBox({ title, text, ok = "confirmar", danger = true }) {
   return new Promise(res => {
     let done = false;
@@ -1224,178 +1316,188 @@ $("#view").addEventListener("click", e => {
   if (ml) openMonthList(UI.tMonth, ml.dataset.mlist);
   if (e.target.closest("[data-goprev]")) openPrevModal();
 });
-function openMonthList(mi, type) {
-  const list = monthStats(mi).list.filter(x => type === "all" || x.tx.type === type).sort((a, b) => b.date.localeCompare(a.date) || (b.tx.createdAt || 0) - (a.tx.createdAt || 0));
-  const title = (type === "all" ? "todas as movimentações" : TYPES[type].label) + ` · ${MONTHS[miM(mi)]}`;
-  const body = list.length ? `<div style="display:flex;flex-direction:column;gap:8px">${list.map(x => itemHTML(x, false)).join("")}</div>`
-    : `<div class="empty"><span>sem movimentações por aqui</span></div>`;
-  const m = openModal({ title, body, wide: true });
-  m.el.addEventListener("click", e => { const it = e.target.closest("[data-item]"); if (it) { m.close(); openPanel(it.dataset.date, null, { tx: it.dataset.item, date: it.dataset.date }); } });
-}
+function openMonthList(mi, type) { openMonthScreen(mi, type); }
 
 
-/* ================= painel do dia ================= */
-const PANEL = { open: false, date: TODAY, filter: null, detail: null };
+/* ================= painel do dia / movimentações do mês (tela cheia) ================= */
+const PANEL = { open: false, mode: "day", date: TODAY, mi: CUR, filter: null, detail: null };
 function openPanel(date, types, detail) {
-  PANEL.open = true; PANEL.date = date; PANEL.filter = types && types.length ? [...types] : null; PANEL.detail = detail || null;
+  Object.assign(PANEL, { open: true, mode: "day", date, filter: types && types.length === 1 ? types[0] : null, detail: detail || null });
+  renderPanel();
+}
+function openMonthScreen(mi, type) {
+  Object.assign(PANEL, { open: true, mode: "month", mi, filter: type === "all" ? null : type, detail: null });
   renderPanel();
 }
 function closePanel() { PANEL.open = false; $("#drawer-root").innerHTML = ""; }
 function repText(x) {
   const r = x.tx.rep || "none";
-  if (r === "installment") return `# ${x.n}/${x.total} mensais`;
-  return REP_LABEL[r];
+  if (r === "installment") return `${x.n}/${x.total} mensais`;
+  return r === "none" ? "" : REP_LABEL[r];
 }
-function itemHTML(x, dots = true) {
-  return `<div class="item" data-item="${x.tx.id}" data-date="${x.date}" role="button" tabindex="0" aria-label="${esc(TYPES[x.tx.type].label)}: ${esc(x.tx.desc)}, ${brl(x.value)}. ver detalhes">
-    ${ti(x.tx.type, true)}
-    <div class="grow"><div class="nm ellip" title="${esc(x.tx.desc)}">${esc(x.tx.desc)}</div><div class="meta"><span class="num">${dBR(x.date)}</span><span>${repText(x)}</span></div></div>
-    <span class="val num">${brl(x.value)}</span>
-    ${dots ? `<button class="dots" data-dots aria-label="mais opções de ${esc(x.tx.desc)}" aria-haspopup="menu">${I.dots.replace("<svg", '<svg width="18" height="18"')}</button>` : ""}</div>`;
+const ddmm = s => s.slice(8, 10) + "/" + s.slice(5, 7);
+function itemHTML(x) {
+  const r = repText(x);
+  return `<button class="lrow" data-item="${x.tx.id}" data-date="${x.date}" aria-label="${esc(TYPES[x.tx.type].label)}: ${esc(x.tx.desc)}, ${brl(x.value)}, ${dBR(x.date)}. ver detalhes">
+    <span class="lrow-top">${ti(x.tx.type, true)}<b class="ellip">${esc(x.tx.desc)}</b><span class="lrow-val num">${brl(x.value)}</span></span>
+    <span class="lrow-sub num">${ddmm(x.date)}${r ? ` · ${r}` : ""}</span></button>`;
 }
+function filterLabel() { const f = PANEL.filter; return f ? `${ti(f)}<span>${TYPES[f].col}</span>` : `<span class="ti" style="color:var(--muted)">•</span><span>todas</span>`; }
 function renderPanel() {
   const root = $("#drawer-root");
-  const d = PANEL.date;
   let head, body;
   if (PANEL.detail) {
     const tx = S.txs.find(t => t.id === PANEL.detail.tx);
-    if (!tx) { PANEL.detail = null; return renderPanel(); }
-    let occ = null; expand(tx, PANEL.detail.date, PANEL.detail.date, (date, value, n, total) => occ = { tx, date, value, n, total });
+    const occ = tx ? occInfo(tx, PANEL.detail.date) : null;
     if (!occ) { PANEL.detail = null; return renderPanel(); }
-    const tm = tagMap();
     const created = tx.createdAt ? new Date(tx.createdAt) : null;
-    head = `<button class="icon-btn" data-pback aria-label="voltar para a lista do dia">${I.back}</button><div class="dt">detalhes</div>
-      <button class="icon-btn" data-pedit aria-label="editar movimentação">${I.pencil}</button><button class="icon-btn" data-pdel aria-label="apagar movimentação" style="color:var(--c-saida)">${I.trash}</button>`;
+    const x = { tx, ...occ };
+    head = `<button class="icon-btn flat" data-pback aria-label="voltar">${I.back}</button><div class="ph-mid"><span class="ph-title">detalhes</span></div>
+      <div class="ph-right"><button class="icon-btn flat" data-pedit aria-label="editar movimentação">${I.pencil}</button><button class="icon-btn flat" data-pdel aria-label="apagar movimentação" style="color:var(--c-saida)">${I.trash}</button></div>`;
     body = `<dl class="detail-grid">
       <dt>tipo</dt><dd>${ti(tx.type, true)} ${TYPES[tx.type].label}</dd>
       <dt>nome</dt><dd>${esc(tx.desc)}</dd>
       <dt>valor</dt><dd class="num">${brl(occ.value)}</dd>
       <dt>data</dt><dd class="num">${dBR(occ.date)}</dd>
-      <dt>repetição</dt><dd>${repText(occ)}</dd>
-      ${tx.type === "cartao" ? `<dt>cartão</dt><dd>${esc(S.cards.find(c => c.id === tx.cardId)?.name || "sem cartão")}</dd>` : ""}
+      <dt>repetição</dt><dd>${repText(x) || "não repete"}</dd>
       <dt>criada em</dt><dd class="num">${created ? `${pad(created.getDate())}/${pad(created.getMonth() + 1)}/${created.getFullYear()} às ${pad(created.getHours())}:${pad(created.getMinutes())}` : "—"}</dd>
     </dl>`;
   } else {
-    const prevD = ymd(addDays(parse(d), -1)), nextD = ymd(addDays(parse(d), 1));
-    head = `<button class="icon-btn" data-pclose aria-label="fechar painel do dia">${I.x}</button>
-      <button class="icon-btn" data-pday="${prevD}" aria-label="dia anterior" ${prevD < miFirst(MIN_MI) ? "disabled" : ""}>${I.left}</button>
-      <div class="dt" title="${dLong(d)}" aria-label="${dLong(d)}">${dShort(d)}</div>
-      <button class="icon-btn" data-pday="${nextD}" aria-label="próximo dia" ${nextD > miLast(MAX_MI) ? "disabled" : ""}>${I.right}</button>
-      <button class="icon-btn" data-padd aria-label="adicionar movimentação neste dia" style="background:var(--accent);color:#fff">${I.plus}</button>`;
-    const f = PANEL.filter;
-    const on = t => !f || f.includes(t);
-    const filt = `<div class="filters" role="group" aria-label="filtrar por tipo">
-      <label class="fchip fchip-all"><input type="checkbox" class="sr" id="pf-all" ${!f ? "checked" : ""}>todas</label>
-      ${TYPE_ORDER.map(t => `<label class="fchip" title="${TYPES[t].col}"><input type="checkbox" class="sr" data-pf="${t}" aria-label="${TYPES[t].col}" ${on(t) ? "checked" : ""}>${ti(t)}</label>`).join("")}
-      <button class="btn sm primary" data-papply>aplicar</button></div>`;
-    let items;
-    if (!S.loaded) items = `<div class="skel"></div><div class="skel"></div><div class="skel"></div>`;
-    else {
-      const list = occs(d, d).filter(x => on(x.tx.type)).sort((a, b) => TYPE_ORDER.indexOf(a.tx.type) - TYPE_ORDER.indexOf(b.tx.type));
-      items = list.length ? list.map(x => itemHTML(x)).join("")
-        : `<div class="empty"><button class="plus" data-padd aria-label="adicionar movimentação neste dia">${I.plus.replace("<svg", '<svg width="26" height="26"')}</button><span>sem movimentações por aqui</span></div>`;
+    const day = PANEL.mode === "day";
+    let mid, list, prevOk, nextOk;
+    if (day) {
+      const d = PANEL.date;
+      prevOk = ymd(addDays(parse(d), -1)) >= miFirst(MIN_MI); nextOk = ymd(addDays(parse(d), 1)) <= miLast(MAX_MI);
+      mid = `<button class="ph-title ph-date num" data-pcal aria-haspopup="dialog" aria-label="escolher dia, atual: ${dLong(d)}">${ddmm(d)}</button>`;
+      list = occs(d, d).sort((a, b) => TYPE_ORDER.indexOf(a.tx.type) - TYPE_ORDER.indexOf(b.tx.type));
+    } else {
+      const mi = PANEL.mi;
+      prevOk = mi > (UI.past ? MIN_MI : Math.min(CUR, mi)); nextOk = mi < MAX_MI;
+      mid = `<span class="ph-title num">${MON3[miM(mi)]}/${String(miY(mi)).slice(2)}</span>`;
+      list = occs(miFirst(mi), miLast(mi)).sort((a, b) => b.date.localeCompare(a.date) || TYPE_ORDER.indexOf(a.tx.type) - TYPE_ORDER.indexOf(b.tx.type));
     }
-    const s = saldoOf(d);
-    body = filt + `<div class="row" style="padding:0 2px;border:0"><span class="grow muted">saldo do dia</span><span class="tag-chip ${saldoCls(s)} num" style="height:28px;font-size:13px">${brl(s)}</span></div>` + items;
+    if (PANEL.filter) list = list.filter(x => x.tx.type === PANEL.filter);
+    head = `<button class="icon-btn flat" data-pclose aria-label="voltar">${I.back}</button>
+      <div class="ph-mid"><button class="icon-btn flat" data-pstep="-1" aria-label="${day ? "dia anterior" : "mês anterior"}" ${prevOk ? "" : "disabled"}>${I.left}</button>${mid}<button class="icon-btn flat" data-pstep="1" aria-label="${day ? "próximo dia" : "próximo mês"}" ${nextOk ? "" : "disabled"}>${I.right}</button></div>
+      <div class="ph-right"><button class="icon-btn flat" data-padd aria-label="adicionar movimentação" aria-haspopup="menu">${I.plus}</button></div>`;
+    const dd = `<button class="pill-dd" data-pfilter aria-haspopup="menu" aria-label="filtrar por tipo, atual: ${PANEL.filter ? TYPES[PANEL.filter].col : "todas"}">${filterLabel()}<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>`;
+    const items = !S.loaded ? `<div class="skel"></div><div class="skel"></div><div class="skel"></div>`
+      : list.length ? `<div class="lrows">${list.map(itemHTML).join("")}</div>`
+      : `<div class="empty"><button class="plus" data-padd aria-label="adicionar movimentação">${I.plus.replace("<svg", '<svg width="26" height="26"')}</button><span>sem movimentações por aqui</span></div>`;
+    body = `<div class="pbar">${dd}</div>${items}`;
   }
   const fresh = !root.firstChild;
-  root.innerHTML = `<div class="drawer-ov" data-pclose ${fresh ? "" : 'style="animation:none"'}></div><aside class="drawer" role="dialog" aria-label="painel do dia" ${fresh ? "" : 'style="animation:none"'}><div class="drawer-head">${head}</div><div class="drawer-body">${body}</div></aside>`;
+  root.innerHTML = `<div class="drawer-ov" data-pclose ${fresh ? "" : 'style="animation:none"'}></div><aside class="drawer screen" role="dialog" aria-label="${PANEL.mode === "day" ? "movimentações do dia" : "movimentações do mês"}" ${fresh ? "" : 'style="animation:none"'}><div class="drawer-head ph">${head}</div><div class="drawer-body pb">${body}</div></aside>`;
 }
 $("#drawer-root").addEventListener("click", e => {
   const t = e.target;
   if (t.closest("[data-pclose]")) return closePanel();
-  const day = t.closest("[data-pday]"); if (day) { PANEL.date = day.dataset.pday; return renderPanel(); }
-  if (t.closest("[data-padd]")) return openForm({ type: PANEL.filter && PANEL.filter.length === 1 ? PANEL.filter[0] : "saida", date: PANEL.date });
-  if (t.closest("[data-papply]")) {
-    const all = $("#pf-all").checked, sel = $$("[data-pf]").filter(c => c.checked).map(c => c.dataset.pf);
-    PANEL.filter = all || sel.length === TYPE_ORDER.length || !sel.length ? null : sel;
-    renderPanel(); toast("filtro aplicado"); return;
+  const st = t.closest("[data-pstep]");
+  if (st) {
+    const d = +st.dataset.pstep;
+    if (PANEL.mode === "day") PANEL.date = ymd(addDays(parse(PANEL.date), d)); else PANEL.mi += d;
+    renderPanel(); const el = $("#drawer-root .lrows, #drawer-root .empty"); if (el) animateSlideEl(el, d); return;
   }
-  if (t.closest("[data-pback]")) { PANEL.detail = null; return renderPanel(); }
-  if (t.closest("[data-pedit]")) { const tx = S.txs.find(x => x.id === PANEL.detail.tx); return openForm({ tx }); }
-  if (t.closest("[data-pdel]")) { const tx = S.txs.find(x => x.id === PANEL.detail.tx); return deleteOcc(tx, PANEL.detail.date); }
-  const dots = t.closest("[data-dots]");
-  if (dots) {
-    const it = dots.closest("[data-item]"), tx = S.txs.find(x => x.id === it.dataset.item), date = it.dataset.date;
-    openPopover(dots, `<div role="menu"><button class="pop-item" data-e>${I.pencil.replace("<svg", '<svg width="18" height="18"')}editar</button><button class="pop-item red" data-d>${I.trash.replace("<svg", '<svg width="18" height="18"')}apagar</button></div>`, {
-      width: 180, onMount: el => {
-        $("[data-e]", el).onclick = () => { closePopover(); openForm({ tx }); };
-        $("[data-d]", el).onclick = () => { closePopover(); deleteOcc(tx, date); };
-      }
+  const pc = t.closest("[data-pcal]"); if (pc) { datePicker(pc, PANEL.date, v => { PANEL.date = v; renderPanel(); }); return; }
+  const pf = t.closest("[data-pfilter]");
+  if (pf) {
+    const opt = (k, lbl, ic) => `<button class="pop-item" data-fk="${k}" ${(PANEL.filter || "all") === k ? 'style="color:var(--accent)"' : ""}>${ic}${lbl}</button>`;
+    openPopover(pf, `<div role="menu" aria-label="filtrar por tipo">${opt("all", "todas", '<span class="ti" style="color:var(--muted)">•</span>')}${TYPE_ORDER.map(k => opt(k, TYPES[k].col, ti(k))).join("")}</div>`, {
+      width: pf.offsetWidth, onMount: el => el.addEventListener("click", ev => { const b = ev.target.closest("[data-fk]"); if (b) { PANEL.filter = b.dataset.fk === "all" ? null : b.dataset.fk; closePopover(); renderPanel(); } })
     });
     return;
   }
+  const add = t.closest("[data-padd]");
+  if (add) {
+    const date = PANEL.mode === "day" ? PANEL.date : (PANEL.mi === CUR ? TODAY : miFirst(PANEL.mi));
+    if (PANEL.filter) return openForm({ type: PANEL.filter, date });
+    openPopover(add, `<div role="menu" aria-label="escolha o tipo">${TYPE_ORDER.map(k => `<button class="pop-item" data-nt="${k}">${ti(k)}<span>${TYPES[k].label}</span></button>`).join("")}</div>`, {
+      width: 240, onMount: el => el.addEventListener("click", ev => { const b = ev.target.closest("[data-nt]"); if (b) { closePopover(); openForm({ type: b.dataset.nt, date }); } })
+    });
+    return;
+  }
+  if (t.closest("[data-pback]")) { PANEL.detail = null; return renderPanel(); }
+  if (t.closest("[data-pedit]")) { const tx = S.txs.find(x => x.id === PANEL.detail.tx); return openForm({ tx, occ: PANEL.detail.date }); }
+  if (t.closest("[data-pdel]")) { const tx = S.txs.find(x => x.id === PANEL.detail.tx); return deleteOcc(tx, PANEL.detail.date); }
   const it = t.closest("[data-item]");
   if (it) { PANEL.detail = { tx: it.dataset.item, date: it.dataset.date }; renderPanel(); }
 });
-$("#drawer-root").addEventListener("change", e => {
-  if (e.target.id === "pf-all" && e.target.checked) $$("[data-pf]").forEach(c => c.checked = true);
-  if (e.target.id === "pf-all" && !e.target.checked) $$("[data-pf]").forEach(c => c.checked = false);
-  if (e.target.dataset.pf) $("#pf-all").checked = $$("[data-pf]").every(c => c.checked);
-});
-$("#drawer-root").addEventListener("keydown", e => {
-  if ((e.key === "Enter" || e.key === " ") && e.target.matches("[data-item]")) { e.preventDefault(); e.target.click(); }
-});
+function animateSlideEl(el, dir) { el.classList.remove("slide-l", "slide-r"); void el.offsetWidth; el.classList.add(dir > 0 ? "slide-l" : "slide-r"); }
 
+/* ===== repetições: escolher o alcance (só este, este e os próximos, só os próximos, todos) ===== */
+function occInfo(tx, date) { let r = null; expand(tx, date, date, (d, v, n, t) => { r = { date: d, value: v, n, total: t }; }); return r; }
+function nextOccDate(tx, date) { let r = null; expand(tx, ymd(addDays(parse(date), 1)), miLast(MAX_MI), d => { r = d; return false; }); return r; }
+const dayDiff = (a, b) => Math.round((parse(b) - parse(a)) / 864e5);
+const shiftDate = (s, n) => ymd(addDays(parse(s), n));
+function chooseScope({ title, text, date, hasNext, danger }) {
+  return new Promise(res => {
+    let done = false;
+    const m = openModal({
+      title, body: `<p style="margin:0;color:var(--muted);line-height:1.5">${text}</p>
+      <div class="scope-list">
+        <button class="scope" data-s="one"><b>só este</b><span>apenas o de ${dBR(date)}</span></button>
+        <button class="scope" data-s="from"><b>este e os próximos</b><span>de ${dBR(date)} em diante</span></button>
+        <button class="scope" data-s="next" ${hasNext ? "" : "disabled"}><b>só os próximos</b><span>${hasNext ? `depois de ${dBR(date)}, sem mexer neste` : "não tem próximos"}</span></button>
+        <button class="scope ${danger ? "danger" : ""}" data-s="all"><b>todos</b><span>todas as repetições, inclusive as que já passaram</span></button>
+      </div>`, onClose: () => { if (!done) res(null); }
+    });
+    m.el.addEventListener("click", e => { const b = e.target.closest("[data-s]"); if (!b || b.disabled) return; done = true; m.close(); res(b.dataset.s); });
+  });
+}
 async function deleteOcc(tx, date) {
   if (!tx) return;
-  const rep = tx.rep || "none";
-  if (rep === "none") {
+  if ((tx.rep || "none") === "none") {
     if (!(await confirmBox({ title: "apagar movimentação?", text: `"${esc(tx.desc)}" vai sumir do app.`, ok: "apagar" }))) return;
     await delTx(tx.id); afterDelete(); toast("movimentação apagada"); return;
   }
-  const m = openModal({
-    title: "apagar repetição", body: `<p style="margin:0;color:var(--muted)">"${esc(tx.desc)}" se repete. o que você quer apagar?</p>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <button class="btn block" data-o="one">só a de ${dBR(date)}</button>
-        <button class="btn block" data-o="next">essa e as próximas</button>
-        <button class="btn block solid-danger" data-o="all">todas as repetições</button></div>`
-  });
-  m.el.addEventListener("click", async e => {
-    const b = e.target.closest("[data-o]"); if (!b) return;
-    m.close();
-    const o = b.dataset.o;
-    if (o === "all" || (o === "next" && date <= tx.date)) await delTx(tx.id);
-    else if (o === "one") await saveTx(tx.id, { ...stripId(tx), skip: [...(tx.skip || []), date] });
-    else await saveTx(tx.id, { ...stripId(tx), endBefore: date });
-    afterDelete(); toast(o === "one" ? "repetição apagada" : "repetições apagadas");
-  });
+  const nd = nextOccDate(tx, date);
+  const s = await chooseScope({ title: "apagar", text: `"${esc(tx.desc)}" se repete. o que você quer apagar?`, date, hasNext: !!nd, danger: true });
+  if (!s) return;
+  const first = occInfo(tx, date)?.n === 1;
+  if (s === "all" || (s === "from" && first)) await delTx(tx.id);
+  else if (s === "one") await saveTx(tx.id, { ...stripId(tx), skip: [...(tx.skip || []), date] });
+  else if (s === "from") await saveTx(tx.id, { ...stripId(tx), endBefore: date });
+  else if (s === "next") await saveTx(tx.id, { ...stripId(tx), endBefore: nd });
+  afterDelete(); toast(s === "one" ? "apagado só esse" : s === "next" ? "próximos apagados" : "repetições apagadas");
 }
 function afterDelete() { if (PANEL.open) { PANEL.detail = null; renderPanel(); } }
 
 /* ================= formulário adicionar / editar ================= */
 function parseMoney(str) { const dg = String(str).replace(/\D/g, ""); return dg ? parseInt(dg, 10) / 100 : 0; }
-function openForm({ type = "saida", date = TODAY, tx = null } = {}) {
+function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) {
   closePopover();
   const edit = !!tx;
+  const recurring = edit && (tx.rep || "none") !== "none";
+  const occD = recurring ? (occ || tx.date) : (edit ? tx.date : null);
+  const oi = recurring ? occInfo(tx, occD) : null;
+  const perInst = edit && tx.rep === "installment";
   const f = edit ? {
-    value: tx.value, type: tx.type, desc: tx.desc, date: tx.date, rep: tx.rep || "none", until: tx.until || "forever",
+    value: perInst ? (oi ? oi.value : r2(tx.value / (tx.installments || 1))) : tx.value, type: tx.type, desc: tx.desc, date: occD, rep: tx.rep || "none", until: tx.until || "forever",
     count: tx.count || 12, installments: tx.installments || 2, tags: [...(tx.tags || [])], cardId: tx.cardId || "",
   } : { value: 0, type, desc: "", date, rep: "none", until: "forever", count: 12, installments: 2, tags: [], cardId: "" };
-  const m = openModal({ title: edit ? "editar movimentação" : "adicionar", body: "", foot: `<button class="btn block" id="f-submit"></button>` });
+  const m = openModal({ title: edit ? "editar" : "adicionar", body: "", cls: "form-modal", foot: `<button class="btn block" id="f-submit"></button>` });
   const el = m.el;
-  const tm = () => tagMap();
+  const REP_DESC = { none: "acontece uma vez só", monthly: "repete o mesmo valor mensalmente", weekly: "repete o mesmo valor semanalmente", daily: "repete o mesmo valor diariamente", yearly: "repete o mesmo valor anualmente", installment: "divide o valor pelo número de parcelas" };
+  const REP_ICO = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="15" height="15" rx="2.5"/><path d="M3 9h15M7.5 2.5v4M13.5 2.5v4"/><path d="M21 15a4 4 0 1 1-1.2-2.8M21 11.5V14h-2.5"/></svg>';
+  const PEN = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
+  const CAL = I.cal.replace("<svg", '<svg width="22" height="22"');
+  const CHEV = '<svg class="fr-chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>';
+  const dNum = s => { const d = parse(s); return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`; };
   function draw() {
-    const inst = f.rep === "installment", repeats = ["monthly", "weekly", "daily"].includes(f.rep);
-    const card = S.cards.find(c => c.id === f.cardId);
+    const inst = f.rep === "installment", repeats = ["monthly", "weekly", "daily", "yearly"].includes(f.rep);
+    const pi = perInst && inst;
     m.setBody(`
-      <div class="field"><span class="flabel" id="lbl-val">${inst ? "valor total" : "valor"}</span>
-        <div class="money"><span>R$</span><input id="f-val" inputmode="numeric" aria-labelledby="lbl-val" class="num" value="${fmt(f.value)}"></div>
-        ${inst ? `<span class="hint num">${f.installments}x de ${brl(f.value / f.installments)}</span>` : ""}</div>
-      <div class="field"><span class="flabel">tipo</span>
-        <button class="selectbox" id="f-type" aria-haspopup="menu" aria-label="mudar tipo, atual: ${TYPES[f.type].label}">${ti(f.type)}<span class="grow">${TYPES[f.type].label}</span><span class="muted" style="font-size:12px">mudar para</span></button></div>
-      <div class="field"><label for="f-desc">descrição</label><input class="input" id="f-desc" maxlength="80" placeholder="ex.: ${f.type === "entrada" ? "salário" : f.type === "economia" ? "reserva de emergência" : f.type === "diario" ? "mercado" : f.type === "cartao" ? "fatura do mês" : "aluguel"}" value="${esc(f.desc)}"></div>
-      <div class="field"><span class="flabel">data</span><button class="selectbox" id="f-date" aria-haspopup="dialog" aria-label="escolher data, atual: ${dBR(f.date)}">${I.cal.replace("<svg", '<svg width="18" height="18"')}<span class="grow num">${dLong(f.date)}</span></button></div>
-      ${f.type === "cartao" ? `<div class="field"><span class="flabel">escolha um cartão</span>
-        <button class="selectbox" id="f-card" aria-haspopup="menu" aria-label="escolher cartão">${I.card.replace("<svg", '<svg width="18" height="18"')}<span class="grow">${card ? esc(card.name) : '<span class="muted">nenhum cartão escolhido</span>'}</span></button></div>` : ""}
-      <div class="field"><span class="flabel">repetição</span>
-        <div class="seg" role="group" aria-label="repetição">${Object.entries(REP_LABEL).map(([k, v]) => `<button data-rep="${k}" aria-pressed="${f.rep === k}">${v}</button>`).join("")}</div>
-        ${edit && tx.rep && tx.rep !== "none" ? `<span class="hint">a edição vale para todas as repetições desse lançamento.</span>` : ""}</div>
-      ${repeats ? `<div class="field"><span class="flabel">até quando</span>
-        <div class="seg" role="group" aria-label="até quando"><button data-until="forever" aria-pressed="${f.until === "forever"}">a perder de vista</button><button data-until="count" aria-pressed="${f.until === "count"}">número de repetições</button></div>
-        ${f.until === "count" ? `<div class="stepper"><button class="icon-btn" data-cnt="-1" aria-label="menos uma repetição">−</button><b class="num" aria-live="polite">${f.count}</b><button class="icon-btn" data-cnt="1" aria-label="mais uma repetição">+</button><span class="muted">vezes</span></div>` : ""}</div>` : ""}
-      ${inst ? `<div class="field"><span class="flabel">parcelas</span><div class="stepper"><button class="icon-btn" data-inst="-1" aria-label="menos uma parcela">−</button><b class="num" aria-live="polite">${f.installments}</b><button class="icon-btn" data-inst="1" aria-label="mais uma parcela">+</button><span class="muted num">parcelas mensais de ${brl(f.value / f.installments)}</span></div></div>` : ""}
-    `);
+      <div class="f-money"><span class="flabel sr-only" id="lbl-val">${pi ? "valor da parcela" : inst ? "valor total" : "valor"}</span>
+        <span class="f-cur">R$</span><input id="f-val" inputmode="numeric" aria-labelledby="lbl-val" class="num" value="${fmt(f.value)}"></div>
+      ${inst ? `<p class="f-hint num">${pi ? `valor de cada parcela` : `${f.installments}x de ${brl(f.value / f.installments)}`}</p>` : ""}
+      <div class="frows">
+        <button class="frow" id="f-type" aria-haspopup="dialog" aria-label="tipo: ${TYPES[f.type].label}. mudar">${ti(f.type, true)}<span class="fr-main">${TYPES[f.type].label}</span>${CHEV}</button>
+        <label class="frow"><span class="fr-ico">${PEN}</span><input class="fr-input" id="f-desc" maxlength="80" placeholder="descrição" aria-label="descrição" value="${esc(f.desc)}"></label>
+        <button class="frow" id="f-date" aria-haspopup="dialog" aria-label="data: ${dBR(f.date)}. mudar"><span class="fr-ico">${CAL}</span><span class="fr-main">data</span><span class="fr-val num">${dNum(f.date)}</span>${CHEV}</button>
+        <button class="frow" id="f-rep" aria-haspopup="dialog" aria-label="repetição: ${REP_LABEL[f.rep]}. mudar"><span class="fr-ico">${REP_ICO}</span><span class="fr-main">${REP_LABEL[f.rep]}</span>${CHEV}</button>
+        ${repeats ? `<button class="frow" id="f-until" aria-haspopup="dialog"><span class="fr-ico">${I.horizonte.replace("<svg", '<svg width="22" height="22"')}</span><span class="fr-main">até quando</span><span class="fr-val num">${f.until === "count" ? `${f.count} vezes` : "a perder de vista"}</span>${CHEV}</button>` : ""}
+        ${inst ? `<div class="frow"><span class="fr-ico">${I.card.replace("<svg", '<svg width="22" height="22"')}</span><span class="fr-main">parcelas</span><span class="stepper"><button class="icon-btn" data-inst="-1" aria-label="menos uma parcela">−</button><b class="num" aria-live="polite">${f.installments}</b><button class="icon-btn" data-inst="1" aria-label="mais uma parcela">+</button></span></div>` : ""}
+      </div>`);
     const b = $("#f-submit", el);
     b.className = `btn block btn-t-${f.type}`;
     b.textContent = edit ? "salvar edição" : TYPES[f.type].btn;
@@ -1405,69 +1507,104 @@ function openForm({ type = "saida", date = TODAY, tx = null } = {}) {
     if (e.target.id === "f-val") {
       f.value = parseMoney(e.target.value);
       e.target.value = fmt(f.value);
-      const hint = $(".money + .hint", el); if (hint) hint.textContent = `${f.installments}x de ${brl(f.value / f.installments)}`;
-      const inl = $("[data-inst]", el)?.parentElement.querySelector("span.muted"); if (inl) inl.textContent = `parcelas mensais de ${brl(f.value / f.installments)}`;
+      const h = $(".f-hint", el); if (h && !(perInst && f.rep === "installment")) h.textContent = `${f.installments}x de ${brl(f.value / f.installments)}`;
     }
     if (e.target.id === "f-desc") f.desc = e.target.value;
   });
+  const listSheet = (title, items, cur, pick) => {
+    const s = openSheet({ title, body: `<div class="slist">${items.map(([k, main, sub, ico]) => `<button class="sitem ${k === cur ? "on" : ""}" data-k="${k}">${ico ? `<span class="si-ico">${ico}</span>` : ""}<span class="si-txt"><b>${main}</b>${sub ? `<span>${sub}</span>` : ""}</span></button>`).join("")}</div>` });
+    s.el.addEventListener("click", ev => { const b = ev.target.closest("[data-k]"); if (b) { s.close(); pick(b.dataset.k); } });
+  };
   el.addEventListener("click", e => {
     const t = e.target;
-    const rep = t.closest("[data-rep]"); if (rep) { f.rep = rep.dataset.rep; return draw(); }
-    const un = t.closest("[data-until]"); if (un) { f.until = un.dataset.until; return draw(); }
-    const cn = t.closest("[data-cnt]"); if (cn) { f.count = Math.max(1, Math.min(999, f.count + +cn.dataset.cnt)); return draw(); }
     const ins = t.closest("[data-inst]"); if (ins) { f.installments = Math.max(2, Math.min(120, f.installments + +ins.dataset.inst)); return draw(); }
-    if (t.closest("#f-type")) {
-      const a = t.closest("#f-type");
-      openPopover(a, `<div role="menu" aria-label="mudar para">${TYPE_ORDER.map(k => `<button class="pop-item" data-to="${k}">${ti(k)}${TYPES[k].label}</button>`).join("")}</div>`, {
-        width: a.offsetWidth, onMount: p => p.addEventListener("click", ev => { const b = ev.target.closest("[data-to]"); if (b) { f.type = b.dataset.to; closePopover(); draw(); } })
+    if (t.closest("#f-type")) listSheet("tipo", TYPE_ORDER.map(k => [k, TYPES[k].label, "", ti(k, true)]), f.type, k => { f.type = k; draw(); });
+    if (t.closest("#f-date")) datePicker(null, f.date, v => { f.date = v; draw(); });
+    if (t.closest("#f-rep")) listSheet("repetir", Object.keys(REP_LABEL).map(k => [k, REP_LABEL[k], REP_DESC[k]]), f.rep, k => { f.rep = k; draw(); });
+    if (t.closest("#f-until")) {
+      const s = openSheet({ title: "até quando", body: `<div class="slist">
+          <button class="sitem ${f.until === "forever" ? "on" : ""}" data-u="forever"><span class="si-txt"><b>a perder de vista</b><span>repete sem data pra acabar</span></span></button>
+          <div class="sitem ${f.until === "count" ? "on" : ""}" data-u="count" role="button" tabindex="0"><span class="si-txt"><b>número de repetições</b><span>escolha quantas vezes</span></span>
+            <span class="stepper"><button class="icon-btn" data-c="-1" aria-label="menos uma">−</button><b class="num" id="u-n">${f.count}</b><button class="icon-btn" data-c="1" aria-label="mais uma">+</button></span></div>
+        </div><button class="btn block primary" data-usave>salvar</button>` });
+      let mode = f.until, cnt = f.count;
+      s.el.addEventListener("click", ev => {
+        const c = ev.target.closest("[data-c]");
+        if (c) { cnt = Math.max(1, Math.min(999, cnt + +c.dataset.c)); $("#u-n", s.el).textContent = cnt; mode = "count"; }
+        const u = ev.target.closest("[data-u]"); if (u && !c) mode = u.dataset.u;
+        $$("[data-u]", s.el).forEach(x => x.classList.toggle("on", x.dataset.u === mode));
+        if (ev.target.closest("[data-usave]")) { f.until = mode; f.count = cnt; s.close(); draw(); }
       });
     }
-    if (t.closest("#f-date")) datePicker(t.closest("#f-date"), f.date, v => { f.date = v; draw(); });
-    if (t.closest("#f-card")) cardPicker(t.closest("#f-card"), f, draw);
     if (t.closest("#f-submit")) submit();
   });
   async function submit() {
     if (!(f.value > 0)) { toast("coloca um valor maior que zero", true); $("#f-val", el)?.focus(); return; }
     if (f.date < miFirst(MIN_MI) || f.date > miLast(MAX_MI)) { toast("a data precisa estar dentro de 5 anos pra trás ou pra frente", true); return; }
     const desc = f.desc.trim() || TYPES[f.type].label;
-    const data = {
-      type: f.type, desc, value: r2(f.value), date: f.date, rep: f.rep,
-      until: f.until, count: f.count, installments: f.installments,
-      tags: f.tags.filter(id => S.tags.some(t => t.id === id)),
-      cardId: f.type === "cartao" ? f.cardId || "" : "",
-      createdAt: edit ? tx.createdAt || Date.now() : Date.now(),
-      skip: [], endBefore: null,
-    };
-    if (edit && tx.rep === f.rep && tx.date === f.date) { data.skip = tx.skip || []; data.endBefore = tx.endBefore || null; }
-    const id = edit ? tx.id : uid("t");
+    const base = { type: f.type, desc, rep: f.rep, until: f.until, count: f.count, installments: f.installments, tags: [], cardId: "", skip: [], endBefore: null };
+    const stored = (v, rep, n) => rep === "installment" && perInst ? r2(v * n) : r2(v);
+    const msgOk = edit ? "edição salva" : `${TYPES[f.type].label} adicionad${f.type === "entrada" || f.type === "saida" || f.type === "economia" ? "a" : "o"}`.replace("gastos com cartão adicionado", "gasto com cartão adicionado");
+    if (!recurring) {
+      const data = { ...base, value: r2(f.value), date: f.date, createdAt: edit ? tx.createdAt || Date.now() : Date.now() };
+      m.close(); await saveTx(edit ? tx.id : uid("t"), data); toast(msgOk); if (PANEL.open) renderPanel(); return;
+    }
+    const nd = nextOccDate(tx, occD);
+    const s = await chooseScope({ title: "salvar edição", text: `"${esc(tx.desc)}" se repete. essa mudança vale pra quê?`, date: occD, hasNext: !!nd });
+    if (!s) return;
     m.close();
-    await saveTx(id, data);
-    toast(edit ? "edição salva" : `${TYPES[f.type].label} adicionad${f.type === "entrada" || f.type === "saida" || f.type === "economia" ? "a" : "o"}`.replace("gastos com cartão adicionado", "gasto com cartão adicionado"));
-    if (PANEL.open && PANEL.detail) renderPanel();
+    const delta = dayDiff(occD, f.date), n = oi ? oi.n : 1, now = Date.now();
+    const old = stripId(tx);
+    if (s === "one") {
+      await saveTx(tx.id, { ...old, skip: [...(tx.skip || []), occD] });
+      await saveTx(uid("t"), { ...base, rep: "none", value: r2(f.value), date: f.date, createdAt: now });
+    } else if (s === "all" || (s === "from" && n === 1)) {
+      const start = shiftDate(tx.date, delta);
+      const keep = tx.rep === f.rep && start === tx.date;
+      await saveTx(tx.id, { ...base, value: stored(f.value, f.rep, f.installments), date: start, createdAt: tx.createdAt || now, skip: keep ? tx.skip || [] : [], endBefore: keep ? tx.endBefore || null : null });
+    } else {
+      const cut = s === "from" ? occD : nd;
+      const done = s === "from" ? n - 1 : n;
+      const cnt = f.rep === tx.rep && f.until === "count" && f.count === (tx.count || 12) ? Math.max(1, f.count - done) : f.count;
+      const ins = f.rep === "installment" && tx.rep === "installment" && f.installments === (tx.installments || 2) ? Math.max(1, f.installments - done) : f.installments;
+      await saveTx(tx.id, { ...old, endBefore: cut });
+      await saveTx(uid("t"), { ...base, count: cnt, installments: ins, value: stored(f.value, f.rep, ins), date: shiftDate(cut, delta), createdAt: now, skip: (tx.skip || []).filter(x => x > cut) });
+    }
+    toast(s === "one" ? "mudou só esse" : s === "next" ? "próximos atualizados" : "edição salva");
+    if (PANEL.open) { PANEL.detail = null; renderPanel(); }
   }
 }
 
 function datePicker(anchor, value, onPick) {
-  let cur = parse(value);
-  let vy = cur.getFullYear(), vm = cur.getMonth();
+  closePopover();
+  let sel = value, cur = parse(value), vy = cur.getFullYear(), vm = cur.getMonth();
+  const WDF = ["dom.", "seg.", "ter.", "qua.", "qui.", "sex.", "sáb."];
   const html = () => {
-    const first = new Date(vy, vm, 1).getDay(), n = dim(vy, vm);
-    let g = WD.map(w => `<span class="wd">${w[0]}</span>`).join("");
-    for (let i = 0; i < first; i++) g += "<span></span>";
-    for (let d = 1; d <= n; d++) { const s = `${vy}-${pad(vm + 1)}-${pad(d)}`; g += `<button data-day="${s}" class="num ${s === value ? "sel" : ""} ${s === TODAY ? "tdy" : ""}" aria-label="${dLong(s)}" ${s === value ? 'aria-current="date"' : ""}>${d}</button>`; }
-    const mi = vy * 12 + vm;
-    return `<div class="calendar"><div class="cal-head"><button class="icon-btn" data-cm="-1" aria-label="mês anterior" ${mi <= MIN_MI ? "disabled" : ""}>${I.left}</button><span>${MONTHS[vm]} ${vy}</span><button class="icon-btn" data-cm="1" aria-label="próximo mês" ${mi >= MAX_MI ? "disabled" : ""}>${I.right}</button></div><div class="cal-grid">${g}</div>
-      <div style="display:flex;justify-content:center;padding-top:8px"><button class="btn sm" data-day="${TODAY}">hoje</button></div></div>`;
+    const first = new Date(vy, vm, 1).getDay(), n = dim(vy, vm), mi = vy * 12 + vm;
+    let g = WDF.map(w => `<span class="wd">${w}</span>`).join("");
+    const cell = (y, m0, d, out) => { const s = `${y}-${pad(m0 + 1)}-${pad(d)}`; return `<button data-day="${s}" class="num ${out ? "out" : ""} ${s === sel ? "sel" : ""} ${s === TODAY ? "tdy" : ""}" aria-label="${dLong(s)}" ${s === sel ? 'aria-pressed="true"' : ""}>${d}</button>`; };
+    const pmi = mi - 1, pn = dim(miY(pmi), miM(pmi));
+    for (let i = first - 1; i >= 0; i--) g += cell(miY(pmi), miM(pmi), pn - i, true);
+    for (let d = 1; d <= n; d++) g += cell(vy, vm, d, false);
+    const tail = (7 - ((first + n) % 7)) % 7, nmi = mi + 1;
+    for (let d = 1; d <= tail; d++) g += cell(miY(nmi), miM(nmi), d, true);
+    return `<div class="cal2"><div class="cal2-head"><b>${MONTHS[vm]} de ${vy}</b>
+      <button class="icon-btn flat" data-today aria-label="ir para hoje">${I.cal}</button>
+      <button class="icon-btn flat" data-cm="-1" aria-label="mês anterior" ${mi <= MIN_MI ? "disabled" : ""}>${I.left}</button>
+      <button class="icon-btn flat" data-cm="1" aria-label="próximo mês" ${mi >= MAX_MI ? "disabled" : ""}>${I.right}</button></div>
+      <div class="cal2-grid">${g}</div></div><button class="btn block primary" data-dsave>salvar</button>`;
   };
-  openPopover(anchor, html(), {
-    onMount: el => el.addEventListener("click", e => {
-      const cm = e.target.closest("[data-cm]");
-      if (cm) { const mi = vy * 12 + vm + +cm.dataset.cm; vy = miY(mi); vm = miM(mi); el.innerHTML = html(); return; }
-      const d = e.target.closest("[data-day]"); if (d) { closePopover(); onPick(d.dataset.day); }
-    })
+  const s = openSheet({ title: "data", body: html() });
+  const body = $(".modal-body", s.el);
+  s.el.addEventListener("click", e => {
+    const cm = e.target.closest("[data-cm]");
+    if (cm) { const mi = vy * 12 + vm + +cm.dataset.cm; vy = miY(mi); vm = miM(mi); body.innerHTML = html(); return; }
+    if (e.target.closest("[data-today]")) { sel = TODAY; vy = NOW.getFullYear(); vm = NOW.getMonth(); body.innerHTML = html(); return; }
+    const d = e.target.closest("[data-day]");
+    if (d) { sel = d.dataset.day; const p = parse(sel); vy = p.getFullYear(); vm = p.getMonth(); body.innerHTML = html(); return; }
+    if (e.target.closest("[data-dsave]")) { s.close(); onPick(sel); }
   });
 }
-
 function cardPicker(anchor, f, draw) {
   const html = () => `<div style="padding:4px">${S.cards.length ? S.cards.map(c => `<button class="pop-item" data-card="${c.id}">${I.card.replace("<svg", '<svg width="18" height="18"')}<span class="grow ellip">${esc(c.name)}</span><span class="hint">fecha ${c.closing} · vence ${c.due}</span></button>`).join("") : `<div class="hint" style="padding:10px 14px">nenhum cartão cadastrado ainda</div>`}
     <button class="pop-item" data-newcard style="color:var(--accent)">${I.plus.replace("<svg", '<svg width="18" height="18"')}criar cartão</button>
