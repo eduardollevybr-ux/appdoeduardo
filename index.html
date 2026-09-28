@@ -632,9 +632,6 @@ input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:tex
 .pager.dragging .m-cell:active,.pager.dragging .m-saldo:active,.pager.dragging .hz-v:active{transform:none}
 @media (max-width:700px){ .page{overflow-x:hidden} }
 @supports not (overflow-x: clip){ .pager{overflow:hidden} .page.page-flush{overflow-x:hidden} }
-/* destaque do dia de hoje ao chegar nele */
-@keyframes todayFlash{0%{box-shadow:inset 0 0 0 0 transparent}30%{box-shadow:inset 0 0 0 3px var(--accent);background-color:var(--accent-soft)}100%{box-shadow:inset 0 0 0 0 transparent}}
-.today-flash>*,.today-flash>td{animation:todayFlash 1.2s var(--ease-out) 1}
 </style>
 
 <div id="app" class="app">
@@ -1147,7 +1144,7 @@ function glide(get, set, to, dur, done) {
   const step = now => { const k = Math.min(1, (now - t0) / dur); set(from + (to - from) * ease(k)); if (k < 1) requestAnimationFrame(step); else done && done(); };
   requestAnimationFrame(step);
 }
-function flashToday(el) { if (!el) return; el.classList.remove("today-flash"); void el.offsetWidth; el.classList.add("today-flash"); }
+function flashToday() { }
 function scrollToToday(smooth, delay = 0) {
   const dur = 750; // mesma animação do botão "ir pra hoje"
   if (isMobile()) {
