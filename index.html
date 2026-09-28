@@ -41,14 +41,14 @@ button{cursor:pointer;background:none;border:0;padding:0}
 
 /* ---------- layout ---------- */
 .app{display:flex;height:100%}
-.sidebar{width:228px;flex:none;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;padding-block:18px 12px;transition:width .2s ease;overflow:hidden}
+.sidebar{width:196px;flex:none;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;padding-block:18px 12px;transition:width .2s ease;overflow:hidden}
 .sidebar.collapsed{width:72px}
 .logo{display:flex;align-items:center;gap:10px;padding:0 20px 22px;color:var(--accent);font-weight:700;font-size:18px;white-space:nowrap}
 .logo-mark{width:32px;height:32px;border-radius:10px;background:var(--accent);color:#fff;display:grid;place-items:center;flex:none;font-size:17px}
 .nav{display:flex;flex-direction:column;gap:2px}
 .nav-label{font-size:11px;letter-spacing:.08em;color:var(--muted);padding:14px 26px 6px;white-space:nowrap}
 .collapsed .nav-label{visibility:hidden}
-.nav-btn{position:relative;display:flex;align-items:center;gap:14px;height:44px;padding:0 24px;color:var(--muted);font-weight:500;white-space:nowrap;text-align:left;width:100%}
+.nav-btn{position:relative;display:flex;align-items:center;gap:13px;height:44px;padding:0 24px;color:var(--muted);font-weight:500;white-space:nowrap;text-align:left;width:100%}
 .nav-btn:hover{color:var(--text);background:var(--surface2)}
 .nav-btn svg{flex:none;width:22px;height:22px}
 .nav-btn.active{color:var(--accent)}
@@ -148,10 +148,10 @@ button.frow:hover{background:var(--surface2)}
 .mcols th{font-size:13px!important;font-weight:600!important;color:var(--text)!important;padding-top:8px!important;padding-bottom:10px!important}
 .mcols th.c-dia{color:var(--text)}
 .mtable td.c-dia{width:64px}
-.mtable td.cell:not(.col-min),.mtable th[data-col]:not(.col-min){width:230px;min-width:230px}
-.mtable td.c-saldo,.mtable th.c-sh{width:220px;min-width:220px}
+.mtable td.cell:not(.col-min),.mtable th[data-col]:not(.col-min){width:194px;min-width:194px}
+.mtable td.c-saldo,.mtable th.c-sh{width:186px;min-width:186px}
 .hcard td.c-saldo,.hcard th.c-sh{width:130px;min-width:130px}
-.mtable td,.mtable th{padding-left:26px!important;padding-right:26px!important}
+.mtable td,.mtable th{padding-left:20px!important;padding-right:20px!important}
 .mtable td.c-dia,.mtable th.c-dia{padding-left:0!important;padding-right:0!important}
 .mtable .col-min{padding-left:6px!important;padding-right:6px!important}
 .mtable tfoot td{height:40px;background:var(--surface)}
@@ -208,7 +208,7 @@ button.frow:hover{background:var(--surface2)}
 
 /* ---------- saldos board ---------- */
 .board{position:absolute;inset:0;overflow:auto;padding:0 24px}
-.board-row{display:flex;gap:40px;width:max-content;padding-block:16px}
+.board-row{display:flex;gap:32px;width:max-content;padding-block:16px}
 .mcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:clip;flex:none}
 .mtable{border-collapse:separate;border-spacing:0;font-size:14px}
 .mtable thead{position:sticky;top:0;z-index:3}
@@ -550,6 +550,65 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .m-foot .m-dia{font-size:13px;color:var(--muted);font-weight:500}
 .m-foot .m-cell{font-weight:700}
 .m-foot .m-cell.z{font-weight:500}
+/* ================= movimento ================= */
+:root{--spring:cubic-bezier(.2,1.25,.3,1);--ease-out:cubic-bezier(.16,1,.3,1)}
+.pager{overflow-x:clip;touch-action:pan-y}
+.track{display:flex;align-items:flex-start;width:100%;transform:translate3d(-100%,0,0);will-change:transform}
+.pane{flex:0 0 100%;min-width:0}
+.pager.dragging .pane{pointer-events:none}
+.pager.dragging .pane:not(.cur){opacity:1}
+@keyframes rise{from{opacity:0;transform:translateY(22px) scale(.97)}}
+.rise{animation:rise .62s var(--ease-out) both;animation-delay:calc(var(--i,0) * 38ms)}
+.mcard.rise{animation-name:riseX;animation-duration:.7s}
+@keyframes riseX{from{opacity:0;transform:translateX(40px) scale(.98)}}
+@keyframes slideL{from{transform:translateX(38%);opacity:0}}
+@keyframes slideR{from{transform:translateX(-38%);opacity:0}}
+.slide-l{animation:slideL .5s var(--ease-out)!important}
+.slide-r{animation:slideR .5s var(--ease-out)!important}
+/* toques: tudo responde */
+.btn,.icon-btn,.bn,.fab,.frow,.sitem,.lrow,.row,.pop-item,.nav-btn,.m-sel,.pill-dd,.scope,.m-grid,.m-cal,.dt-btn,.ph-date,.swatch,.cal2-grid button,.cal-grid button{transition:transform .22s var(--spring),background-color .2s,color .2s,box-shadow .2s,border-color .2s}
+.btn:active,.icon-btn:active,.fab:active,.pop-item:active,.m-sel:active,.pill-dd:active,.scope:active,.m-grid:active,.m-cal:active,.cal2-grid button:active,.cal-grid button:active,.swatch:active{transform:scale(.92)}
+.frow:active,.sitem:active,.lrow:active,.row:active,.nav-btn:active{transform:scale(.98)}
+.m-cell,.m-saldo,.m-dia,.hz-d,.hz-v{transition:transform .2s var(--spring),background-color .2s}
+.m-cell:active,.m-saldo:active,.hz-v:active{transform:scale(.97)}
+.cell,.c-saldo{transition:background-color .18s,filter .18s,box-shadow .18s}
+.cell:hover{box-shadow:inset 0 0 0 1px var(--line2)}
+.btn.primary:hover,.btn[class*="btn-t-"]:hover{transform:translateY(-1px);box-shadow:0 8px 22px color-mix(in srgb,var(--accent) 30%,transparent)}
+/* barra de baixo: indicador desliza */
+.bottom-nav{position:relative}
+.bn-ind{position:absolute;top:-1px;left:0;width:33.3333%;height:3px;background:var(--accent);border-radius:0 0 3px 3px;transition:transform .5s var(--spring)}
+.bn.active::before{display:none!important}
+@keyframes bump{0%{transform:scale(1)}35%{transform:scale(1.22) translateY(-3px)}70%{transform:scale(.95)}100%{transform:scale(1)}}
+.bn.bump svg{animation:bump .55s var(--spring)}
+/* barra lateral */
+@keyframes barIn{from{transform:scaleY(0)}}
+.nav-btn.active::before{animation:barIn .45s var(--spring);transform-origin:center}
+.nav-btn svg{transition:transform .3s var(--spring)}
+.nav-btn:hover svg{transform:scale(1.12) rotate(-4deg)}
+/* botão flutuante */
+@keyframes fabIn{from{transform:scale(0) rotate(-120deg);opacity:0}}
+.fab:not([hidden]){animation:fabIn .6s var(--spring)}
+.fab svg{transition:transform .35s var(--spring)}
+.fab:active svg{transform:rotate(90deg)}
+/* janelas e folhas com mola */
+@keyframes pop{from{transform:translateY(26px) scale(.93);opacity:0}}
+.modal{animation:pop .5s var(--spring)!important}
+@keyframes sheetUp{from{transform:translateY(100%)}}
+.modal.sheet{animation:sheetUp .5s var(--ease-out)!important}
+@media (max-width:700px){ @keyframes fullIn{from{transform:translateY(40px);opacity:0}} .modal.form-modal{animation:fullIn .45s var(--ease-out)!important} }
+.overlay{animation:fade .25s ease}
+.drawer{animation-duration:.5s;animation-timing-function:var(--ease-out)}
+.popover{animation:popIn .28s var(--spring)!important;transform-origin:top left}
+@keyframes popIn{from{opacity:0;transform:scale(.9) translateY(-6px)}}
+/* check-in, barra de progresso */
+@keyframes checkPop{0%{transform:scale(0) rotate(-30deg)}60%{transform:scale(1.5)}100%{transform:scale(1)}}
+.check.pop{animation:checkPop .5s var(--spring);transform-origin:top right}
+.bar i{transition:width 1.2s var(--spring)!important}
+/* troca de tema suave */
+body,.sidebar,.topbar,.card,.list,.mbox,.bottom-nav,.drawer,.modal{transition:background-color .35s ease,color .35s ease,border-color .35s ease}
+/* login */
+.auth-card>*{animation:rise .6s var(--ease-out) both}
+.auth-card>*:nth-child(2){animation-delay:.05s}.auth-card>*:nth-child(3){animation-delay:.1s}.auth-card>*:nth-child(4){animation-delay:.15s}.auth-card>*:nth-child(5){animation-delay:.2s}.auth-card>*:nth-child(6){animation-delay:.25s}.auth-card>*:nth-child(7){animation-delay:.3s}
 </style>
 
 <div id="app" class="app">
@@ -877,7 +936,8 @@ function delTx(id) { return backend.del("tx", id); }
 function toggleCheckin(d) {
   const next = { ...S.checkins };
   if (next[d]) delete next[d]; else next[d] = true;
-  S.checkins = next; render();
+  S.checkins = next; UI.popCheck = next[d] ? d : null; render();
+  setTimeout(() => { UI.popCheck = null; }, 600);
   backend.putCheckins(next);
 }
 function saveProfile(patch) { const p = { ...prof(), ...patch }; S.profile = p; backend.putProfile(p); dataChanged(); }
@@ -1104,7 +1164,11 @@ function scrollToMonth(mi, smooth) {
 $("#period").addEventListener("click", e => {
   const s = e.target.closest("[data-scroll]"), m = e.target.closest("[data-m]");
   if (s) { const cur = visibleMi(); scrollToMonth(Math.min(MAX_MI, Math.max(MIN_MI, cur + +s.dataset.scroll)), true); }
-  if (m) { changeMonth(+m.dataset.m); if (isMobile()) animateSlide(UI.tab === "saldos" ? ".m-list" : ".page-inner", +m.dataset.m); }
+  if (m) {
+    const d = +m.dataset.m, pg = $("#view .pager[data-pager='tot']");
+    if (isMobile() && pg && !pg.dataset.anim && (d > 0 ? pg.dataset.next : pg.dataset.prev) === "1" && UI.tMonth + d >= MIN_MI) { slidePager(pg, d, () => applyPager("tot", d)); return; }
+    changeMonth(d); if (isMobile()) animateSlide(".pane.cur", d);
+  }
 });
 let extending = false;
 function onBoardScroll() {
@@ -1121,22 +1185,61 @@ function onBoardScroll() {
     extending = true; UI.bEnd = Math.min(MAX_MI, UI.bEnd + 6); renderAll(); extending = false;
   }
 }
-/* celular: arrastar o dedo pro lado troca o mês */
-let touch0 = null;
-$("#view").addEventListener("touchstart", e => { if (isMobile() && e.touches.length === 1) touch0 = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }, { passive: true });
-$("#view").addEventListener("touchend", e => {
-  if (!touch0 || !isMobile() || UI.tab === "menu") { touch0 = null; return; }
-  const t = e.changedTouches[0], dx = t.clientX - touch0.x, dy = t.clientY - touch0.y; touch0 = null;
-  if (!(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5)) return;
-  const dir = dx < 0 ? 1 : -1;
-  if (UI.tab === "horizonte") { const b = UI.tMonth; if (UI.tMonth < CUR) UI.tMonth = CUR; changeMonth(dir * 3, CUR); if (UI.tMonth !== b) animateSlide(".hz", dir); }
-  else if (UI.tab === "totais") { const b = UI.tMonth; changeMonth(dir, Math.min(CUR, UI.tMonth)); if (UI.tMonth !== b) animateSlide(".page-inner", dir); }
-  else if (UI.tab === "saldos") {
-    const order = ["all", ...TYPE_ORDER];
-    const i = (order.indexOf(UI.mCol) + dir + order.length) % order.length;
-    UI.mCol = order[i]; renderAll(); animateSlide(".m-list", dir);
+/* ================= arrastar com o dedo (a tela acompanha) ================= */
+function pagerHTML(kind, keys, fn) {
+  return `<div class="page"><div class="pager" data-pager="${kind}" data-prev="${keys[0] != null ? 1 : 0}" data-next="${keys[2] != null ? 1 : 0}"><div class="track">${keys.map((k, i) => `<div class="pane ${i === 1 ? "cur" : ""}" ${i !== 1 ? 'aria-hidden="true" inert' : ""}>${k == null ? "" : fn(k)}</div>`).join("")}</div></div></div>`;
+}
+function applyPager(kind, dir) {
+  if (kind === "hz") { const s = hzStart(); UI.tMonth = Math.max(CUR, Math.min(MAX_MI - 2, s + dir * 3)); }
+  else if (kind === "tot") UI.tMonth = Math.max(MIN_MI, Math.min(MAX_MI, UI.tMonth + dir));
+  else { const i = COL_ORDER.indexOf(UI.mCol), L = COL_ORDER.length; UI.mCol = COL_ORDER[(i + dir + L) % L]; }
+  renderAll();
+}
+function slidePager(pg, dir, then) {
+  const track = pg.firstElementChild, w = pg.clientWidth;
+  pg.dataset.anim = "1";
+  track.style.transition = "transform .46s cubic-bezier(.22,.9,.24,1)";
+  track.style.transform = `translate3d(${dir > 0 ? -2 * w : dir < 0 ? 0 : -w}px,0,0)`;
+  let done = false;
+  const fin = () => { if (done) return; done = true; delete pg.dataset.anim; if (dir) then(); else { track.style.transition = ""; track.style.transform = ""; } };
+  track.addEventListener("transitionend", fin, { once: true }); setTimeout(fin, 520);
+}
+let PG = null;
+$("#view").addEventListener("touchstart", e => {
+  if (!isMobile() || e.touches.length !== 1) return;
+  const pg = e.target.closest(".pager"); if (!pg || pg.dataset.anim) return;
+  const t = e.touches[0], now = performance.now();
+  PG = { pg, track: pg.firstElementChild, x0: t.clientX, y0: t.clientY, dx: 0, axis: null, w: pg.clientWidth, lx: t.clientX, lt: now, v: 0 };
+}, { passive: true });
+$("#view").addEventListener("touchmove", e => {
+  if (!PG) return;
+  const t = e.touches[0], dx = t.clientX - PG.x0, dy = t.clientY - PG.y0;
+  if (!PG.axis) {
+    if (Math.abs(dx) + Math.abs(dy) < 8) return;
+    PG.axis = Math.abs(dx) > Math.abs(dy) * 1.1 ? "x" : "y";
+    if (PG.axis === "x") { lpCancel(); PG.track.style.transition = "none"; PG.pg.classList.add("dragging"); }
   }
-});
+  if (PG.axis !== "x") return;
+  e.preventDefault();
+  const canP = PG.pg.dataset.prev === "1", canN = PG.pg.dataset.next === "1";
+  let d = dx;
+  if ((d > 0 && !canP) || (d < 0 && !canN)) d = Math.sign(d) * Math.pow(Math.abs(d), 0.72); // resistência na ponta
+  const now = performance.now(); PG.v = (t.clientX - PG.lx) / Math.max(1, now - PG.lt); PG.lx = t.clientX; PG.lt = now;
+  PG.dx = d;
+  PG.track.style.transform = `translate3d(${-PG.w + d}px,0,0)`;
+}, { passive: false });
+const pgEnd = () => {
+  if (!PG) return; const p = PG; PG = null;
+  if (p.axis !== "x") return;
+  p.pg.classList.remove("dragging");
+  const dir = p.dx < 0 ? 1 : -1, allowed = dir > 0 ? p.pg.dataset.next === "1" : p.pg.dataset.prev === "1";
+  const fling = Math.abs(p.v) > 0.45 && Math.sign(p.v) === Math.sign(p.dx) && Math.abs(p.dx) > 24;
+  const commit = allowed && (Math.abs(p.dx) > p.w * 0.5 || fling);
+  slidePager(p.pg, commit ? dir : 0, () => applyPager(p.pg.dataset.pager, dir));
+};
+$("#view").addEventListener("touchend", pgEnd);
+$("#view").addEventListener("touchcancel", pgEnd);
+
 $(".topbar").addEventListener("click", e => {
   if (e.target.closest("[data-mtoday]")) goToday();
   if (e.target.closest("[data-mgrid]")) goTab("horizonte");
@@ -1151,7 +1254,14 @@ function renderMobileChrome() {
     : mob && UI.tab !== "menu" ? `<button class="m-cal" data-mtoday aria-label="ir pra hoje, dia ${NOW.getDate()}"><b class="num">${NOW.getDate()}</b></button>` : "";
   $(".topbar").hidden = mob && UI.tab === "menu";
   const bn = (tab, label, ic) => `<button class="bn ${UI.tab === tab || (tab === "saldos" && UI.tab === "horizonte") ? "active" : ""}" data-tab="${tab}" aria-label="${label}">${ic}<span>${label}</span></button>`;
-  $("#bottom-nav").innerHTML = mob ? bn("saldos", "saldos", I.saldos) + bn("totais", "totais", I.totais) + bn("menu", "menu", I.menu) : "";
+  const nav = $("#bottom-nav");
+  if (!mob) { nav.innerHTML = ""; delete nav.dataset.built; }
+  else {
+    if (!nav.dataset.built) { nav.innerHTML = `<span class="bn-ind" aria-hidden="true"></span>` + bn("saldos", "saldos", I.saldos) + bn("totais", "totais", I.totais) + bn("menu", "menu", I.menu); nav.dataset.built = "1"; }
+    const idx = { saldos: 0, horizonte: 0, totais: 1, menu: 2 }[UI.tab] ?? 0;
+    $$(".bn", nav).forEach((b, i) => { const on = i === idx; if (on && !b.classList.contains("active")) { b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump"); } b.classList.toggle("active", on); });
+    $(".bn-ind", nav).style.transform = `translateX(${idx * 100}%)`;
+  }
   let fab = $("#fab");
   if (!fab) { fab = document.createElement("button"); fab.id = "fab"; fab.className = "fab"; fab.setAttribute("aria-label", "adicionar movimentação"); fab.setAttribute("aria-haspopup", "menu"); fab.innerHTML = I.plus; fab.onclick = () => openAddMenu(fab); document.body.appendChild(fab); }
   fab.hidden = !(mob && (UI.tab === "saldos" || UI.tab === "totais")) || !!UI.signedOut;
@@ -1181,7 +1291,7 @@ function renderAll() {
   const pos = keep && sc ? [sc.scrollLeft, sc.scrollTop] : null;
   v.dataset.tab = vkey;
   const isBoard = UI.tab === "saldos" || UI.tab === "horizonte";
-  v.innerHTML = isBoard ? (mob ? (UI.tab === "horizonte" ? mobileHorizonHTML() : mobileMonthHTML(false)) : saldosHTML(UI.tab === "horizonte")) : UI.tab === "totais" ? totaisHTML() : menuHTML();
+  v.innerHTML = isBoard ? (mob ? (UI.tab === "horizonte" ? mobileHorizonHTML() : mobileMonthHTML()) : saldosHTML(UI.tab === "horizonte")) : UI.tab === "totais" ? totaisHTML() : menuHTML();
   const sc2 = $(".board,.page", v);
   if (pos && sc2) { sc2.scrollLeft = pos[0]; sc2.scrollTop = pos[1]; }
   const board = $("#board", v);
@@ -1192,8 +1302,33 @@ function renderAll() {
     const sb = $("#scroll-back"); if (sb) sb.disabled = visibleMi() <= MIN_MI;
   }
   if (UI.tab === "totais") requestAnimationFrame(() => $$(".bar i", v).forEach(b => b.style.width = b.dataset.w + "%"));
+  if (!keep) enterAnim(v);
+  countUp(v, !keep);
   if (PANEL.open) renderPanel();
   placeFab();
+}
+/* ================= animações de entrada ================= */
+function stagger(els, step = 38, max = 18) {
+  els.slice(0, max).forEach((el, i) => { el.style.setProperty("--i", i); el.classList.remove("rise"); void el.offsetWidth; el.classList.add("rise"); });
+}
+function enterAnim(v) {
+  const sel = UI.tab === "totais" ? ".pane.cur .section-title, .pane.cur .calc, .pane.cur .list .row, .page > .page-inner .section-title, .page > .page-inner .calc, .page > .page-inner .list .row"
+    : UI.tab === "menu" ? ".profile-card, .list .row"
+    : isMobile() ? (UI.tab === "horizonte" ? ".pane.cur .hz-row" : ".pane.cur .m-day") : ".mcard";
+  stagger($$(sel, v));
+}
+const LAST_COUNT = {};
+function countUp(root, force) {
+  $$("[data-count]", root).forEach(el => {
+    if (el.closest(".pane") && !el.closest(".pane.cur")) return;
+    const to = +el.dataset.count, key = el.closest(".calc")?.getAttribute("aria-label") || "";
+    const from = force ? 0 : (LAST_COUNT[key] ?? to);
+    LAST_COUNT[key] = to;
+    if (from === to) return;
+    const t0 = performance.now(), dur = 900;
+    const step = now => { const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 4); el.textContent = brl(from + (to - from) * e); if (k < 1 && el.isConnected) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  });
 }
 function placeFab() {
   const fab = $("#fab"); if (!fab || fab.hidden) return;
@@ -1217,7 +1352,7 @@ function monthCard(mi, horizon) {
     const ds = `${y}-${pad(m + 1)}-${pad(d)}`, o = c.day[ds], wd = new Date(y, m, d).getDay();
     const cls = [(wd === 0 || wd === 6) ? "we" : "", ds === TODAY ? "today" : ""].join(" ");
     const s = c.saldo[ds] ?? 0;
-    body += `<tr class="${cls}" data-row="${ds}"><td class="c-dia num" data-act="check" data-d="${ds}" role="button" tabindex="0" aria-label="dia ${d} de ${MONTHS[m]}: ${S.checkins[ds] ? "desmarcar" : "marcar"} check-in">${d}${S.checkins[ds] ? `<span class="check" aria-hidden="true">${I.checkW}</span>` : ""}</td>`;
+    body += `<tr class="${cls}" data-row="${ds}"><td class="c-dia num" data-act="check" data-d="${ds}" role="button" tabindex="0" aria-label="dia ${d} de ${MONTHS[m]}: ${S.checkins[ds] ? "desmarcar" : "marcar"} check-in">${d}${S.checkins[ds] ? `<span class="check ${UI.popCheck === ds ? "pop" : ""}" aria-hidden="true">${I.checkW}</span>` : ""}</td>`;
     for (const t of cols) {
       const { v, real, fc } = cellVal(o, t, ds); tot[t] = r2(tot[t] + v);
       body += `<td class="cell num ${v ? "" : "z"} ${fc ? "fc" : ""} ${hid[t] ? "col-min" : ""}" data-act="cell" data-d="${ds}" data-t="${t}" role="button" tabindex="0" aria-label="${TYPES[t].col} em ${d} de ${MONTHS[m]}: ${fmt(v)}${fc ? " (com previsão)" : ""}${real ? ", ver detalhes" : ", adicionar"}"><span class="in">${ti(fc && !real ? "prev" : t)}<span class="v">${brl(v)}</span></span></td>`;
@@ -1249,17 +1384,22 @@ $("#view").addEventListener("keydown", e => {
 
 /* ================= saldos no celular: um mês, só vertical ================= */
 const mSaldoCls = v => Math.abs(v) < 0.005 ? "m-zero" : v > 0 ? "m-pos" : "m-neg";
-function mobileMonthHTML(horizon) {
+const COL_ORDER = ["all", ...TYPE_ORDER];
+function mobileMonthHTML() {
+  const i = COL_ORDER.indexOf(UI.mCol), L = COL_ORDER.length;
+  return pagerHTML("col", [COL_ORDER[(i - 1 + L) % L], UI.mCol, COL_ORDER[(i + 1) % L]], col => mMonthInner(false, col));
+}
+function mMonthInner(horizon, col) {
   const mi = UI.tMonth, y = miY(mi), m = miM(mi), n = dim(y, m), c = calc();
-  const cols = horizon ? [] : UI.mCol === "all" ? TYPE_ORDER : [UI.mCol];
+  const cols = horizon ? [] : col === "all" ? TYPE_ORDER : [col];
   const h2 = horizon ? "h2" : "";
   const tot = { entrada: 0, saida: 0, diario: 0, economia: 0, cartao: 0 };
-  const selLabel = UI.mCol === "all" ? `<span class="ti" style="color:var(--muted)">${"•"}</span>todas` : `${ti(UI.mCol)}${TYPES[UI.mCol].col}`;
-  let h = `<div class="page"><div class="m-list"><div class="m-headrow ${h2}"><span>dia</span>${horizon ? `<span>saldos</span>` : `<button class="m-sel" id="m-col" aria-haspopup="menu" aria-label="escolher coluna, atual: ${UI.mCol === "all" ? "todas" : TYPES[UI.mCol].col}">${selLabel}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button><span>saldos</span>`}</div>`;
+  const selLabel = col === "all" ? `<span class="ti" style="color:var(--muted)">${"•"}</span>todas` : `${ti(col)}${TYPES[col].col}`;
+  let h = `<div class="m-list"><div class="m-headrow ${h2}"><span>dia</span>${horizon ? `<span>saldos</span>` : `<button class="m-sel" id="m-col" aria-haspopup="menu" aria-label="escolher coluna, atual: ${col === "all" ? "todas" : TYPES[col].col}">${selLabel}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button><span>saldos</span>`}</div>`;
   for (let d = 1; d <= n; d++) {
     const ds = `${y}-${pad(m + 1)}-${pad(d)}`, o = c.day[ds], wd = new Date(y, m, d).getDay(), s = c.saldo[ds] ?? 0;
     const cls = [(wd === 0 || wd === 6) ? "we" : "", ds === TODAY ? "today" : ""].join(" ");
-    h += `<div class="m-day ${h2} ${cls}" data-row="${ds}"><button class="m-dia num" data-act="check" data-d="${ds}" aria-label="dia ${d}: ${S.checkins[ds] ? "desmarcar" : "marcar"} check-in">${d}${S.checkins[ds] ? `<span class="check" aria-hidden="true">${I.checkW}</span>` : ""}</button>`;
+    h += `<div class="m-day ${h2} ${cls}" data-row="${ds}"><button class="m-dia num" data-act="check" data-d="${ds}" aria-label="dia ${d}: ${S.checkins[ds] ? "desmarcar" : "marcar"} check-in">${d}${S.checkins[ds] ? `<span class="check ${UI.popCheck === ds ? "pop" : ""}" aria-hidden="true">${I.checkW}</span>` : ""}</button>`;
     if (!horizon) {
       h += `<div class="m-vals">`;
       for (const t of cols) {
@@ -1270,8 +1410,7 @@ function mobileMonthHTML(horizon) {
     }
     h += `<button class="m-saldo num ${mSaldoCls(s)}" data-act="saldo" data-d="${ds}" aria-label="saldo no dia ${d}: ${fmt(s)}">${brl(s)}</button></div>`;
   }
-  const endS = c.saldo[miLast(mi)] ?? 0;
-  return h + `</div></div>`;
+  return h + `</div>`;
 }
 /* celular: segurar o dedo numa célula abre o lançamento daquele tipo e dia */
 let lpT = null, lpFired = false, lpXY = null;
@@ -1289,11 +1428,15 @@ $("#view").addEventListener("contextmenu", e => { if (e.target.closest(".m-cell"
 
 /* horizonte no celular: 3 meses lado a lado, só a coluna de saldos */
 const hzCls = v => Math.abs(v) < 0.005 ? "h-zero" : v > 0 ? "h-pos" : v > -NEG_SMALL ? "h-neg1" : "h-neg2";
+function hzStart() { return Math.max(CUR, Math.min(UI.tMonth, MAX_MI - 2)); }
 function mobileHorizonHTML() {
+  const s = hzStart();
+  return pagerHTML("hz", [s - 3 >= CUR ? s - 3 : null, s, s + 3 <= MAX_MI - 2 ? s + 3 : (s < MAX_MI - 2 ? MAX_MI - 2 : null)], hzInner);
+}
+function hzInner(start) {
   const c = calc();
-  const start = Math.max(CUR, Math.min(UI.tMonth, MAX_MI - 2));
   const ms = [start, start + 1, start + 2];
-  let h = `<div class="page"><div class="hz" role="grid" aria-label="horizonte de saldos"><div class="hz-head">${ms.map(mi => `<div class="hz-mh ${mi === CUR ? "cur" : ""}">${MON3[miM(mi)]}/${String(miY(mi)).slice(2)}</div>`).join("")}</div>`;
+  let h = `<div class="hz" role="grid" aria-label="horizonte de saldos"><div class="hz-head">${ms.map(mi => `<div class="hz-mh ${mi === CUR ? "cur" : ""}">${MON3[miM(mi)]}/${String(miY(mi)).slice(2)}</div>`).join("")}</div>`;
   for (let d = 1; d <= 31; d++) {
     h += `<div class="hz-row">`;
     for (const mi of ms) {
@@ -1305,7 +1448,7 @@ function mobileHorizonHTML() {
     }
     h += `</div>`;
   }
-  return h + `</div></div>`;
+  return h + `</div>`;
 }
 $("#view").addEventListener("click", e => {
   const b = e.target.closest("#m-col"); if (!b) return;
@@ -1319,23 +1462,28 @@ $("#view").addEventListener("click", e => {
 function fx(...parts) { return `<div class="formula" aria-hidden="true">${parts.join("")}</div>`; }
 const op = s => `<span>${s}</span>`;
 function totaisHTML() {
-  const mi = UI.tMonth, st = monthStats(mi);
+  const mi = UI.tMonth;
+  if (!isMobile()) return `<div class="page">${totaisInner(mi)}</div>`;
+  return pagerHTML("tot", [mi - 1 >= Math.min(CUR, mi) && mi > MIN_MI ? mi - 1 : null, mi, mi < MAX_MI ? mi + 1 : null], totaisInner);
+}
+function totaisInner(mi) {
+  const st = monthStats(mi);
   const perf = st.performance;
   const perfS = Math.abs(perf) < 0.005 ? ["zerado", ""] : perf < 0 ? ["faltou dinheiro", "bad"] : ["sobrou dinheiro", "good"];
   const pct = st.econPct;
   const ecS = st.econVal <= 0 ? ["nada guardado", ""] : pct < 20 ? ["abaixo do ideal", "bad"] : pct <= 30 ? ["dentro do ideal", "good"] : ["acima do ideal", "good"];
   const cvS = Math.abs(st.custo) < 0.005 ? ["zerado", ""] : st.custo <= st.custoBase ? ["dentro da renda", "good"] : ["acima da renda", "bad"];
   const dmS = [`previsão ${brl(st.perDay)}/dia`, ""];
-  const calcCard = (title, formula, value, s, extra = "") => `<div class="card calc" aria-label="${title}"><h3>${title}</h3>${formula}<div class="big num">${value}</div>${extra}<span class="status ${s[1]}">${s[0]}</span></div>`;
-  let h = `<div class="page"><div class="page-inner"><div><h2 class="section-title">cálculos do mês</h2><div class="calc-grid">`;
-  h += calcCard("performance", fx(ti("entrada"), op("−"), ti("saida"), op("−"), ti("diario"), op("−"), ti("economia"), op("−"), ti("cartao"), op("−"), ti("prev")), brl(perf), perfS);
+  const calcCard = (title, formula, value, s, extra = "", num) => `<div class="card calc" aria-label="${title}"><h3>${title}</h3>${formula}<div class="big num" ${num != null ? `data-count="${num}"` : ""}>${value}</div>${extra}<span class="status ${s[1]}">${s[0]}</span></div>`;
+  let h = `<div class="page-inner"><div><h2 class="section-title">cálculos do mês</h2><div class="calc-grid">`;
+  h += calcCard("performance", fx(ti("entrada"), op("−"), ti("saida"), op("−"), ti("diario"), op("−"), ti("economia"), op("−"), ti("cartao"), op("−"), ti("prev")), brl(perf), perfS, "", perf);
   h += calcCard("economizado", fx(ti("economia"), op("÷"), ti("entrada")), `${pct.toFixed(1).replace(".", ",")}%`, ecS, `<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct)}"><i data-w="${Math.min(100, pct)}"></i></div>`);
-  h += calcCard("custo de vida", fx(ti("saida"), op("+"), ti("diario"), op("+"), ti("cartao"), op("+"), ti("prev")), brl(st.custo), cvS);
+  h += calcCard("custo de vida", fx(ti("saida"), op("+"), ti("diario"), op("+"), ti("cartao"), op("+"), ti("prev")), brl(st.custo), cvS, "", st.custo);
   h += calcCard("diário médio", fx(ti("diario"), op("÷"), op(`dias (${st.passed})`)), st.diarioMedio == null ? "—" : brl(st.diarioMedio), dmS);
   h += `</div></div><div><h2 class="section-title">movimentações do mês</h2><div class="list">`;
   for (const t of TYPE_ORDER) h += `<button class="row" data-mlist="${t}">${ti(t, true)}<span class="grow">${TYPES[t].label}</span><span class="val num">${brl(st.all[t])}</span>${I.chev}</button>`;
   h += `<button class="row" data-mlist="all"><span class="grow" style="color:var(--accent);font-weight:600">ver todas</span><span class="muted">${st.list.length} ${st.list.length === 1 ? "movimentação" : "movimentações"}</span>${I.chev}</button></div></div>`;
-  return h + `</div></div>`;
+  return h + `</div>`;
 }
 $("#view").addEventListener("click", e => {
   const ml = e.target.closest("[data-mlist]");
@@ -1414,6 +1562,7 @@ function renderPanel() {
   }
   const fresh = !root.firstChild;
   root.innerHTML = `<div class="drawer-ov" data-pclose ${fresh ? "" : 'style="animation:none"'}></div><aside class="drawer screen" role="dialog" aria-label="${PANEL.mode === "day" ? "movimentações do dia" : "movimentações do mês"}" ${fresh ? "" : 'style="animation:none"'}><div class="drawer-head ph">${head}</div><div class="drawer-body pb">${body}</div></aside>`;
+  stagger($$("#drawer-root .lrow, #drawer-root .detail-grid > *"), 30, 14);
 }
 $("#drawer-root").addEventListener("click", e => {
   const t = e.target;
@@ -1624,7 +1773,7 @@ function datePicker(anchor, value, onPick) {
   const body = $(".modal-body", s.el);
   s.el.addEventListener("click", e => {
     const cm = e.target.closest("[data-cm]");
-    if (cm) { const mi = vy * 12 + vm + +cm.dataset.cm; vy = miY(mi); vm = miM(mi); body.innerHTML = html(); return; }
+    if (cm) { const mi = vy * 12 + vm + +cm.dataset.cm; vy = miY(mi); vm = miM(mi); body.innerHTML = html(); const g = $(".cal2-grid", body); if (g) animateSlideEl(g, +cm.dataset.cm); return; }
     if (e.target.closest("[data-today]")) { sel = TODAY; vy = NOW.getFullYear(); vm = NOW.getMonth(); body.innerHTML = html(); return; }
     const d = e.target.closest("[data-day]");
     if (d) { sel = d.dataset.day; const p = parse(sel); vy = p.getFullYear(); vm = p.getMonth(); body.innerHTML = html(); return; }
