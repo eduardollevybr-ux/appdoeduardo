@@ -147,10 +147,11 @@ button.frow:hover{background:var(--surface2)}
 .mtable th:last-child,.mtable td:last-child{border-right:0}
 .mcols th{font-size:13px!important;font-weight:600!important;color:var(--text)!important;padding-top:8px!important;padding-bottom:10px!important}
 .mcols th.c-dia{color:var(--text)}
-.mtable td.c-dia{width:56px}
-.cell{min-width:168px}
-.c-saldo{min-width:168px}
-.mtable td,.mtable th{padding-left:18px!important;padding-right:18px!important}
+.mtable td.c-dia{width:64px}
+.mtable td.cell:not(.col-min),.mtable th[data-col]:not(.col-min){width:230px;min-width:230px}
+.mtable td.c-saldo,.mtable th.c-sh{width:220px;min-width:220px}
+.hcard td.c-saldo,.hcard th.c-sh{width:130px;min-width:130px}
+.mtable td,.mtable th{padding-left:26px!important;padding-right:26px!important}
 .mtable td.c-dia,.mtable th.c-dia{padding-left:0!important;padding-right:0!important}
 .mtable .col-min{padding-left:6px!important;padding-right:6px!important}
 .mtable tfoot td{height:40px;background:var(--surface)}
@@ -207,7 +208,7 @@ button.frow:hover{background:var(--surface2)}
 
 /* ---------- saldos board ---------- */
 .board{position:absolute;inset:0;overflow:auto;padding:0 24px}
-.board-row{display:flex;gap:22px;width:max-content;padding-block:16px}
+.board-row{display:flex;gap:40px;width:max-content;padding-block:16px}
 .mcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:clip;flex:none}
 .mtable{border-collapse:separate;border-spacing:0;font-size:14px}
 .mtable thead{position:sticky;top:0;z-index:3}
