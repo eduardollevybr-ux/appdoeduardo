@@ -738,7 +738,7 @@ const UI = {
   hiddenCols: lsGet("ae.cols", {}),
   bStart: CUR, bEnd: CUR + 11, mCol: "all",
   tMonth: CUR, tagMonth: CUR, tagFilter: "",
-  signedOut: false, past: false,
+  signedOut: false, past: false, autoToday: true,
 };
 const isMobile = () => matchMedia("(max-width: 700px)").matches;
 const prof = () => ({ ...DEFAULT_PROFILE, ...(S.profile || {}) });
@@ -811,7 +811,7 @@ async function initSupabase() {
   const onSession = async session => {
     if (session && session.user) {
       if (SB_USER && SB_USER.id === session.user.id) return;
-      SB_USER = session.user; hideAuth(); await load();
+      SB_USER = session.user; UI.autoToday = true; UI.tab = "saldos"; UI.tMonth = CUR; hideAuth(); await load();
     } else { SB_USER = null; S.loaded = false; applyData(null); showAuth("login"); }
   };
   SB.auth.onAuthStateChange((ev, session) => {
@@ -1134,6 +1134,9 @@ function goTab(tab) { UI.tab = tab; closePopover(); resetBoard(); $("#view").dat
 function goToday() {
   UI.tab = "saldos"; UI.tMonth = CUR; resetBoard(); $("#view").dataset.tab = "";
   renderAll();
+  scrollToToday(true);
+}
+function scrollToToday(smooth) {
   if (isMobile()) {
     const pg = $("#view .page"), row = $(`#view .pane.cur [data-row="${TODAY}"]`);
     if (!pg || !row) return;
@@ -1142,7 +1145,7 @@ function goToday() {
       const r = row.getBoundingClientRect(), pr = pg.getBoundingClientRect();
       if (pg.scrollHeight > pg.clientHeight + 2) {
         const top = Math.max(0, r.top - pr.top + pg.scrollTop - pg.clientHeight / 2 + r.height / 2);
-        if ("scrollBehavior" in document.documentElement.style) pg.scrollTo({ top, behavior: "smooth" }); else pg.scrollTop = top;
+        if (smooth && "scrollBehavior" in document.documentElement.style) pg.scrollTo({ top, behavior: "smooth" }); else pg.scrollTop = top;
       } else { // aparelhos em que a página inteira rola, e não a área do app
         const top = Math.max(0, r.top + (window.scrollY || 0) - innerHeight / 2 + r.height / 2);
         window.scrollTo(0, top);
@@ -1352,6 +1355,8 @@ function renderAll() {
   if (UI.tab === "totais") requestAnimationFrame(() => $$(".bar i", v).forEach(b => b.style.width = b.dataset.w + "%"));
   if (PANEL.open) renderPanel();
   placeFab();
+  // ao abrir o app (ou entrar na conta), já vai direto para o dia de hoje
+  if (UI.autoToday && S.loaded && UI.tab === "saldos" && !$("#auth")) { UI.autoToday = false; scrollToToday(false); }
 }
 /* ================= animações de entrada ================= */
 function stagger(els, step = 38, max = 18) {
