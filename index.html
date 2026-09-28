@@ -139,6 +139,24 @@ button.frow:hover{background:var(--surface2)}
 .cal2-grid button.out{color:var(--zero)}
 .cal2-grid button.tdy{box-shadow:inset 0 0 0 1.5px var(--line2)}
 .cal2-grid button.sel{background:var(--accent);color:#fff;font-weight:700}
+/* quadro no estilo da referência */
+.mcard{background:transparent!important;border:0!important;overflow:visible!important;border-radius:0!important}
+.mhead{font-size:17px;font-weight:700;padding:4px 2px 12px}
+.mbox{background:var(--surface);border:1px solid var(--line2);border-radius:14px;overflow:clip}
+.mtable th,.mtable td{border-right:1px solid var(--line)}
+.mtable th:last-child,.mtable td:last-child{border-right:0}
+.mcols th{font-size:14px!important;font-weight:600!important;color:var(--text)!important;padding-top:14px!important;padding-bottom:14px!important}
+.mcols th.c-dia{color:var(--text)}
+.mtable td{height:46px}
+.mtable td.c-dia{width:56px}
+.cell{min-width:150px}
+.c-saldo{min-width:150px}
+.mtable tfoot td{height:52px;background:var(--surface)}
+.mtable tfoot td.foot-blank{background:var(--surface)!important}
+.mtable tfoot .cell.tot .v{font-weight:600}
+.ti-entrada,.ti-saida,.ti-diario,.ti-economia,.ti-cartao{color:#fff!important}
+.ti-entrada{background:var(--c-entrada)!important}.ti-saida{background:var(--c-saida)!important}.ti-diario{background:var(--c-diario)!important}.ti-economia{background:var(--c-economia)!important}.ti-cartao{background:var(--c-cartao)!important}
+.cell.z .ti,.m-cell.z .ti,.m-chip.z .ti{background:var(--zero)!important;color:var(--surface)!important;filter:none!important;opacity:.7!important}
 .scope-list{display:flex;flex-direction:column;gap:8px}
 .scope{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px 16px;border-radius:var(--r-md);border:1px solid var(--line2);background:var(--surface2);text-align:left;width:100%}
 .scope:hover{border-color:var(--accent)}
@@ -174,29 +192,29 @@ button.frow:hover{background:var(--surface2)}
 .view{flex:1;min-height:0;position:relative}
 
 /* ---------- type icons ---------- */
-.ti{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:6px;font-size:11px;font-weight:700;flex:none;line-height:1}
-.ti svg{width:15px;height:15px}
-.ti-entrada{color:var(--c-entrada)} .ti-saida{color:var(--c-saida)}
+.ti{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:700;flex:none;line-height:1}
+.ti svg{width:13px;height:13px}
+.ti-entrada{color:var(--c-entrada);background:color-mix(in srgb,var(--c-entrada) 18%,transparent)} .ti-saida{color:var(--c-saida);background:color-mix(in srgb,var(--c-saida) 18%,transparent)}
 .ti-diario{color:var(--c-diario);background:color-mix(in srgb,var(--c-diario) 18%,transparent)}
 .ti-economia{color:var(--c-economia);background:color-mix(in srgb,var(--c-economia) 18%,transparent)}
 .ti-cartao{color:var(--c-cartao);background:color-mix(in srgb,var(--c-cartao) 18%,transparent)}
 .ti-prev{color:var(--c-diario);border:1.5px dashed var(--c-diario)}
-.ti.lg{width:28px;height:28px;border-radius:9px;font-size:14px}.ti.lg svg{width:20px;height:20px}
+.ti.lg{width:30px;height:30px;border-radius:50%;font-size:14px}.ti.lg svg{width:18px;height:18px}
 
 /* ---------- saldos board ---------- */
 .board{position:absolute;inset:0;overflow:auto;padding:0 24px}
-.board-row{display:flex;gap:14px;width:max-content;padding-block:16px}
+.board-row{display:flex;gap:22px;width:max-content;padding-block:16px}
 .mcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:clip;flex:none}
 .mtable{border-collapse:separate;border-spacing:0;font-size:14px}
 .mtable thead{position:sticky;top:0;z-index:3}
 .mtable thead th{background:var(--surface);font-weight:500}
 .mtitle th{text-align:left;padding:14px 14px 8px;font-size:15px;font-weight:700!important}
 .mtitle .yr{color:var(--muted);font-weight:500;margin-left:6px}
-.mcols th{padding:6px 8px 8px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--line2);white-space:nowrap;cursor:pointer;user-select:none;text-align:right}
+.mcols th{padding:6px 14px 10px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--line2);white-space:nowrap;cursor:pointer;user-select:none;text-align:right}
 .mcols th:hover{color:var(--text)}
-.mcols th .h{display:inline-flex;align-items:center;gap:6px}
+.mcols th .h{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%}
 .mcols th.c-dia{cursor:default;text-align:center}
-.mtable td{height:34px;padding:0 8px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}
+.mtable td{height:38px;padding:0 14px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}
 .mtable td.c-dia{width:46px;text-align:center;font-weight:600;cursor:pointer;position:relative;color:var(--muted);padding:0}
 .mtable td.c-dia:hover{color:var(--text)}
 .mtable tr.we td.c-dia{background:var(--weekend)}
@@ -204,12 +222,12 @@ button.frow:hover{background:var(--surface2)}
 .mtable tr.today td{border-bottom:1.5px solid var(--today-line)}
 .mtable tr.blank td{cursor:default;color:transparent}
 .mtable tr.blank td.c-dia{background:transparent}
-.cell{min-width:96px;cursor:pointer}
+.cell{min-width:128px;cursor:pointer}
 .cell:hover{background:var(--surface2)}
-.cell .in{display:inline-flex;align-items:center;gap:6px;justify-content:flex-end}
+.cell .in{display:flex;align-items:center;gap:12px;justify-content:space-between;width:100%}
 .cell.z{color:var(--zero)}
-.cell.z .ti{display:none}
-.c-saldo{min-width:110px;font-weight:600;cursor:pointer;color:var(--on-color)}
+.cell.z .ti{filter:grayscale(1);opacity:.4}
+.c-saldo{min-width:132px;font-weight:600;cursor:pointer;color:var(--on-color)}
 .s-pos{background:var(--pos);color:var(--pos-fg)} .s-zero{background:var(--zero-s);color:var(--zero-fg)}
 .mtable tfoot td.s-pos{background:linear-gradient(var(--pos),var(--pos)) var(--surface2)} .mtable tfoot td.s-zero{background:linear-gradient(var(--zero-s),var(--zero-s)) var(--surface2)} .mtable tfoot td.s-neg1{background:linear-gradient(var(--neg1),var(--neg1)) var(--surface2)} .mtable tfoot td.s-neg2{background:linear-gradient(var(--neg2),var(--neg2)) var(--surface2)} .m-foot .m-saldo.m-pos{background:linear-gradient(var(--m-pos),var(--m-pos)) var(--surface)} .m-foot .m-saldo.m-zero{background:linear-gradient(var(--m-zero),var(--m-zero)) var(--surface)} .m-foot .m-saldo.m-neg{background:linear-gradient(var(--m-neg),var(--m-neg)) var(--surface)} .s-neg1{background:var(--neg1);color:var(--neg1-fg)} .s-neg2{background:var(--neg2);color:var(--neg2-fg)}
 .c-saldo:hover{filter:brightness(1.12)}
@@ -223,11 +241,11 @@ tr.blank .c-saldo{background:transparent}
 .mtable .col-min{min-width:0;width:34px;padding:0 6px}
 .mtable .col-min .v,.mtable th.col-min .lbl{display:none}
 .mtable td.col-min .ti{display:inline-grid}
-.mtable td.col-min.z .ti{display:none}
+.mtable td.col-min .in,.mtable th.col-min .h{justify-content:center}
 .mtable td.col-min .in{justify-content:center}
 
 /* horizonte */
-.hcard .cell,.hcard .c-saldo{min-width:88px}
+.hcard .cell,.hcard .c-saldo{min-width:104px}
 .hcard td.c-saldo{text-align:center}
 
 /* ---------- generic surfaces ---------- */
@@ -1018,7 +1036,7 @@ $("#sidebar").addEventListener("click", e => {
   if (e.target.closest("#btn-today")) goToday();
   if (e.target.closest("#btn-collapse")) { UI.sideCollapsed = !UI.sideCollapsed; lsSet("ae.side", UI.sideCollapsed); render(); }
 });
-function resetBoard() { UI.bStart = UI.past ? Math.max(MIN_MI, CUR - 6) : CUR; UI.bEnd = CUR + 11; }
+function resetBoard() { UI.bStart = CUR; UI.bEnd = CUR + 11; }
 const PAST_ICO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>';
 const pastBtn = cls => `<button class="${cls} past-btn" data-past aria-pressed="${!!UI.past}" aria-label="${UI.past ? "voltar pro mês atual" : "ver meses passados"}" title="${UI.past ? "voltar pro mês atual" : "ver meses passados"}">${PAST_ICO}${cls.includes("pill") ? `<span>${UI.past ? "voltar pro atual" : "meses passados"}</span>` : ""}</button>`;
 function togglePast() {
@@ -1032,7 +1050,7 @@ function togglePast() {
 document.addEventListener("click", e => { if (e.target.closest("[data-past]")) togglePast(); });
 function goTab(tab) { UI.tab = tab; closePopover(); resetBoard(); $("#view").dataset.tab = ""; render(); }
 function goToday() {
-  UI.tab = "saldos"; UI.tMonth = CUR; UI.past = false; resetBoard(); $("#view").dataset.tab = "";
+  UI.tab = "saldos"; UI.tMonth = CUR; resetBoard(); $("#view").dataset.tab = "";
   renderAll();
   const row = $(`#view [data-row="${TODAY}"]`);
   if (!row) return;
@@ -1059,7 +1077,7 @@ function periodHTML() {
   if (isMobile()) {
     if (UI.tab === "menu" || UI.tab === "horizonte") return "";
     const mi = UI.tMonth;
-    return `<button class="icon-btn" data-m="-1" aria-label="mês anterior" ${mi <= (UI.past ? MIN_MI : CUR) ? "disabled" : ""}>${I.left}</button>
+    return `<button class="icon-btn" data-m="-1" aria-label="mês anterior" ${mi <= MIN_MI ? "disabled" : ""}>${I.left}</button>
       <span class="period-label m-label">${MON3[miM(mi)]}/${String(miY(mi)).slice(2)}</span>
       <button class="icon-btn" data-m="1" aria-label="próximo mês" ${mi >= MAX_MI ? "disabled" : ""}>${I.right}</button>`;
   }
@@ -1070,7 +1088,7 @@ function periodHTML() {
   }
   if (UI.tab === "totais") {
     const mi = UI.tMonth;
-    return `<button class="icon-btn" data-m="-1" aria-label="mês anterior" ${mi <= (UI.past ? MIN_MI : CUR) ? "disabled" : ""}>${I.left}</button>
+    return `<button class="icon-btn" data-m="-1" aria-label="mês anterior" ${mi <= MIN_MI ? "disabled" : ""}>${I.left}</button>
       <span class="period-label">${MONTHS[miM(mi)]} ${miY(mi)}</span>
       <button class="icon-btn" data-m="1" aria-label="próximo mês" ${mi >= MAX_MI ? "disabled" : ""}>${I.right}</button>`;
   }
@@ -1081,7 +1099,7 @@ function animateSlide(sel, dir) {
   el.classList.remove("slide-l", "slide-r"); void el.offsetWidth;
   el.classList.add(dir > 0 ? "slide-l" : "slide-r");
 }
-function changeMonth(d) { const n = Math.min(MAX_MI, Math.max(UI.past ? MIN_MI : CUR, UI.tMonth + d)); if (n === UI.tMonth) return; UI.tMonth = n; renderAll(); const pg = $("#view .page"); if (pg) pg.scrollTop = 0; }
+function changeMonth(d, minMi = MIN_MI) { const n = Math.min(MAX_MI, Math.max(minMi, UI.tMonth + d)); if (n === UI.tMonth) return; UI.tMonth = n; renderAll(); const pg = $("#view .page"); if (pg) pg.scrollTop = 0; }
 function scrollToMonth(mi, smooth) {
   const board = $("#board"); if (!board) return;
   if (mi < UI.bStart || mi > UI.bEnd) { UI.bStart = Math.max(MIN_MI, Math.min(UI.bStart, mi - 3)); UI.bEnd = Math.min(MAX_MI, Math.max(UI.bEnd, mi + 11)); renderAll(); }
@@ -1090,15 +1108,15 @@ function scrollToMonth(mi, smooth) {
 }
 $("#period").addEventListener("click", e => {
   const s = e.target.closest("[data-scroll]"), m = e.target.closest("[data-m]");
-  if (s) { const cur = visibleMi(); scrollToMonth(Math.min(MAX_MI, Math.max(UI.past ? MIN_MI : CUR, cur + +s.dataset.scroll)), true); }
+  if (s) { const cur = visibleMi(); scrollToMonth(Math.min(MAX_MI, Math.max(MIN_MI, cur + +s.dataset.scroll)), true); }
   if (m) { changeMonth(+m.dataset.m); if (isMobile()) animateSlide(UI.tab === "saldos" ? ".m-list" : ".page-inner", +m.dataset.m); }
 });
 let extending = false;
 function onBoardScroll() {
   const board = $("#board"); if (!board || extending) return;
   const lab = $("#vis-label"); if (lab) lab.textContent = rangeLabel(visibleMi());
-  const sb = $("#scroll-back"); if (sb) sb.disabled = visibleMi() <= (UI.past ? MIN_MI : CUR);
-  if (board.scrollLeft < 300 && UI.past && UI.bStart > MIN_MI) {
+  const sb = $("#scroll-back"); if (sb) sb.disabled = visibleMi() <= MIN_MI;
+  if (false) {
     extending = true;
     const oldW = board.scrollWidth, oldL = board.scrollLeft;
     UI.bStart = Math.max(MIN_MI, UI.bStart - 6); renderAll();
@@ -1116,8 +1134,8 @@ $("#view").addEventListener("touchend", e => {
   const t = e.changedTouches[0], dx = t.clientX - touch0.x, dy = t.clientY - touch0.y; touch0 = null;
   if (!(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5)) return;
   const dir = dx < 0 ? 1 : -1;
-  if (UI.tab === "horizonte") { const b = UI.tMonth; changeMonth(dir * 3); if (UI.tMonth !== b) animateSlide(".hz", dir); }
-  else if (UI.tab === "totais") { const b = UI.tMonth; changeMonth(dir); if (UI.tMonth !== b) animateSlide(".page-inner", dir); }
+  if (UI.tab === "horizonte") { const b = UI.tMonth; if (UI.tMonth < CUR) UI.tMonth = CUR; changeMonth(dir * 3, CUR); if (UI.tMonth !== b) animateSlide(".hz", dir); }
+  else if (UI.tab === "totais") { const b = UI.tMonth; changeMonth(dir, Math.min(CUR, UI.tMonth)); if (UI.tMonth !== b) animateSlide(".page-inner", dir); }
   else if (UI.tab === "saldos") {
     const order = ["all", ...TYPE_ORDER];
     const i = (order.indexOf(UI.mCol) + dir + order.length) % order.length;
@@ -1158,9 +1176,9 @@ function renderAll() {
   renderSidebar();
   renderMobileChrome();
   $("#title").textContent = mob && UI.tab === "horizonte" ? "horizonte de saldos" : TITLES[UI.tab];
-  $("#title-extra").innerHTML = !mob && UI.tab !== "menu" ? pastBtn("icon-btn") : "";
+  $("#title-extra").innerHTML = "";
   $("#period").innerHTML = periodHTML();
-  $("#top-right").innerHTML = mob ? (UI.tab === "saldos" ? `<div class="tr-row">${pastBtn("icon-btn")}<button class="m-grid" data-mgrid aria-label="abrir horizonte de saldos">${"<i></i>".repeat(9)}</button></div>` : UI.tab === "horizonte" ? `<div class="tr-row">${pastBtn("icon-btn")}<button class="icon-btn" data-madd aria-label="adicionar movimentação" aria-haspopup="menu" style="background:none">${I.plus}</button></div>` : UI.tab === "totais" ? pastBtn("icon-btn") : "") : (S.loaded ? "" : `<span>carregando…</span>`);
+  $("#top-right").innerHTML = mob ? (UI.tab === "saldos" ? `<div class="tr-row"><button class="m-grid" data-mgrid aria-label="abrir horizonte de saldos">${"<i></i>".repeat(9)}</button></div>` : UI.tab === "horizonte" ? `<div class="tr-row"><button class="icon-btn" data-madd aria-label="adicionar movimentação" aria-haspopup="menu" style="background:none">${I.plus}</button></div>` : "") : (S.loaded ? "" : `<span>carregando…</span>`);
   const v = $("#view");
   const vkey = UI.tab + (mob ? ":m" : "");
   const keep = v.dataset.tab === vkey;
@@ -1176,7 +1194,7 @@ function renderAll() {
     if (!keep) { const c = $(`.mcard[data-mi="${CUR}"]`, board); if (c) board.scrollLeft = c.offsetLeft - 24; }
     board.addEventListener("scroll", onBoardScroll, { passive: true });
     const lab = $("#vis-label"); if (lab) lab.textContent = rangeLabel(visibleMi());
-    const sb = $("#scroll-back"); if (sb) sb.disabled = visibleMi() <= (UI.past ? MIN_MI : CUR);
+    const sb = $("#scroll-back"); if (sb) sb.disabled = visibleMi() <= MIN_MI;
   }
   if (UI.tab === "totais") requestAnimationFrame(() => $$(".bar i", v).forEach(b => b.style.width = b.dataset.w + "%"));
   if (PANEL.open) renderPanel();
@@ -1207,15 +1225,14 @@ function monthCard(mi, horizon) {
     body += `<tr class="${cls}" data-row="${ds}"><td class="c-dia num" data-act="check" data-d="${ds}" role="button" tabindex="0" aria-label="dia ${d} de ${MONTHS[m]}: ${S.checkins[ds] ? "desmarcar" : "marcar"} check-in">${d}${S.checkins[ds] ? `<span class="check" aria-hidden="true">${I.checkW}</span>` : ""}</td>`;
     for (const t of cols) {
       const { v, real, fc } = cellVal(o, t, ds); tot[t] = r2(tot[t] + v);
-      body += `<td class="cell num ${v ? "" : "z"} ${fc ? "fc" : ""} ${hid[t] ? "col-min" : ""}" data-act="cell" data-d="${ds}" data-t="${t}" role="button" tabindex="0" aria-label="${TYPES[t].col} em ${d} de ${MONTHS[m]}: ${fmt(v)}${fc ? " (com previsão)" : ""}${real ? ", ver detalhes" : ", adicionar"}"><span class="in">${ti(fc && !real ? "prev" : t)}<span class="v">${fmt(v)}</span></span></td>`;
+      body += `<td class="cell num ${v ? "" : "z"} ${fc ? "fc" : ""} ${hid[t] ? "col-min" : ""}" data-act="cell" data-d="${ds}" data-t="${t}" role="button" tabindex="0" aria-label="${TYPES[t].col} em ${d} de ${MONTHS[m]}: ${fmt(v)}${fc ? " (com previsão)" : ""}${real ? ", ver detalhes" : ", adicionar"}"><span class="in">${ti(fc && !real ? "prev" : t)}<span class="v">${brl(v)}</span></span></td>`;
     }
-    body += `<td class="c-saldo num ${saldoCls(s)}" data-act="saldo" data-d="${ds}" role="button" tabindex="0" aria-label="saldo em ${d} de ${MONTHS[m]}: ${fmt(s)}">${horizon ? abbr(s) : fmt(s)}</td></tr>`;
+    body += `<td class="c-saldo num ${saldoCls(s)}" data-act="saldo" data-d="${ds}" role="button" tabindex="0" aria-label="saldo em ${d} de ${MONTHS[m]}: ${fmt(s)}">${horizon ? abbr(s) : brl(s)}</td></tr>`;
   }
   const endS = c.saldo[miLast(mi)] ?? 0;
-  const head = `<thead><tr class="mtitle"><th colspan="${cols.length + 2}">${MONTHS[m]}<span class="yr">${y}</span></th></tr>
-    <tr class="mcols"><th class="c-dia">dia</th>${cols.map(t => `<th data-col="${t}" class="${hid[t] ? "col-min" : ""}" title="${hid[t] ? "mostrar" : "recolher"} coluna" aria-label="${hid[t] ? "mostrar" : "recolher"} coluna ${TYPES[t].col}"><span class="h">${ti(t)}<span class="lbl">${TYPES[t].col}</span></span></th>`).join("")}<th class="c-dia" style="text-align:${horizon ? "center" : "right"};padding-right:8px">saldos</th></tr></thead>`;
-  const foot = `<tfoot><tr><td class="c-dia">total</td>${cols.map(t => `<td class="cell num ${tot[t] ? "" : "z"} ${hid[t] ? "col-min" : ""}"><span class="in">${ti(t)}<span class="v">${fmt(tot[t])}</span></span></td>`).join("")}<td class="c-saldo num ${saldoCls(endS)}" style="cursor:default">${horizon ? abbr(endS) : fmt(endS)}</td></tr></tfoot>`;
-  return `<div class="mcard ${horizon ? "hcard" : ""}" data-mi="${mi}"><table class="mtable">${head}<tbody>${body}</tbody>${foot}</table></div>`;
+  const head = `<thead><tr class="mcols"><th class="c-dia">dia</th>${cols.map(t => `<th data-col="${t}" class="${hid[t] ? "col-min" : ""}" title="${hid[t] ? "mostrar" : "recolher"} coluna" aria-label="${hid[t] ? "mostrar" : "recolher"} coluna ${TYPES[t].col}"><span class="h">${ti(t)}<span class="lbl">${TYPES[t].col}</span></span></th>`).join("")}<th class="c-dia" style="text-align:${horizon ? "center" : "right"};padding-right:8px">saldos</th></tr></thead>`;
+  const foot = `<tfoot><tr><td class="c-dia" aria-label="total do mês"></td>${cols.map(t => `<td class="cell num tot ${hid[t] ? "col-min" : ""}"><span class="in">${ti(t)}<span class="v">${brl(tot[t])}</span></span></td>`).join("")}<td class="c-saldo foot-blank" aria-label="saldo final: ${fmt(endS)}"></td></tr></tfoot>`;
+  return `<div class="mcard ${horizon ? "hcard" : ""}" data-mi="${mi}"><div class="mhead">${MONTHS[m]} de ${y}</div><div class="mbox"><table class="mtable">${head}<tbody>${body}</tbody>${foot}</table></div></div>`;
 }
 function boardAct(el) {
   const act = el.dataset.act, d = el.dataset.d;
@@ -1265,7 +1282,7 @@ function mobileMonthHTML(horizon) {
 const hzCls = v => Math.abs(v) < 0.005 ? "h-zero" : v > 0 ? "h-pos" : v > -NEG_SMALL ? "h-neg1" : "h-neg2";
 function mobileHorizonHTML() {
   const c = calc();
-  const start = Math.min(UI.tMonth, MAX_MI - 2);
+  const start = Math.max(CUR, Math.min(UI.tMonth, MAX_MI - 2));
   const ms = [start, start + 1, start + 2];
   let h = `<div class="page"><div class="hz" role="grid" aria-label="horizonte de saldos"><div class="hz-head">${ms.map(mi => `<div class="hz-mh ${mi === CUR ? "cur" : ""}">${MON3[miM(mi)]}/${String(miY(mi)).slice(2)}</div>`).join("")}</div>`;
   for (let d = 1; d <= 31; d++) {
@@ -1372,7 +1389,7 @@ function renderPanel() {
       list = occs(d, d).sort((a, b) => TYPE_ORDER.indexOf(a.tx.type) - TYPE_ORDER.indexOf(b.tx.type));
     } else {
       const mi = PANEL.mi;
-      prevOk = mi > (UI.past ? MIN_MI : Math.min(CUR, mi)); nextOk = mi < MAX_MI;
+      prevOk = mi > MIN_MI; nextOk = mi < MAX_MI;
       mid = `<span class="ph-title num">${MON3[miM(mi)]}/${String(miY(mi)).slice(2)}</span>`;
       list = occs(miFirst(mi), miLast(mi)).sort((a, b) => b.date.localeCompare(a.date) || TYPE_ORDER.indexOf(a.tx.type) - TYPE_ORDER.indexOf(b.tx.type));
     }
