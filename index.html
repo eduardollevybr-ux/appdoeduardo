@@ -630,6 +630,7 @@ input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:tex
 .pane{contain:layout paint}
 .pager.dragging *{transition:none!important;animation:none!important}
 .pager.dragging .m-cell:active,.pager.dragging .m-saldo:active,.pager.dragging .hz-v:active{transform:none}
+@media (max-width:700px){ .page{overflow-x:hidden} }
 </style>
 
 <div id="app" class="app">
@@ -1131,9 +1132,16 @@ function goTab(tab) { UI.tab = tab; closePopover(); resetBoard(); $("#view").dat
 function goToday() {
   UI.tab = "saldos"; UI.tMonth = CUR; resetBoard(); $("#view").dataset.tab = "";
   renderAll();
+  if (isMobile()) {
+    const pg = $("#view .page"), row = $(`#view .pane.cur [data-row="${TODAY}"]`);
+    if (!pg || !row) return;
+    pg.scrollLeft = 0;
+    const top = row.getBoundingClientRect().top - pg.getBoundingClientRect().top + pg.scrollTop - pg.clientHeight / 2 + row.offsetHeight / 2;
+    pg.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    return;
+  }
   const row = $(`#view [data-row="${TODAY}"]`);
   if (!row) return;
-  if (isMobile()) { row.scrollIntoView({ block: "center" }); return; }
   const board = $("#board");
   scrollToMonth(CUR);
   board.scrollTop = Math.max(0, row.offsetTop - board.clientHeight / 2);
