@@ -11,7 +11,7 @@
   --weekend:#17191C; --today-bg:#FFFFFF; --today-fg:#1D1F23; --today-line:#FFFFFF;
   --accent:#8A3FD9; --accent-soft:rgba(138,63,217,.18);
   --pos:rgba(96,146,230,.30); --pos-fg:#D6E4FF; --zero-s:rgba(242,196,60,.30); --zero-fg:#FFE28F; --neg1:rgba(214,110,112,.28); --neg1-fg:#FFD0D1; --neg2:rgba(200,72,76,.50); --neg2-fg:#FFE1E2; --on-color:#FFFFFF;
-  --c-entrada:#4C8DFF; --c-saida:#EF4B4F; --c-diario:#EC5DA8; --c-economia:#33A1FF; --c-cartao:#9C6BFF;
+  --c-entrada:#2F66E0; --c-saida:#EF4B4F; --c-diario:#EC5DA8; --c-economia:#4DB6F7; --c-cartao:#7A22C8;
   --shadow:0 18px 50px rgba(0,0,0,.45);
   --overlay:rgba(8,9,11,.6);
   --logo-a:#FFFFFF; --logo-b:#FFFFFF;
@@ -26,7 +26,7 @@
   --weekend:#E4E5E9; --today-bg:#1D1F23; --today-fg:#FFFFFF; --today-line:#1D1F23;
   --logo-a:#820AD1; --logo-b:#820AD1;
   --pos:#DCE7FA; --pos-fg:#2F5DA8; --zero-s:#FBE3A1; --zero-fg:#5C4700; --neg1:#F8DADB; --neg1-fg:#9B3336; --neg2:#F0B3B5; --neg2-fg:#7E1F22;
-  --c-economia:#1A86E0; --c-entrada:#2F6FE0; --accent:#820AD1; --accent-soft:rgba(130,10,209,.10);
+  --c-economia:#34A6EE; --c-entrada:#2458C9; --c-cartao:#6A14B8; --accent:#820AD1; --accent-soft:rgba(130,10,209,.10);
   --shadow:0 18px 50px rgba(29,31,35,.18);
   --overlay:rgba(29,31,35,.35);
 }
@@ -145,18 +145,22 @@ button.frow:hover{background:var(--surface2)}
 .mbox{background:var(--surface);border:1px solid var(--line2);border-radius:14px;overflow:clip}
 .mtable th,.mtable td{border-right:1px solid var(--line)}
 .mtable th:last-child,.mtable td:last-child{border-right:0}
-.mcols th{font-size:14px!important;font-weight:600!important;color:var(--text)!important;padding-top:14px!important;padding-bottom:14px!important}
+.mcols th{font-size:13px!important;font-weight:600!important;color:var(--text)!important;padding-top:8px!important;padding-bottom:10px!important}
 .mcols th.c-dia{color:var(--text)}
-.mtable td{height:46px}
 .mtable td.c-dia{width:56px}
-.cell{min-width:150px}
-.c-saldo{min-width:150px}
-.mtable tfoot td{height:52px;background:var(--surface)}
+.cell{min-width:168px}
+.c-saldo{min-width:168px}
+.mtable td,.mtable th{padding-left:18px!important;padding-right:18px!important}
+.mtable td.c-dia,.mtable th.c-dia{padding-left:0!important;padding-right:0!important}
+.mtable .col-min{padding-left:6px!important;padding-right:6px!important}
+.mtable tfoot td{height:40px;background:var(--surface)}
 .mtable tfoot td.foot-blank{background:var(--surface)!important}
 .mtable tfoot .cell.tot .v{font-weight:600}
 .ti-entrada,.ti-saida,.ti-diario,.ti-economia,.ti-cartao{color:#fff!important}
 .ti-entrada{background:var(--c-entrada)!important}.ti-saida{background:var(--c-saida)!important}.ti-diario{background:var(--c-diario)!important}.ti-economia{background:var(--c-economia)!important}.ti-cartao{background:var(--c-cartao)!important}
 .cell.z .ti,.m-cell.z .ti,.m-chip.z .ti{background:var(--zero)!important;color:var(--surface)!important;filter:none!important;opacity:.7!important}
+.m-cell{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;transition:background .15s}
+.m-cell.pressing{background:var(--accent-soft)}
 .scope-list{display:flex;flex-direction:column;gap:8px}
 .scope{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px 16px;border-radius:var(--r-md);border:1px solid var(--line2);background:var(--surface2);text-align:left;width:100%}
 .scope:hover{border-color:var(--accent)}
@@ -1037,17 +1041,7 @@ $("#sidebar").addEventListener("click", e => {
   if (e.target.closest("#btn-collapse")) { UI.sideCollapsed = !UI.sideCollapsed; lsSet("ae.side", UI.sideCollapsed); render(); }
 });
 function resetBoard() { UI.bStart = CUR; UI.bEnd = CUR + 11; }
-const PAST_ICO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>';
-const pastBtn = cls => `<button class="${cls} past-btn" data-past aria-pressed="${!!UI.past}" aria-label="${UI.past ? "voltar pro mês atual" : "ver meses passados"}" title="${UI.past ? "voltar pro mês atual" : "ver meses passados"}">${PAST_ICO}${cls.includes("pill") ? `<span>${UI.past ? "voltar pro atual" : "meses passados"}</span>` : ""}</button>`;
-function togglePast() {
-  UI.past = !UI.past;
-  if (!UI.past) UI.tMonth = CUR;
-  resetBoard(); $("#view").dataset.tab = ""; renderAll();
-  if (UI.past && !isMobile() && (UI.tab === "saldos" || UI.tab === "horizonte")) scrollToMonth(CUR - 1, true);
-  if (UI.past && isMobile()) changeMonth(-1);
-  toast(UI.past ? "mostrando meses passados" : "de volta pro mês atual");
-}
-document.addEventListener("click", e => { if (e.target.closest("[data-past]")) togglePast(); });
+
 function goTab(tab) { UI.tab = tab; closePopover(); resetBoard(); $("#view").dataset.tab = ""; render(); }
 function goToday() {
   UI.tab = "saldos"; UI.tMonth = CUR; resetBoard(); $("#view").dataset.tab = "";
@@ -1230,7 +1224,7 @@ function monthCard(mi, horizon) {
     body += `<td class="c-saldo num ${saldoCls(s)}" data-act="saldo" data-d="${ds}" role="button" tabindex="0" aria-label="saldo em ${d} de ${MONTHS[m]}: ${fmt(s)}">${horizon ? abbr(s) : brl(s)}</td></tr>`;
   }
   const endS = c.saldo[miLast(mi)] ?? 0;
-  const head = `<thead><tr class="mcols"><th class="c-dia">dia</th>${cols.map(t => `<th data-col="${t}" class="${hid[t] ? "col-min" : ""}" title="${hid[t] ? "mostrar" : "recolher"} coluna" aria-label="${hid[t] ? "mostrar" : "recolher"} coluna ${TYPES[t].col}"><span class="h">${ti(t)}<span class="lbl">${TYPES[t].col}</span></span></th>`).join("")}<th class="c-dia" style="text-align:${horizon ? "center" : "right"};padding-right:8px">saldos</th></tr></thead>`;
+  const head = `<thead><tr class="mcols"><th class="c-dia">dia</th>${cols.map(t => `<th data-col="${t}" class="${hid[t] ? "col-min" : ""}" title="${hid[t] ? "mostrar" : "recolher"} coluna" aria-label="${hid[t] ? "mostrar" : "recolher"} coluna ${TYPES[t].col}"><span class="h">${ti(t)}<span class="lbl">${TYPES[t].col}</span></span></th>`).join("")}<th class="c-sh" style="cursor:default;text-align:${horizon ? "center" : "right"};padding-right:8px">saldos</th></tr></thead>`;
   const foot = `<tfoot><tr><td class="c-dia" aria-label="total do mês"></td>${cols.map(t => `<td class="cell num tot ${hid[t] ? "col-min" : ""}"><span class="in">${ti(t)}<span class="v">${brl(tot[t])}</span></span></td>`).join("")}<td class="c-saldo foot-blank" aria-label="saldo final: ${fmt(endS)}"></td></tr></tfoot>`;
   return `<div class="mcard ${horizon ? "hcard" : ""}" data-mi="${mi}"><div class="mhead">${MONTHS[m]} de ${y}</div><div class="mbox"><table class="mtable">${head}<tbody>${body}</tbody>${foot}</table></div></div>`;
 }
@@ -1278,6 +1272,20 @@ function mobileMonthHTML(horizon) {
   const endS = c.saldo[miLast(mi)] ?? 0;
   return h + `</div></div>`;
 }
+/* celular: segurar o dedo numa célula abre o lançamento daquele tipo e dia */
+let lpT = null, lpFired = false, lpXY = null;
+$("#view").addEventListener("touchstart", e => {
+  const c = e.target.closest(".m-cell[data-t]"); if (!c || e.touches.length !== 1) return;
+  lpFired = false; lpXY = [e.touches[0].clientX, e.touches[0].clientY];
+  c.classList.add("pressing");
+  lpT = setTimeout(() => { lpFired = true; c.classList.remove("pressing"); try { navigator.vibrate && navigator.vibrate(12); } catch { } openForm({ type: c.dataset.t, date: c.dataset.d }); }, 480);
+}, { passive: true });
+const lpCancel = () => { clearTimeout(lpT); lpT = null; $$(".m-cell.pressing").forEach(x => x.classList.remove("pressing")); };
+$("#view").addEventListener("touchmove", e => { if (lpT && lpXY && Math.hypot(e.touches[0].clientX - lpXY[0], e.touches[0].clientY - lpXY[1]) > 10) lpCancel(); }, { passive: true });
+$("#view").addEventListener("touchend", e => { lpCancel(); if (lpFired) { e.preventDefault(); } }, { passive: false });
+$("#view").addEventListener("click", e => { if (lpFired && e.target.closest(".m-cell")) { e.stopImmediatePropagation(); e.preventDefault(); lpFired = false; } }, true);
+$("#view").addEventListener("contextmenu", e => { if (e.target.closest(".m-cell")) e.preventDefault(); });
+
 /* horizonte no celular: 3 meses lado a lado, só a coluna de saldos */
 const hzCls = v => Math.abs(v) < 0.005 ? "h-zero" : v > 0 ? "h-pos" : v > -NEG_SMALL ? "h-neg1" : "h-neg2";
 function mobileHorizonHTML() {
