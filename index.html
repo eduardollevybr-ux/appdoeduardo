@@ -462,18 +462,20 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .profile-card{margin:16px 16px 0;flex-wrap:wrap}
   .page-inner>.hint{padding:0 16px}
 }
-.m-cal{position:relative;width:44px;height:50px;display:block;padding:0}
-.mc-body{position:absolute;left:0;right:0;top:6px;bottom:0;border-radius:9px;background:var(--cal-bg);overflow:hidden;display:grid;place-items:center;padding-top:9px}
-.mc-body::before{content:"";position:absolute;top:0;left:0;right:0;height:9px;background:var(--accent)}
-.mc-body b{font-size:18px;font-weight:700;color:var(--text)}
-.mc-ring{position:absolute;top:1px;width:5px;height:11px;border-radius:1.5px;background:var(--cal-ring)}
-.mc-ring.l{left:10px}.mc-ring.r{right:10px}
+.m-cal{position:relative;width:38px;height:38px;display:block;padding:0}
+.mc-body{position:absolute;left:0;right:0;top:4px;bottom:0;border-radius:8px;background:var(--cal-bg);overflow:hidden;display:grid;place-items:center;padding-top:7px}
+.mc-body::before{content:"";position:absolute;top:0;left:0;right:0;height:7px;background:var(--accent)}
+.mc-body b{font-size:15px;font-weight:700;color:var(--text)}
+.mc-ring{position:absolute;top:0;width:4px;height:9px;border-radius:1.5px;background:var(--cal-ring)}
+.mc-ring.l{left:9px}.mc-ring.r{right:9px}
 :root{--cal-bg:#3A3E46;--cal-ring:#101114}
 :root.light{--cal-bg:#E2E4E9;--cal-ring:#1D1F23}
-.m-grid{width:44px;height:44px;border-radius:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:6px;background:var(--surface2)}
-.m-grid i{background:var(--muted);opacity:.35;border-radius:2px}
-.m-grid[aria-pressed="true"]{background:var(--m-zero)}
-.m-grid[aria-pressed="true"] i{background:var(--accent);opacity:.7}
+.m-grid{width:38px;height:38px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:2px;padding:0;background:none;border-radius:0}
+.m-grid i{border-radius:3px;background:var(--m-zero)}
+.m-grid i.h-zero{background:var(--m-zero)}
+.m-grid i.h-pos{background:var(--h-pos)}
+.m-grid i.h-neg1{background:var(--h-neg1)}
+.m-grid i.h-neg2{background:var(--h-neg2)}
 .m-headrow{position:sticky;top:0;z-index:2;background:var(--bg);display:grid;grid-template-columns:64px 1fr 40%;align-items:center;gap:0;border-bottom:1px solid var(--line2);padding:10px 0}
 .m-headrow.h2{grid-template-columns:64px 1fr}
 .m-headrow>span{color:var(--muted);font-weight:600;font-size:15px}
@@ -1291,7 +1293,7 @@ function renderAll() {
   $("#title").textContent = mob && UI.tab === "horizonte" ? "horizonte de saldos" : TITLES[UI.tab];
   $("#title-extra").innerHTML = "";
   $("#period").innerHTML = periodHTML();
-  $("#top-right").innerHTML = mob ? (UI.tab === "saldos" ? `<div class="tr-row"><button class="m-grid" data-mgrid aria-label="abrir horizonte de saldos">${"<i></i>".repeat(9)}</button></div>` : UI.tab === "horizonte" ? `<div class="tr-row"><button class="icon-btn" data-madd aria-label="adicionar movimentação" aria-haspopup="menu" style="background:none">${I.plus}</button></div>` : "") : (S.loaded ? "" : `<span>carregando…</span>`);
+  $("#top-right").innerHTML = mob ? (UI.tab === "saldos" ? `<div class="tr-row"><button class="m-grid" data-mgrid aria-label="abrir horizonte de saldos">${gridIcon()}</button></div>` : UI.tab === "horizonte" ? `<div class="tr-row"><button class="icon-btn" data-madd aria-label="adicionar movimentação" aria-haspopup="menu" style="background:none">${I.plus}</button></div>` : "") : (S.loaded ? "" : `<span>carregando…</span>`);
   const v = $("#view");
   const vkey = UI.tab + (mob ? ":m" : "");
   const keep = v.dataset.tab === vkey;
@@ -1310,8 +1312,6 @@ function renderAll() {
     const sb = $("#scroll-back"); if (sb) sb.disabled = visibleMi() <= MIN_MI;
   }
   if (UI.tab === "totais") requestAnimationFrame(() => $$(".bar i", v).forEach(b => b.style.width = b.dataset.w + "%"));
-  if (!keep) enterAnim(v);
-  countUp(v, !keep);
   if (PANEL.open) renderPanel();
   placeFab();
 }
@@ -1436,6 +1436,16 @@ $("#view").addEventListener("contextmenu", e => { if (e.target.closest(".m-cell"
 
 /* horizonte no celular: 3 meses lado a lado, só a coluna de saldos */
 const hzCls = v => Math.abs(v) < 0.005 ? "h-zero" : v > 0 ? "h-pos" : v > -NEG_SMALL ? "h-neg1" : "h-neg2";
+/* ícone do horizonte: dias 10, 20 e 30 deste mês e dos próximos dois, com as cores do horizonte */
+function gridIcon() {
+  const c = calc(); let h = "";
+  for (const d of [10, 20, 30]) for (let k = 0; k < 3; k++) {
+    const mi = CUR + k, dd = Math.min(d, dim(miY(mi), miM(mi)));
+    const s = c.saldo[`${miY(mi)}-${pad(miM(mi) + 1)}-${pad(dd)}`] ?? 0;
+    h += `<i class="${hzCls(s)}"></i>`;
+  }
+  return h;
+}
 function hzStart() { return Math.max(CUR, Math.min(UI.tMonth, MAX_MI - 2)); }
 function mobileHorizonHTML() {
   const s = hzStart();
@@ -1570,7 +1580,6 @@ function renderPanel() {
   }
   const fresh = !root.firstChild;
   root.innerHTML = `<div class="drawer-ov" data-pclose ${fresh ? "" : 'style="animation:none"'}></div><aside class="drawer screen" role="dialog" aria-label="${PANEL.mode === "day" ? "movimentações do dia" : "movimentações do mês"}" ${fresh ? "" : 'style="animation:none"'}><div class="drawer-head ph">${head}</div><div class="drawer-body pb">${body}</div></aside>`;
-  stagger($$("#drawer-root .lrow, #drawer-root .detail-grid > *"), 30, 14);
 }
 $("#drawer-root").addEventListener("click", e => {
   const t = e.target;
