@@ -77,7 +77,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .pbar{padding:6px 16px 16px;border-bottom:1px solid var(--line2)}
 .pill-dd{display:flex;align-items:center;gap:10px;width:100%;height:48px;padding:0 18px;border:2px solid var(--line2);border-radius:999px;font-weight:600;font-size:16px}
 .pill-dd span:not(.ti){flex:1;text-align:left}
-.pill-dd svg{color:var(--muted);flex:none}
+.pill-dd>svg{color:var(--muted);flex:none}
 .lrows{display:flex;flex-direction:column}
 .lrow{display:flex;flex-direction:column;gap:6px;padding:18px 16px;border-bottom:1px solid var(--line);text-align:left;width:100%}
 .lrow:hover{background:var(--surface2)}
@@ -489,7 +489,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .m-headrow>span:first-child{text-align:center}
 .m-headrow>span:last-child{text-align:right;padding-right:14px}
 .m-sel{display:flex;align-items:center;gap:8px;height:42px;padding:0 14px;border:2px solid var(--line2);border-radius:999px;font-weight:600;font-size:15px;margin-right:8px;justify-self:start}
-.m-sel svg{width:16px;height:16px;color:var(--muted)}
+.m-sel>svg{width:16px;height:16px;color:var(--muted)}
 .m-day{display:grid;grid-template-columns:64px 1fr 40%;border-bottom:1px solid var(--line2)}
 .m-day.h2{grid-template-columns:64px 1fr}
 .m-dia{position:relative;display:flex;justify-content:center;align-items:flex-start;padding-top:13px;font-size:16px;font-weight:600;border-right:1px solid var(--line)}
@@ -626,6 +626,10 @@ body,.sidebar,.topbar,.card,.list,.mbox,.bottom-nav,.drawer,.modal{transition:ba
 /* sem seleção de texto: só campos de digitar permitem */
 *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+/* arrasto mais leve */
+.pane{contain:layout paint}
+.pager.dragging *{transition:none!important;animation:none!important}
+.pager.dragging .m-cell:active,.pager.dragging .m-saldo:active,.pager.dragging .hz-v:active{transform:none}
 </style>
 
 <div id="app" class="app">
@@ -1215,14 +1219,14 @@ function applyPager(kind, dir) {
   else { const i = COL_ORDER.indexOf(UI.mCol), L = COL_ORDER.length; UI.mCol = COL_ORDER[(i + dir + L) % L]; }
   renderAll();
 }
-function slidePager(pg, dir, then) {
+function slidePager(pg, dir, then, dur) {
   const track = pg.firstElementChild, w = pg.clientWidth;
   pg.dataset.anim = "1";
-  track.style.transition = "transform .46s cubic-bezier(.22,.9,.24,1)";
+  track.style.transition = `transform ${dur || 480}ms cubic-bezier(.2,.85,.25,1)`;
   track.style.transform = `translate3d(${dir > 0 ? -2 * w : dir < 0 ? 0 : -w}px,0,0)`;
   let done = false;
   const fin = () => { if (done) return; done = true; delete pg.dataset.anim; if (dir) then(); else { track.style.transition = ""; track.style.transform = ""; } };
-  track.addEventListener("transitionend", fin, { once: true }); setTimeout(fin, 520);
+  track.addEventListener("transitionend", fin, { once: true }); setTimeout(fin, (dur || 480) + 60);
 }
 let PG = null;
 $("#view").addEventListener("touchstart", e => {
@@ -1237,7 +1241,7 @@ $("#view").addEventListener("touchmove", e => {
   if (!PG.axis) {
     if (Math.abs(dx) + Math.abs(dy) < 8) return;
     PG.axis = Math.abs(dx) > Math.abs(dy) * 1.1 ? "x" : "y";
-    if (PG.axis === "x") { lpCancel(); PG.track.style.transition = "none"; PG.pg.classList.add("dragging"); }
+    if (PG.axis === "x") { lpCancel(); PG.track.style.transition = "none"; PG.pg.classList.add("dragging"); PG.x0 = t.clientX - Math.sign(dx) * 0; }
   }
   if (PG.axis !== "x") return;
   e.preventDefault();
@@ -1246,16 +1250,21 @@ $("#view").addEventListener("touchmove", e => {
   if ((d > 0 && !canP) || (d < 0 && !canN)) d = Math.sign(d) * Math.pow(Math.abs(d), 0.72); // resistência na ponta
   const now = performance.now(); PG.v = (t.clientX - PG.lx) / Math.max(1, now - PG.lt); PG.lx = t.clientX; PG.lt = now;
   PG.dx = d;
-  PG.track.style.transform = `translate3d(${-PG.w + d}px,0,0)`;
+  if (!PG.raf) PG.raf = requestAnimationFrame(() => { if (PG) { PG.raf = 0; PG.track.style.transform = `translate3d(${-PG.w + PG.dx}px,0,0)`; } });
 }, { passive: false });
 const pgEnd = () => {
   if (!PG) return; const p = PG; PG = null;
+  if (p.raf) cancelAnimationFrame(p.raf);
   if (p.axis !== "x") return;
+  p.track.style.transform = `translate3d(${-p.w + p.dx}px,0,0)`;
   p.pg.classList.remove("dragging");
   const dir = p.dx < 0 ? 1 : -1, allowed = dir > 0 ? p.pg.dataset.next === "1" : p.pg.dataset.prev === "1";
-  const fling = Math.abs(p.v) > 0.45 && Math.sign(p.v) === Math.sign(p.dx) && Math.abs(p.dx) > 24;
-  const commit = allowed && (Math.abs(p.dx) > p.w * 0.5 || fling);
-  slidePager(p.pg, commit ? dir : 0, () => applyPager(p.pg.dataset.pager, dir));
+  const fling = Math.abs(p.v) > 0.3 && Math.sign(p.v) === Math.sign(p.dx) && Math.abs(p.dx) > 20;
+  const commit = allowed && (Math.abs(p.dx) > p.w * 0.4 || fling);
+  // duração proporcional ao que falta andar e à velocidade do dedo: parece continuar o movimento
+  const rest = commit ? p.w - Math.abs(p.dx) : Math.abs(p.dx);
+  const dur = Math.max(220, Math.min(520, rest / Math.max(0.9, Math.abs(p.v)) ));
+  slidePager(p.pg, commit ? dir : 0, () => applyPager(p.pg.dataset.pager, dir), dur);
 };
 $("#view").addEventListener("touchend", pgEnd);
 $("#view").addEventListener("touchcancel", pgEnd);
