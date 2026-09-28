@@ -750,8 +750,8 @@ function queue(key, fn) { chains[key] = (chains[key] || Promise.resolve()).then(
 function onErr(e) { console.warn(e); toast("não deu pra salvar agora. tenta de novo em instantes", true); }
 
 /* ===== supabase: cole aqui a URL e a chave "anon public" do seu projeto ===== */
-const SUPABASE_URL = "https://dneyysfzncgtvbxjrpsh.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuZXl5c2Z6bmNndHZieGpycHNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1Mzg5MzYsImV4cCI6MjEwNjExNDkzNn0.Jc0TyvwLxsdjL98nqi5SmA5K8x_5ZTqUlv4wUldu9Fg";
+const SUPABASE_URL = "https://ccxiuaqirickchmrowrz.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjeGl1YXFpcmlja2NobXJvd3J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxMDg2NTQsImV4cCI6MjEwMTY4NDY1NH0.TiInMdno4_yvWK-c8mg6DY7IymPaJKrtN1CwS-8dm8U";
 const SB_TABLE = "previsao_state";
 let SB = null, SB_USER = null;
 
@@ -2139,7 +2139,7 @@ function bindAuth(el) {
     try {
       if (mode === "login") { const { error } = await SB.auth.signInWithPassword({ email, password: pass }); if (error) throw error; }
       if (mode === "signup") {
-        const { data, error } = await SB.auth.signUp({ email, password: pass, options: { data: { nome: ($("#au-n", el).value || "").trim() } } });
+        const { data, error } = await SB.auth.signUp({ email, password: pass, options: { data: { nome: ($("#au-n", el).value || "").trim() }, emailRedirectTo: location.href.split("#")[0].split("?")[0] } });
         if (error) throw error;
         if (!data.session) { showAuthKeepMsg("login", "pronto! confirma a conta pelo link que mandamos no seu e-mail e depois entra aqui."); }
       }
