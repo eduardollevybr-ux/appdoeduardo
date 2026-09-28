@@ -94,8 +94,13 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .form-modal .modal-body{padding:0 0 12px;gap:0}
 .f-money{display:flex;align-items:baseline;gap:8px;padding:8px 20px 18px}
-.f-cur{font-size:34px;font-weight:700}
-.f-money input{border:0;background:none;outline:none;font-size:44px!important;font-weight:700;width:100%;min-width:0;padding:0}
+.f-cur{font-size:30px;font-weight:700}
+.f-money input{border:0;background:none;outline:none;font-size:36px!important;font-weight:700;width:100%;min-width:0;padding:0;caret-color:var(--accent)}
+.f-money input::placeholder{color:var(--zero);opacity:1}
+.form-modal .modal-foot{flex-direction:column;gap:4px;border-top:0}
+.form-modal #f-submit{height:54px;font-size:16px}
+.btn-link{height:48px;width:100%;font-weight:600;font-size:16px;border-radius:999px;color:var(--text)}
+.btn-link:hover{background:var(--surface2)}
 .f-hint{margin:-12px 20px 12px;color:var(--muted);font-size:13px}
 .frows{border-top:1px solid var(--line2)}
 .frow{display:flex;align-items:center;gap:14px;width:100%;min-height:66px;padding:0 20px;border-bottom:1px solid var(--line2);text-align:left;cursor:pointer}
@@ -110,7 +115,9 @@ button.frow:hover{background:var(--surface2)}
 @media (max-width:700px){
   .overlay:has(.form-modal){padding:0}
   .modal.form-modal{width:100%;height:100%;max-height:none;border-radius:0;border:0}
-  .form-modal .modal-head{padding-top:calc(14px + env(safe-area-inset-top,0px))}
+  .form-modal .modal-head{display:none}
+  .form-modal .modal-body{flex:0 0 auto;padding-top:calc(24px + env(safe-area-inset-top,0px))!important}
+  .form-modal .modal-foot{padding-top:24px}
   .form-modal .modal-foot{padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));border-top:0}
 }
 /* folhas que sobem de baixo */
@@ -292,7 +299,7 @@ button.row:hover{background:var(--surface2)}
 .btn-t-entrada{background:var(--c-entrada)!important;color:#fff!important}
 .btn-t-saida{background:var(--c-saida)!important;color:#fff!important}
 .btn-t-diario{background:var(--c-diario)!important;color:#fff!important}
-.btn-t-economia{background:var(--c-economia)!important;color:#1D1F23!important}
+.btn-t-economia{background:var(--c-economia)!important;color:#fff!important}
 .btn-t-cartao{background:var(--c-cartao)!important;color:#fff!important}
 .field{display:flex;flex-direction:column;gap:6px}
 .field>label,.flabel{font-size:12.5px;color:var(--muted);font-weight:500}
@@ -616,6 +623,9 @@ body,.sidebar,.topbar,.card,.list,.mbox,.bottom-nav,.drawer,.modal{transition:ba
 /* login */
 .auth-card>*{animation:rise .6s var(--ease-out) both}
 .auth-card>*:nth-child(2){animation-delay:.05s}.auth-card>*:nth-child(3){animation-delay:.1s}.auth-card>*:nth-child(4){animation-delay:.15s}.auth-card>*:nth-child(5){animation-delay:.2s}.auth-card>*:nth-child(6){animation-delay:.25s}.auth-card>*:nth-child(7){animation-delay:.3s}
+/* sem seleção de texto: só campos de digitar permitem */
+*{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 </style>
 
 <div id="app" class="app">
@@ -1667,7 +1677,7 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
     value: perInst ? (oi ? oi.value : r2(tx.value / (tx.installments || 1))) : tx.value, type: tx.type, desc: tx.desc, date: occD, rep: tx.rep || "none", until: tx.until || "forever",
     count: tx.count || 12, installments: tx.installments || 2, tags: [...(tx.tags || [])], cardId: tx.cardId || "",
   } : { value: 0, type, desc: "", date, rep: "none", until: "forever", count: 12, installments: 2, tags: [], cardId: "" };
-  const m = openModal({ title: edit ? "editar" : "adicionar", body: "", cls: "form-modal", foot: `<button class="btn block" id="f-submit"></button>` });
+  const m = openModal({ title: edit ? "editar" : "adicionar", body: "", cls: "form-modal", foot: `<button class="btn block" id="f-submit"></button><button class="btn-link" id="f-cancel">cancelar</button>` });
   const el = m.el;
   const REP_DESC = { none: "acontece uma vez só", monthly: "repete o mesmo valor mensalmente", weekly: "repete o mesmo valor semanalmente", daily: "repete o mesmo valor diariamente", yearly: "repete o mesmo valor anualmente", installment: "divide o valor pelo número de parcelas" };
   const REP_ICO = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="15" height="15" rx="2.5"/><path d="M3 9h15M7.5 2.5v4M13.5 2.5v4"/><path d="M21 15a4 4 0 1 1-1.2-2.8M21 11.5V14h-2.5"/></svg>';
@@ -1680,7 +1690,7 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
     const pi = perInst && inst;
     m.setBody(`
       <div class="f-money"><span class="flabel sr-only" id="lbl-val">${pi ? "valor da parcela" : inst ? "valor total" : "valor"}</span>
-        <span class="f-cur">R$</span><input id="f-val" inputmode="numeric" aria-labelledby="lbl-val" class="num" value="${fmt(f.value)}"></div>
+        <span class="f-cur">R$</span><input id="f-val" inputmode="numeric" aria-labelledby="lbl-val" class="num" placeholder="0,00" value="${f.value ? fmt(f.value) : ""}"></div>
       ${inst ? `<p class="f-hint num">${pi ? `valor de cada parcela` : `${f.installments}x de ${brl(f.value / f.installments)}`}</p>` : ""}
       <div class="frows">
         <button class="frow" id="f-type" aria-haspopup="dialog" aria-label="tipo: ${TYPES[f.type].label}. mudar">${ti(f.type, true)}<span class="fr-main">${TYPES[f.type].label}</span>${CHEV}</button>
@@ -1698,7 +1708,7 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
   el.addEventListener("input", e => {
     if (e.target.id === "f-val") {
       f.value = parseMoney(e.target.value);
-      e.target.value = fmt(f.value);
+      e.target.value = f.value ? fmt(f.value) : "";
       const h = $(".f-hint", el); if (h && !(perInst && f.rep === "installment")) h.textContent = `${f.installments}x de ${brl(f.value / f.installments)}`;
     }
     if (e.target.id === "f-desc") f.desc = e.target.value;
@@ -1729,6 +1739,7 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
       });
     }
     if (t.closest("#f-submit")) submit();
+    if (t.closest("#f-cancel")) m.close();
   });
   async function submit() {
     if (!(f.value > 0)) { toast("coloca um valor maior que zero", true); $("#f-val", el)?.focus(); return; }
@@ -2120,6 +2131,27 @@ if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
   document.addEventListener("touchend", e => { const t = Date.now(); if (t - lastTap < 350 && !e.target.closest("button,a,input,textarea,select,label,[role=button]")) e.preventDefault(); lastTap = t; }, { passive: false });
   document.addEventListener("dblclick", stop, { passive: false });
 }
+
+/* ================= segurar o dedo = tocar ================= */
+(() => {
+  let st = null;
+  const CLICKABLE = "button,a[href],label,[role=button],[data-act],.frow,.sitem,.lrow,.row,.pop-item";
+  document.addEventListener("touchstart", e => {
+    if (e.touches.length !== 1) { st = null; return; }
+    const el = e.target.closest(CLICKABLE);
+    st = el && !e.target.closest("input,textarea,.m-cell[data-t]") ? { el, x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now(), moved: false } : null;
+  }, { passive: true });
+  document.addEventListener("touchmove", e => { if (st && Math.hypot(e.touches[0].clientX - st.x, e.touches[0].clientY - st.y) > 10) st.moved = true; }, { passive: true });
+  document.addEventListener("touchend", e => {
+    const s = st; st = null;
+    if (!s || s.moved || Date.now() - s.t < 450) return;
+    if (!s.el.isConnected || s.el.disabled) return;
+    e.preventDefault(); // toque longo vira um toque normal, sem menu nem seleção
+    s.el.click();
+  }, { passive: false });
+  document.addEventListener("contextmenu", e => { if (!e.target.closest("input,textarea")) e.preventDefault(); });
+  document.addEventListener("selectstart", e => { if (!e.target.closest || !e.target.closest("input,textarea")) e.preventDefault(); });
+})();
 
 /* ================= início ================= */
 renderAll();
