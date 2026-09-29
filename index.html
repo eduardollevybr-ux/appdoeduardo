@@ -686,6 +686,24 @@ const miY = mi => Math.floor(mi / 12), miM = mi => ((mi % 12) + 12) % 12;
 const miFirst = mi => `${miY(mi)}-${pad(miM(mi) + 1)}-01`;
 const miLast = mi => `${miY(mi)}-${pad(miM(mi) + 1)}-${pad(dim(miY(mi), miM(mi)))}`;
 const addMonthsClamp = (d, n, origDay) => { const t = new Date(d.getFullYear(), d.getMonth() + n, 1); return new Date(t.getFullYear(), t.getMonth(), Math.min(origDay, dim(t.getFullYear(), t.getMonth()))); };
+/* ===== dias úteis: segunda a sexta, sem os feriados nacionais oficiais ===== */
+const HOL = {};
+function easter(y) { const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451), mo = Math.floor((h + l - 7 * m + 114) / 31), da = ((h + l - 7 * m + 114) % 31) + 1; return new Date(y, mo - 1, da); }
+function holidays(y) {
+  if (HOL[y]) return HOL[y];
+  const set = new Set(["01-01", "04-21", "05-01", "09-07", "10-12", "11-02", "11-15", "11-20", "12-25"].map(x => `${y}-${x}`));
+  set.add(ymd(addDays(easter(y), -2))); // sexta-feira santa
+  return (HOL[y] = set);
+}
+const isBiz = d => { const w = d.getDay(); return w !== 0 && w !== 6 && !holidays(d.getFullYear()).has(ymd(d)); };
+const nextBiz = d => { while (!isBiz(d)) d = addDays(d, 1); return d; };
+function nthBiz(y, m0, n) { let c = 0, lastB = null; for (let day = 1, L = dim(y, m0); day <= L; day++) { const d = new Date(y, m0, day); if (isBiz(d)) { c++; lastB = d; if (c === n) return d; } } return lastB; }
+/* data da repetição mensal conforme a regra do dia: mesmo dia, dia X ou próximo dia útil, ou Nº dia útil */
+function monthDate(mode, y, m0, day, nth) {
+  if (mode === "nth") return nthBiz(y, m0, nth || 5);
+  const d = new Date(y, m0, Math.min(day, dim(y, m0)));
+  return mode === "biz" ? nextBiz(d) : d;
+}
 const fmt = v => (Math.abs(v) < 0.005 ? 0 : v).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const brl = v => (v < -0.004 ? "- R$ " : "R$ ") + fmt(Math.abs(v));
 const dBR = s => { const d = parse(s); return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`; };
@@ -880,6 +898,7 @@ function expand(tx, from, to, cb) {
   for (let i = i0; i < count; i++) {
     let d;
     if (rep === "none") d = start;
+    else if (rep === "monthly" && tx.mday && tx.mday !== "same") { const t = new Date(start.getFullYear(), start.getMonth() + i, 1); d = monthDate(tx.mday, t.getFullYear(), t.getMonth(), tx.aday || od, tx.nth); }
     else if (rep === "monthly" || inst) d = addMonthsClamp(start, i, od);
     else if (rep === "yearly") d = addMonthsClamp(start, 12 * i, od);
     else if (rep === "weekly") d = addDays(start, 7 * i);
@@ -1667,6 +1686,8 @@ function closePanel() { PANEL.open = false; $("#drawer-root").innerHTML = ""; }
 function repText(x) {
   const r = x.tx.rep || "none";
   if (r === "installment") return `${x.n}/${x.total} mensais`;
+  if (r === "monthly" && x.tx.mday === "nth") return `todo ${x.tx.nth || 5}º dia útil`;
+  if (r === "monthly" && x.tx.mday === "biz") return `todo dia ${x.tx.aday || +x.tx.date.slice(8)} ou próximo dia útil`;
   return r === "none" ? "" : REP_LABEL[r];
 }
 const ddmm = s => s.slice(8, 10) + "/" + s.slice(5, 7);
@@ -1806,7 +1827,12 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
   const f = edit ? {
     value: perInst ? (oi ? oi.value : r2(tx.value / (tx.installments || 1))) : tx.value, type: tx.type, desc: tx.desc, date: occD, rep: tx.rep || "none", until: tx.until || "forever",
     count: tx.count || 12, installments: tx.installments || 2, tags: [...(tx.tags || [])], cardId: tx.cardId || "",
-  } : { value: 0, type, desc: "", date, rep: "none", until: "forever", count: 12, installments: 2, tags: [], cardId: "" };
+    mday: tx.rep === "monthly" && tx.mday ? tx.mday : "same", nth: tx.nth || 5, aday: tx.aday || (tx.date ? +tx.date.slice(8) : 1),
+  } : { value: 0, type, desc: "", date, rep: "none", until: "forever", count: 12, installments: 2, tags: [], cardId: "", mday: "same", nth: 5, aday: +date.slice(8) };
+  const isRule = () => f.rep === "monthly" && f.mday !== "same";
+  /* data real conforme a regra do dia (usa o mês da data escolhida) */
+  const effDate = ds => { if (f.rep !== "monthly" || f.mday === "same") return ds; const d = parse(ds); return ymd(monthDate(f.mday, d.getFullYear(), d.getMonth(), f.aday, f.nth)); };
+  const MDAY_LABEL = () => f.mday === "nth" ? `${f.nth}º dia útil` : f.mday === "biz" ? `dia ${f.aday} ou próximo útil` : "mesmo dia";
   const m = openModal({ title: edit ? "editar" : "adicionar", body: "", cls: "form-modal", foot: `<button class="btn block" id="f-submit"></button><button class="btn-link" id="f-cancel">cancelar</button>` });
   const el = m.el;
   const REP_DESC = { none: "acontece uma vez só", monthly: "repete o mesmo valor mensalmente", weekly: "repete o mesmo valor semanalmente", daily: "repete o mesmo valor diariamente", yearly: "repete o mesmo valor anualmente", installment: "divide o valor pelo número de parcelas" };
@@ -1825,8 +1851,9 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
       <div class="frows">
         <button class="frow" id="f-type" aria-haspopup="dialog" aria-label="tipo: ${TYPES[f.type].label}. mudar">${ti(f.type, true)}<span class="fr-main">${TYPES[f.type].label}</span>${CHEV}</button>
         <label class="frow"><span class="fr-ico">${PEN}</span><input class="fr-input" id="f-desc" autocomplete="off" maxlength="80" placeholder="descrição" aria-label="descrição" value="${esc(f.desc)}"></label>
-        <button class="frow" id="f-date" aria-haspopup="dialog" aria-label="data: ${dBR(f.date)}. mudar"><span class="fr-ico">${CAL}</span><span class="fr-main">data</span><span class="fr-val num">${dNum(f.date)}</span>${CHEV}</button>
+        <button class="frow" id="f-date" aria-haspopup="dialog" aria-label="data: ${dBR(f.date)}. mudar"><span class="fr-ico">${CAL}</span><span class="fr-main">data</span><span class="fr-val num">${dNum(effDate(f.date))}</span>${CHEV}</button>
         <button class="frow" id="f-rep" aria-haspopup="dialog" aria-label="repetição: ${REP_LABEL[f.rep]}. mudar"><span class="fr-ico">${REP_ICO}</span><span class="fr-main">${REP_LABEL[f.rep]}</span>${CHEV}</button>
+        ${f.rep === "monthly" ? `<button class="frow" id="f-mday" aria-haspopup="dialog" aria-label="qual dia: ${MDAY_LABEL()}. mudar"><span class="fr-ico">${CAL}</span><span class="fr-main">qual dia</span><span class="fr-val">${MDAY_LABEL()}</span>${CHEV}</button>` : ""}
         ${repeats ? `<button class="frow" id="f-until" aria-haspopup="dialog"><span class="fr-ico">${I.horizonte.replace("<svg", '<svg width="22" height="22"')}</span><span class="fr-main">até quando</span><span class="fr-val num">${f.until === "count" ? `${f.count} vezes` : "a perder de vista"}</span>${CHEV}</button>` : ""}
         ${inst ? `<div class="frow"><span class="fr-ico">${I.card.replace("<svg", '<svg width="22" height="22"')}</span><span class="fr-main">parcelas</span><span class="stepper"><button class="icon-btn" data-inst="-1" aria-label="menos uma parcela">−</button><b class="num" aria-live="polite">${f.installments}</b><button class="icon-btn" data-inst="1" aria-label="mais uma parcela">+</button></span></div>` : ""}
       </div>`);
@@ -1851,7 +1878,24 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
     const t = e.target;
     const ins = t.closest("[data-inst]"); if (ins) { f.installments = Math.max(2, Math.min(120, f.installments + +ins.dataset.inst)); return draw(); }
     if (t.closest("#f-type")) listSheet("tipo", TYPE_ORDER.map(k => [k, TYPES[k].label, "", ti(k, true)]), f.type, k => { f.type = k; draw(); });
-    if (t.closest("#f-date")) datePicker(null, f.date, v => { f.date = v; draw(); });
+    if (t.closest("#f-date")) datePicker(null, effDate(f.date), v => { f.date = v; f.aday = +v.slice(8); draw(); });
+    if (t.closest("#f-mday")) {
+      const day = f.mday === "biz" ? f.aday : +f.date.slice(8);
+      const s = openSheet({ title: "qual dia", body: `<div class="slist">
+          <button class="sitem ${f.mday === "same" ? "on" : ""}" data-md="same"><span class="si-txt"><b>mesmo dia</b><span>sempre no dia ${day}, mesmo se cair em fim de semana ou feriado</span></span></button>
+          <button class="sitem ${f.mday === "biz" ? "on" : ""}" data-md="biz"><span class="si-txt"><b>dia ${day} ou próximo dia útil</b><span>se o dia ${day} cair em fim de semana ou feriado, passa pro próximo dia útil</span></span></button>
+          <div class="sitem ${f.mday === "nth" ? "on" : ""}" data-md="nth" role="button" tabindex="0"><span class="si-txt"><b>dia útil do mês</b><span>ex.: todo 5º dia útil</span></span>
+            <span class="stepper"><button class="icon-btn" data-nc="-1" aria-label="um dia útil a menos">−</button><b class="num" id="md-n">${f.nth}º</b><button class="icon-btn" data-nc="1" aria-label="um dia útil a mais">+</button></span></div>
+        </div><p class="hint" style="margin:12px 20px 0;line-height:1.5">dia útil: segunda a sexta, sem contar os feriados nacionais.</p><button class="btn block primary" data-mdsave style="margin-top:14px">salvar</button>` });
+      let mode = f.mday, n = f.nth;
+      s.el.addEventListener("click", ev => {
+        const c = ev.target.closest("[data-nc]");
+        if (c) { n = Math.max(1, Math.min(22, n + +c.dataset.nc)); $("#md-n", s.el).textContent = n + "º"; mode = "nth"; }
+        const u = ev.target.closest("[data-md]"); if (u && !c) mode = u.dataset.md;
+        $$("[data-md]", s.el).forEach(x => x.classList.toggle("on", x.dataset.md === mode));
+        if (ev.target.closest("[data-mdsave]")) { if (mode === "biz" && f.mday !== "biz") f.aday = day; f.mday = mode; f.nth = n; s.close(); draw(); }
+      });
+    }
     if (t.closest("#f-rep")) listSheet("repetir", Object.keys(REP_LABEL).map(k => [k, REP_LABEL[k], REP_DESC[k]]), f.rep, k => { f.rep = k; draw(); });
     if (t.closest("#f-until")) {
       const s = openSheet({ title: "até quando", body: `<div class="slist">
@@ -1875,25 +1919,28 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
     if (!(f.value > 0)) { toast("coloca um valor maior que zero", true); $("#f-val", el)?.focus(); return; }
     if (f.date < miFirst(MIN_MI) || f.date > miLast(MAX_MI)) { toast("a data precisa estar dentro de 5 anos pra trás ou pra frente", true); return; }
     const desc = f.desc.trim() || TYPES[f.type].label;
-    const base = { type: f.type, desc, rep: f.rep, until: f.until, count: f.count, installments: f.installments, tags: [], cardId: "", skip: [], endBefore: null };
+    const rule = isRule();
+    const base = { type: f.type, desc, rep: f.rep, until: f.until, count: f.count, installments: f.installments, tags: [], cardId: "", skip: [], endBefore: null, mday: rule ? f.mday : "same", nth: rule && f.mday === "nth" ? f.nth : null, aday: rule && f.mday === "biz" ? f.aday : null };
+    const fDate = effDate(f.date);
     const stored = (v, rep, n) => rep === "installment" && perInst ? r2(v * n) : r2(v);
     const msgOk = edit ? "edição salva" : `${TYPES[f.type].label} adicionad${f.type === "entrada" || f.type === "saida" || f.type === "economia" ? "a" : "o"}`.replace("gastos com cartão adicionado", "gasto com cartão adicionado");
     if (!recurring) {
-      const data = { ...base, value: r2(f.value), date: f.date, createdAt: edit ? tx.createdAt || Date.now() : Date.now() };
+      const data = { ...base, value: r2(f.value), date: fDate, createdAt: edit ? tx.createdAt || Date.now() : Date.now() };
       m.close(); await saveTx(edit ? tx.id : uid("t"), data); toast(msgOk); if (PANEL.open) renderPanel(); return;
     }
     const nd = nextOccDate(tx, occD);
     const s = await chooseScope({ title: "salvar edição", text: `"${esc(tx.desc)}" se repete. essa mudança vale pra quê?`, date: occD, hasNext: !!nd });
     if (!s) return;
     m.close();
-    const delta = dayDiff(occD, f.date), n = oi ? oi.n : 1, now = Date.now();
+    const delta = dayDiff(occD, fDate), n = oi ? oi.n : 1, now = Date.now();
+    const ruleKey = o => o.rep === "monthly" ? `${o.mday || "same"}|${o.nth || ""}|${o.aday || ""}` : "";
     const old = stripId(tx);
     if (s === "one") {
       await saveTx(tx.id, { ...old, skip: [...(tx.skip || []), occD] });
-      await saveTx(uid("t"), { ...base, rep: "none", value: r2(f.value), date: f.date, createdAt: now });
+      await saveTx(uid("t"), { ...base, rep: "none", mday: "same", nth: null, aday: null, value: r2(f.value), date: fDate, createdAt: now });
     } else if (s === "all" || (s === "from" && n === 1)) {
-      const start = shiftDate(tx.date, delta);
-      const keep = tx.rep === f.rep && start === tx.date;
+      const start = rule ? effDate(delta ? shiftDate(tx.date, delta) : tx.date) : shiftDate(tx.date, delta);
+      const keep = tx.rep === f.rep && start === tx.date && ruleKey(tx) === ruleKey(base);
       await saveTx(tx.id, { ...base, value: stored(f.value, f.rep, f.installments), date: start, createdAt: tx.createdAt || now, skip: keep ? tx.skip || [] : [], endBefore: keep ? tx.endBefore || null : null });
     } else {
       const cut = s === "from" ? occD : nd;
@@ -1901,7 +1948,7 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
       const cnt = f.rep === tx.rep && f.until === "count" && f.count === (tx.count || 12) ? Math.max(1, f.count - done) : f.count;
       const ins = f.rep === "installment" && tx.rep === "installment" && f.installments === (tx.installments || 2) ? Math.max(1, f.installments - done) : f.installments;
       await saveTx(tx.id, { ...old, endBefore: cut });
-      await saveTx(uid("t"), { ...base, count: cnt, installments: ins, value: stored(f.value, f.rep, ins), date: shiftDate(cut, delta), createdAt: now, skip: (tx.skip || []).filter(x => x > cut) });
+      await saveTx(uid("t"), { ...base, count: cnt, installments: ins, value: stored(f.value, f.rep, ins), date: rule ? effDate(shiftDate(cut, delta)) : shiftDate(cut, delta), createdAt: now, skip: (tx.skip || []).filter(x => x > cut) });
     }
     toast(s === "one" ? "mudou só esse" : s === "next" ? "próximos atualizados" : "edição salva");
     if (PANEL.open) { PANEL.detail = null; renderPanel(); }
@@ -2164,7 +2211,7 @@ function openRefer() {
 }
 
 function openNews() {
-  const N = [["27/09/2026", ["primeira versão do FLUX no computador", "abreviação do horizonte padronizada (sempre com 2 casas, ex.: 1.90K)", "agora dá pra mudar a repetição ao editar um lançamento", "menu adicionar ajustado para telas baixas"]]];
+  const N = [["29/09/2026", ["repetição mensal com dia útil: escolha \"dia X ou próximo dia útil\" (ex.: pagamento do dia 5) ou \"Nº dia útil do mês\" (ex.: salário no 5º dia útil)", "sem sugestões do navegador nos campos de texto e valor"]], ["27/09/2026", ["primeira versão do FLUX no computador", "abreviação do horizonte padronizada (sempre com 2 casas, ex.: 1.90K)", "agora dá pra mudar a repetição ao editar um lançamento", "menu adicionar ajustado para telas baixas"]]];
   openModal({ title: "o que há de novo", body: N.map(([d, l]) => `<div class="card" style="padding:16px"><div class="hint num" style="font-weight:600">${d}</div><ul style="margin:8px 0 0;padding-left:18px;line-height:1.7">${l.map(x => `<li>${x}</li>`).join("")}</ul></div>`).join("") });
 }
 const TERMS = `<p>o FLUX é uma ferramenta de organização financeira pessoal. as previsões mostradas são feitas a partir do que você cadastra e não são recomendação financeira.</p><p>você é responsável pelas informações que cadastra. a gente pode mudar funcionalidades com o tempo e avisa em "o que há de novo".</p><p>texto provisório: substitua pelos termos oficiais antes de divulgar o app.</p>`;
