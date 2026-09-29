@@ -150,7 +150,14 @@ button.frow:hover{background:var(--surface2)}
 .mcard{background:transparent!important;border:0!important;overflow:visible!important;border-radius:0!important}
 .mhead{font-size:17px;font-weight:700;padding:4px 2px 12px}
 /* PC: título do mês fixo no topo junto com o título das colunas */
-@media (min-width:701px){.board .board-row{padding-top:0}.mhead{position:sticky;top:0;z-index:4;background:var(--bg);line-height:24px;padding:12px 2px 12px}.mbox .mtable thead{top:48px}}
+@media (min-width:701px){.board .board-row{padding-top:0}.mhead{position:sticky;top:0;z-index:4;background:var(--bg);line-height:24px;padding:12px 2px 12px}.mbox .mtable thead{top:48px}.hcard .mhead{padding:0;height:8px}.hcard .mbox .mtable thead{top:8px}
+  /* horizonte no PC mais compacto */
+  .d-hz .topbar{min-height:56px;padding-block:8px}
+  .d-hz .board .board-row{gap:8px}
+  .hcard .mtable td{height:30px}
+  .hcard .mtable td.c-saldo{text-align:right!important;padding-right:14px!important;padding-left:8px!important}}
+.mcols th.hz-mth{text-align:center!important;font-size:14px!important;font-weight:700!important;padding:7px 0!important;cursor:default}
+.mcols th.hz-mth.cur{background:var(--hz-cur);color:var(--hz-cur-fg)!important}
 .mbox{background:var(--surface);border:1px solid var(--line2);border-radius:14px;overflow:clip}
 .mtable th,.mtable td{border-right:1px solid var(--line)}
 .mtable th:last-child,.mtable td:last-child{border-right:0}
@@ -213,6 +220,7 @@ button.frow:hover{background:var(--surface2)}
 .ti-economia{color:var(--c-economia);background:color-mix(in srgb,var(--c-economia) 18%,transparent)}
 .ti-cartao{color:var(--c-cartao);background:color-mix(in srgb,var(--c-cartao) 18%,transparent)}
 .ti-prev{color:var(--c-diario);border:1.5px dashed var(--c-diario)}
+.ti{font-style:normal}
 .ti.lg{width:30px;height:30px;border-radius:50%;font-size:14px}.ti.lg svg{width:18px;height:18px}
 
 /* ---------- saldos board ---------- */
@@ -1410,6 +1418,7 @@ function renderMobileChrome() {
   const mob = isMobile();
   const hz = mob && UI.tab === "horizonte";
   document.body.classList.toggle("m-hz", hz);
+  document.body.classList.toggle("d-hz", !mob && UI.tab === "horizonte");
   $("#top-left").innerHTML = hz ? `<button class="icon-btn" data-mback aria-label="voltar para saldos" style="background:none">${I.back}</button>`
     : mob && UI.tab !== "menu" ? `<button class="m-cal" data-mtoday aria-label="ir pra hoje, dia ${NOW.getDate()}"><span class="mc-body"><b class="num">${NOW.getDate()}</b></span><i class="mc-ring l"></i><i class="mc-ring r"></i></button>` : "";
   $(".topbar").hidden = mob && UI.tab === "menu";
@@ -1519,7 +1528,7 @@ function monthCard(mi, horizon) {
   const tot = { entrada: 0, saida: 0, diario: 0, economia: 0, cartao: 0 };
   let body = "";
   for (let d = 1; d <= 31; d++) {
-    if (d > n) { body += `<tr class="blank"><td class="c-dia"></td>${cols.map(t => `<td class="cell ${hid[t] ? "col-min" : ""}"></td>`).join("")}<td class="c-saldo"></td></tr>`; continue; }
+    if (d > n) { if (horizon) continue; body += `<tr class="blank"><td class="c-dia"></td>${cols.map(t => `<td class="cell ${hid[t] ? "col-min" : ""}"></td>`).join("")}<td class="c-saldo"></td></tr>`; continue; }
     const ds = `${y}-${pad(m + 1)}-${pad(d)}`, o = c.day[ds], wd = new Date(y, m, d).getDay();
     const cls = [(wd === 0 || wd === 6) ? "we" : "", ds === TODAY ? "today" : ""].join(" ");
     const s = c.saldo[ds] ?? 0;
@@ -1531,9 +1540,9 @@ function monthCard(mi, horizon) {
     body += `<td class="c-saldo num ${saldoCls(s)}" data-act="saldo" data-d="${ds}" role="button" tabindex="0" aria-label="saldo em ${d} de ${MONTHS[m]}: ${fmt(s)}">${horizon ? abbr(s) : brl(s)}</td></tr>`;
   }
   const endS = c.saldo[miLast(mi)] ?? 0;
-  const head = `<thead><tr class="mcols"><th class="c-dia">dia</th>${cols.map(t => `<th data-col="${t}" class="${hid[t] ? "col-min" : ""}" title="${hid[t] ? "mostrar" : "recolher"} coluna" aria-label="${hid[t] ? "mostrar" : "recolher"} coluna ${TYPES[t].col}"><span class="h">${ti(t)}<span class="lbl">${TYPES[t].col}</span></span></th>`).join("")}<th class="c-sh" style="cursor:default;text-align:${horizon ? "center" : "right"};padding-right:8px">saldos</th></tr></thead>`;
-  const foot = `<tfoot><tr><td class="c-dia" aria-label="total do mês"></td>${cols.map(t => `<td class="cell num tot ${hid[t] ? "col-min" : ""}"><span class="in">${ti(t)}<span class="v">${brl(tot[t])}</span></span></td>`).join("")}<td class="c-saldo foot-blank" aria-label="saldo final: ${fmt(endS)}"></td></tr></tfoot>`;
-  return `<div class="mcard ${horizon ? "hcard" : ""}" data-mi="${mi}"><div class="mhead">${MONTHS[m]} de ${y}</div><div class="mbox"><table class="mtable">${head}<tbody>${body}</tbody>${foot}</table></div></div>`;
+  const head = horizon ? `<thead><tr class="mcols"><th colspan="2" class="hz-mth ${mi === CUR ? "cur" : ""}" aria-label="${MONTHS[m]} de ${y}">${MON3[m]}/${String(y).slice(2)}</th></tr></thead>` : `<thead><tr class="mcols"><th class="c-dia">dia</th>${cols.map(t => `<th data-col="${t}" class="${hid[t] ? "col-min" : ""}" title="${hid[t] ? "mostrar" : "recolher"} coluna" aria-label="${hid[t] ? "mostrar" : "recolher"} coluna ${TYPES[t].col}"><span class="h">${ti(t)}<span class="lbl">${TYPES[t].col}</span></span></th>`).join("")}<th class="c-sh" style="cursor:default;text-align:${horizon ? "center" : "right"};padding-right:8px">saldos</th></tr></thead>`;
+  const foot = horizon ? "" : `<tfoot><tr><td class="c-dia" aria-label="total do mês"></td>${cols.map(t => `<td class="cell num tot ${hid[t] ? "col-min" : ""}"><span class="in">${ti(t)}<span class="v">${brl(tot[t])}</span></span></td>`).join("")}<td class="c-saldo foot-blank" aria-label="saldo final: ${fmt(endS)}"></td></tr></tfoot>`;
+  return `<div class="mcard ${horizon ? "hcard" : ""}" data-mi="${mi}"><div class="mhead">${horizon ? "" : `${MONTHS[m]} de ${y}`}</div><div class="mbox"><table class="mtable">${head}<tbody>${body}</tbody>${foot}</table></div></div>`;
 }
 function boardAct(el) {
   const act = el.dataset.act, d = el.dataset.d;
@@ -2213,7 +2222,7 @@ function openRefer() {
 }
 
 function openNews() {
-  const N = [["29/09/2026", ["repetição mensal com dia útil: escolha \"dia X ou próximo dia útil\" (ex.: pagamento do dia 5) ou \"Nº dia útil do mês\" (ex.: salário no 5º dia útil)", "sem sugestões do navegador nos campos de texto e valor", "no computador, o mês e o ano ficam fixos no topo junto com o título das colunas", "número de repetições começa em 2 (mínimo 2)"]], ["27/09/2026", ["primeira versão do FLUX no computador", "abreviação do horizonte padronizada (sempre com 2 casas, ex.: 1.90K)", "agora dá pra mudar a repetição ao editar um lançamento", "menu adicionar ajustado para telas baixas"]]];
+  const N = [["29/09/2026", ["repetição mensal com dia útil: escolha \"dia X ou próximo dia útil\" (ex.: pagamento do dia 5) ou \"Nº dia útil do mês\" (ex.: salário no 5º dia útil)", "sem sugestões do navegador nos campos de texto e valor", "no computador, o mês e o ano ficam fixos no topo junto com o título das colunas", "número de repetições começa em 2 (mínimo 2)", "horizonte no computador igual ao do celular: mês no título e sem os blocos vazios no fim"]], ["27/09/2026", ["primeira versão do FLUX no computador", "abreviação do horizonte padronizada (sempre com 2 casas, ex.: 1.90K)", "agora dá pra mudar a repetição ao editar um lançamento", "menu adicionar ajustado para telas baixas"]]];
   openModal({ title: "o que há de novo", body: N.map(([d, l]) => `<div class="card" style="padding:16px"><div class="hint num" style="font-weight:600">${d}</div><ul style="margin:8px 0 0;padding-left:18px;line-height:1.7">${l.map(x => `<li>${x}</li>`).join("")}</ul></div>`).join("") });
 }
 const TERMS = `<p>o FLUX é uma ferramenta de organização financeira pessoal. as previsões mostradas são feitas a partir do que você cadastra e não são recomendação financeira.</p><p>você é responsável pelas informações que cadastra. a gente pode mudar funcionalidades com o tempo e avisa em "o que há de novo".</p><p>texto provisório: substitua pelos termos oficiais antes de divulgar o app.</p>`;
