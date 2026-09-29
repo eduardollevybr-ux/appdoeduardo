@@ -1301,7 +1301,19 @@ function fitPanes(root) {
   $$(".pager", root).forEach(pg => {
     const cur = $(".pane.cur", pg); if (!cur) return;
     const h = cur.offsetHeight;
-    $$(".pane:not(.cur)", pg).forEach(p => { p.style.maxHeight = h + "px"; p.style.overflow = "hidden"; });
+    $$(".pane:not(.cur)", pg).forEach(p => { p.style.height = h + "px"; });
+  });
+}
+/* ao começar a arrastar: os painéis do lado mostram o mesmo dia e o cabeçalho já no lugar */
+function alignPanes(pg) {
+  const a = rowAnchor(); if (!a) return;
+  const top = $("#view .page").getBoundingClientRect().top;
+  $$(".pane:not(.cur)", pg).forEach(p => {
+    const list = p.firstElementChild, row = $(`[data-row="${a.d}"]`, p); if (!list || !row) return;
+    list.style.transform = ""; const hd = $(".m-headrow", p); if (hd) { hd.style.transform = ""; hd.style.position = ""; }
+    const D = Math.round(a.off - (row.getBoundingClientRect().top - top));
+    list.style.transform = `translate3d(0,${D}px,0)`;
+    if (hd) { hd.style.position = "relative"; hd.style.transform = `translate3d(0,${Math.round(top - p.getBoundingClientRect().top - D)}px,0)`; }
   });
 }
 function rowAnchor() {
@@ -1339,7 +1351,7 @@ $("#view").addEventListener("touchmove", e => {
   if (!PG.axis) {
     if (Math.abs(dx) + Math.abs(dy) < 8) return;
     PG.axis = Math.abs(dx) > Math.abs(dy) * 1.1 ? "x" : "y";
-    if (PG.axis === "x") { lpCancel(); PG.track.style.transition = "none"; PG.pg.classList.add("dragging"); PG.x0 = t.clientX - Math.sign(dx) * 0; }
+    if (PG.axis === "x") { lpCancel(); alignPanes(PG.pg); PG.track.style.transition = "none"; PG.pg.classList.add("dragging"); PG.x0 = t.clientX - Math.sign(dx) * 0; }
   }
   if (PG.axis !== "x") return;
   e.preventDefault();
