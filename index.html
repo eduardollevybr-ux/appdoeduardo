@@ -424,10 +424,10 @@ textarea.input{height:auto;min-height:120px;padding:12px 14px;resize:vertical}
 #title-extra .past-btn[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);border-color:transparent}
 @media (max-width:700px){ #title-extra{display:none} }
 /* barra de rolagem no tom do app */
-*{scrollbar-width:thin;scrollbar-color:var(--surface3) transparent}
+*{--sb:color-mix(in srgb,var(--muted) 60%,transparent);scrollbar-width:thin;scrollbar-color:var(--sb) transparent}
 ::-webkit-scrollbar{width:10px;height:10px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:99px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--sb);border-radius:99px;border:2px solid var(--bg)}
 ::-webkit-scrollbar-thumb:hover{background:var(--muted)}
 ::-webkit-scrollbar-corner{background:transparent}
 ::-webkit-scrollbar-button{display:none;width:0;height:0}
