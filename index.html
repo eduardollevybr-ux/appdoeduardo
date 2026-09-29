@@ -1853,7 +1853,7 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
         <label class="frow"><span class="fr-ico">${PEN}</span><input class="fr-input" id="f-desc" autocomplete="off" maxlength="80" placeholder="descrição" aria-label="descrição" value="${esc(f.desc)}"></label>
         <button class="frow" id="f-date" aria-haspopup="dialog" aria-label="data: ${dBR(f.date)}. mudar"><span class="fr-ico">${CAL}</span><span class="fr-main">data</span><span class="fr-val num">${dNum(effDate(f.date))}</span>${CHEV}</button>
         <button class="frow" id="f-rep" aria-haspopup="dialog" aria-label="repetição: ${REP_LABEL[f.rep]}. mudar"><span class="fr-ico">${REP_ICO}</span><span class="fr-main">${REP_LABEL[f.rep]}</span>${CHEV}</button>
-        ${f.rep === "monthly" ? `<button class="frow" id="f-mday" aria-haspopup="dialog" aria-label="qual dia: ${MDAY_LABEL()}. mudar"><span class="fr-ico">${CAL}</span><span class="fr-main">qual dia</span><span class="fr-val">${MDAY_LABEL()}</span>${CHEV}</button>` : ""}
+        ${f.rep === "monthly" ? `<button class="frow" id="f-mday" aria-haspopup="dialog" aria-label="repete no: ${MDAY_LABEL()}. mudar"><span class="fr-ico">${CAL}</span><span class="fr-main">repete no</span><span class="fr-val">${MDAY_LABEL()}</span>${CHEV}</button>` : ""}
         ${repeats ? `<button class="frow" id="f-until" aria-haspopup="dialog"><span class="fr-ico">${I.horizonte.replace("<svg", '<svg width="22" height="22"')}</span><span class="fr-main">até quando</span><span class="fr-val num">${f.until === "count" ? `${f.count} vezes` : "a perder de vista"}</span>${CHEV}</button>` : ""}
         ${inst ? `<div class="frow"><span class="fr-ico">${I.card.replace("<svg", '<svg width="22" height="22"')}</span><span class="fr-main">parcelas</span><span class="stepper"><button class="icon-btn" data-inst="-1" aria-label="menos uma parcela">−</button><b class="num" aria-live="polite">${f.installments}</b><button class="icon-btn" data-inst="1" aria-label="mais uma parcela">+</button></span></div>` : ""}
       </div>`);
@@ -1881,7 +1881,7 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
     if (t.closest("#f-date")) datePicker(null, effDate(f.date), v => { f.date = v; f.aday = +v.slice(8); draw(); });
     if (t.closest("#f-mday")) {
       const day = f.mday === "biz" ? f.aday : +f.date.slice(8);
-      const s = openSheet({ title: "qual dia", body: `<div class="slist">
+      const s = openSheet({ title: "repete no", body: `<div class="slist">
           <button class="sitem ${f.mday === "same" ? "on" : ""}" data-md="same"><span class="si-txt"><b>mesmo dia</b><span>sempre no dia ${day}, mesmo se cair em fim de semana ou feriado</span></span></button>
           <button class="sitem ${f.mday === "biz" ? "on" : ""}" data-md="biz"><span class="si-txt"><b>dia ${day} ou próximo dia útil</b><span>se o dia ${day} cair em fim de semana ou feriado, passa pro próximo dia útil</span></span></button>
           <div class="sitem ${f.mday === "nth" ? "on" : ""}" data-md="nth" role="button" tabindex="0"><span class="si-txt"><b>dia útil do mês</b><span>ex.: todo 5º dia útil</span></span>
