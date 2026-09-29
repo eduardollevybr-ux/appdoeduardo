@@ -776,7 +776,7 @@ const UI = {
   tab: "saldos",
   sideCollapsed: lsGet("ae.side", false),
   hiddenCols: lsGet("ae.cols", {}),
-  bStart: CUR, bEnd: CUR + 11, mCol: "all",
+  bStart: CUR, bEnd: CUR + 11, hzS: CUR, mCol: "all",
   tMonth: CUR, tagMonth: CUR, tagFilter: "",
   signedOut: false, past: false, autoToday: true,
 };
@@ -1216,7 +1216,10 @@ $("#sidebar").addEventListener("click", e => {
   if (e.target.closest("#btn-today")) goToday();
   if (e.target.closest("#btn-collapse")) { UI.sideCollapsed = !UI.sideCollapsed; lsSet("ae.side", UI.sideCollapsed); render(); }
 });
-function resetBoard() { UI.bStart = CUR; UI.bEnd = CUR + 11; }
+/* horizonte de saldos: sempre o mês atual + 11 meses, começando no mês atual */
+const HZ_END = CUR + 11;
+const isHz = () => UI.tab === "horizonte";
+function resetBoard() { UI.bStart = CUR; UI.bEnd = CUR + 11; UI.hzS = CUR; }
 
 function goTab(tab) { UI.tab = tab; closePopover(); resetBoard(); $("#view").dataset.tab = ""; render(); }
 function goToday() {
@@ -1305,7 +1308,8 @@ function animateSlide(sel, dir) {
 function changeMonth(d, minMi = MIN_MI) { const n = Math.min(MAX_MI, Math.max(minMi, UI.tMonth + d)); if (n === UI.tMonth) return; UI.tMonth = n; renderAll(); const pg = $("#view .page"); if (pg) pg.scrollTop = 0; }
 function scrollToMonth(mi, smooth) {
   const board = $("#board"); if (!board) return;
-  if (mi < UI.bStart || mi > UI.bEnd) { UI.bStart = Math.max(MIN_MI, Math.min(UI.bStart, mi - 3)); UI.bEnd = Math.min(MAX_MI, Math.max(UI.bEnd, mi + 11)); renderAll(); }
+  if (isHz()) mi = Math.max(CUR, Math.min(HZ_END, mi));
+  else if (mi < UI.bStart || mi > UI.bEnd) { UI.bStart = Math.max(MIN_MI, Math.min(UI.bStart, mi - 3)); UI.bEnd = Math.min(MAX_MI, Math.max(UI.bEnd, mi + 11)); renderAll(); }
   const c = $(`#board .mcard[data-mi="${mi}"]`); if (!c) return;
   $("#board").scrollTo({ left: c.offsetLeft - 24, behavior: smooth ? "smooth" : "auto" });
 }
@@ -1362,8 +1366,9 @@ function bindVScroll(board) {
 let extending = false;
 function onBoardScroll() {
   const board = $("#board"); if (!board || extending) return;
-  const lab = $("#vis-label"); if (lab) lab.textContent = rangeLabel(visibleMi());
-  const sb = $("#scroll-back"); if (sb) sb.disabled = visibleMi() <= MIN_MI;
+  const lab = $("#vis-label"); if (lab) lab.textContent = rangeLabel(isHz() ? CUR : visibleMi());
+  const sb = $("#scroll-back"); if (sb) sb.disabled = visibleMi() <= (isHz() ? CUR : MIN_MI);
+  if (isHz()) return; // horizonte tem 12 meses fixos: não estende
   if (false) {
     extending = true;
     const oldW = board.scrollWidth, oldL = board.scrollLeft;
@@ -1405,7 +1410,7 @@ function rowAnchor() {
   return null;
 }
 function applyPager(kind, dir) {
-  if (kind === "hz") { const s = hzStart(); UI.tMonth = Math.max(CUR, Math.min(MAX_MI - 2, s + dir * 3)); }
+  if (kind === "hz") { const s = hzStart(); UI.hzS = Math.max(CUR, Math.min(HZ_END - 2, s + dir * 3)); }
   else if (kind === "tot") UI.tMonth = Math.max(MIN_MI, Math.min(MAX_MI, UI.tMonth + dir));
   else { UI.keepRow = rowAnchor(); const i = COL_ORDER.indexOf(UI.mCol), L = COL_ORDER.length; UI.mCol = COL_ORDER[(i + dir + L) % L]; }
   renderAll();
@@ -1532,8 +1537,8 @@ function renderAll() {
     if (!keep) VTOP = 0;
     VTOP = Math.min(VTOP, vMax());
     placeVBar(); vSet(VTOP);
-    const lab = $("#vis-label"); if (lab) lab.textContent = rangeLabel(visibleMi());
-    const sb = $("#scroll-back"); if (sb) sb.disabled = visibleMi() <= MIN_MI;
+    const lab = $("#vis-label"); if (lab) lab.textContent = rangeLabel(isHz() ? CUR : visibleMi());
+    const sb = $("#scroll-back"); if (sb) sb.disabled = visibleMi() <= (isHz() ? CUR : MIN_MI);
   }
   if (UI.tab === "totais") requestAnimationFrame(() => $$(".bar i", v).forEach(b => b.style.width = b.dataset.w + "%"));
   if (PANEL.open) renderPanel();
@@ -1578,7 +1583,8 @@ function placeFab() {
 /* ================= saldos / horizonte ================= */
 function saldosHTML(horizon) {
   let h = `<div class="board" id="board"><div class="board-row">`;
-  for (let mi = UI.bStart; mi <= UI.bEnd; mi++) h += monthCard(mi, horizon);
+  const a = horizon ? CUR : UI.bStart, b = horizon ? HZ_END : UI.bEnd;
+  for (let mi = a; mi <= b; mi++) h += monthCard(mi, horizon);
   return h + `</div></div>`;
 }
 function monthCard(mi, horizon) {
@@ -1677,10 +1683,10 @@ function gridIcon() {
   }
   return h;
 }
-function hzStart() { return Math.max(CUR, Math.min(UI.tMonth, MAX_MI - 2)); }
+function hzStart() { return Math.max(CUR, Math.min(UI.hzS, HZ_END - 2)); }
 function mobileHorizonHTML() {
   const s = hzStart();
-  return pagerHTML("hz", [s - 3 >= CUR ? s - 3 : null, s, s + 3 <= MAX_MI - 2 ? s + 3 : (s < MAX_MI - 2 ? MAX_MI - 2 : null)], hzInner);
+  return pagerHTML("hz", [s - 3 >= CUR ? s - 3 : null, s, s + 3 <= HZ_END - 2 ? s + 3 : null], hzInner);
 }
 function hzInner(start) {
   const c = calc();
@@ -2281,7 +2287,7 @@ function openRefer() {
 }
 
 function openNews() {
-  const N = [["29/09/2026", ["repetição mensal com dia útil: escolha \"dia X ou próximo dia útil\" (ex.: pagamento do dia 5) ou \"Nº dia útil do mês\" (ex.: salário no 5º dia útil)", "sem sugestões do navegador nos campos de texto e valor", "no computador, o mês e o ano ficam fixos no topo junto com o título das colunas", "número de repetições começa em 2 (mínimo 2)", "horizonte no computador igual ao do celular: mês no título e sem os blocos vazios no fim", "barras do topo mais baixas e com a mesma altura em todas as telas", "cantos arredondados sempre visíveis no título das colunas e na linha de totais", "no computador, só os dias rolam: mês, título das colunas e totais ficam parados, com uma barra de rolagem na direita que move todos os meses juntos", "linha de totais colada no último dia de cada mês, com uma linha de destaque acima", "barras de rolagem sólidas e iguais na vertical e na horizontal"]], ["27/09/2026", ["primeira versão do FLUX no computador", "abreviação do horizonte padronizada (sempre com 2 casas, ex.: 1.90K)", "agora dá pra mudar a repetição ao editar um lançamento", "menu adicionar ajustado para telas baixas"]]];
+  const N = [["29/09/2026", ["horizonte de saldos mostra sempre o mês atual e os próximos 11 meses, começando pelo mês atual, qualquer que seja o mês aberto na tela de saldos", "repetição mensal com dia útil: escolha \"dia X ou próximo dia útil\" (ex.: pagamento do dia 5) ou \"Nº dia útil do mês\" (ex.: salário no 5º dia útil)", "sem sugestões do navegador nos campos de texto e valor", "no computador, o mês e o ano ficam fixos no topo junto com o título das colunas", "número de repetições começa em 2 (mínimo 2)", "horizonte no computador igual ao do celular: mês no título e sem os blocos vazios no fim", "barras do topo mais baixas e com a mesma altura em todas as telas", "cantos arredondados sempre visíveis no título das colunas e na linha de totais", "no computador, só os dias rolam: mês, título das colunas e totais ficam parados, com uma barra de rolagem na direita que move todos os meses juntos", "linha de totais colada no último dia de cada mês, com uma linha de destaque acima", "barras de rolagem sólidas e iguais na vertical e na horizontal"]], ["27/09/2026", ["primeira versão do FLUX no computador", "abreviação do horizonte padronizada (sempre com 2 casas, ex.: 1.90K)", "agora dá pra mudar a repetição ao editar um lançamento", "menu adicionar ajustado para telas baixas"]]];
   openModal({ title: "o que há de novo", body: N.map(([d, l]) => `<div class="card" style="padding:16px"><div class="hint num" style="font-weight:600">${d}</div><ul style="margin:8px 0 0;padding-left:18px;line-height:1.7">${l.map(x => `<li>${x}</li>`).join("")}</ul></div>`).join("") });
 }
 const TERMS = `<p>o FLUX é uma ferramenta de organização financeira pessoal. as previsões mostradas são feitas a partir do que você cadastra e não são recomendação financeira.</p><p>você é responsável pelas informações que cadastra. a gente pode mudar funcionalidades com o tempo e avisa em "o que há de novo".</p><p>texto provisório: substitua pelos termos oficiais antes de divulgar o app.</p>`;
