@@ -149,17 +149,19 @@ button.frow:hover{background:var(--surface2)}
 /* quadro no estilo da referência */
 .mcard{background:transparent!important;border:0!important;overflow:visible!important;border-radius:0!important}
 .mhead{font-size:17px;font-weight:700;padding:4px 2px 12px}
-/* PC: título do mês fixo no topo junto com o título das colunas */
-@media (min-width:701px){.board .board-row{padding-top:0}.mhead{position:sticky;top:0;z-index:4;background:var(--bg);line-height:24px;padding:12px 2px 12px}.mbox .mtable thead{top:48px}.board .mbox{border-top:0;overflow-clip-margin:1px}
-  .board .mcard:not(.hcard) .mbox{border-bottom:0}
-  .mtable thead th{position:relative;box-shadow:inset 0 1px 0 var(--line2)}
-  .mtable tfoot td{position:relative;box-shadow:inset 0 -1px 0 var(--line2)}
-  .mtable thead th:first-child::before,.mtable thead th:last-child::after,.mtable tfoot td:first-child::before,.mtable tfoot td:last-child::after{content:"";position:absolute;width:15px;height:14px;z-index:2;pointer-events:none}
-  .mtable thead th:first-child::before{top:0;left:-1px;background:radial-gradient(circle at 15px 14px,transparent 13.4px,var(--line2) 14px,var(--line2) 14.6px,var(--bg) 15.2px)}
-  .mtable thead th:last-child::after{top:0;right:-1px;background:radial-gradient(circle at 0 14px,transparent 13.4px,var(--line2) 14px,var(--line2) 14.6px,var(--bg) 15.2px)}
-  .mtable tfoot td:first-child::before{bottom:0;left:-1px;background:radial-gradient(circle at 15px 0,transparent 13.4px,var(--line2) 14px,var(--line2) 14.6px,var(--bg) 15.2px)}
-  .mtable tfoot td:last-child::after{bottom:0;right:-1px;background:radial-gradient(circle at 0 0,transparent 13.4px,var(--line2) 14px,var(--line2) 14.6px,var(--bg) 15.2px)}
-  .hcard .mhead{padding:0;height:8px}.hcard .mbox .mtable thead{top:8px}
+/* PC: só os dias rolam; mês, título das colunas e totais ficam parados (totais colados no último dia) */
+@media (min-width:701px){
+  .board{overflow-x:auto;overflow-y:hidden}
+  .board .board-row{height:100%;padding-top:0;padding-bottom:16px;align-items:flex-start}
+  .board .mcard{display:flex;flex-direction:column;max-height:100%}
+  .mhead{flex:none;line-height:24px;padding:12px 2px 12px}
+  .board .mbox{min-height:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+  .board .mbox::-webkit-scrollbar{display:none}
+  .vbar{position:absolute;right:0;width:14px;padding:0 2px;background:var(--bg);overflow-x:hidden;overflow-y:scroll;z-index:6}
+  .vbar>div{width:1px}
+  .board .mbox .mtable thead{position:sticky;top:0}
+  .board .mbox .mtable tfoot{position:sticky;bottom:0;z-index:2}
+  .hcard .mhead{padding:0;height:8px}
   /* horizonte no PC mais compacto */
   .d-hz .board .board-row{gap:8px}
   .hcard .mtable td{height:30px}
@@ -440,7 +442,7 @@ textarea.input{height:auto;min-height:120px;padding:12px 14px;resize:vertical}
 #title-extra .past-btn[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);border-color:transparent}
 @media (max-width:700px){ #title-extra{display:none} }
 /* barra de rolagem no tom do app */
-*{--sb:color-mix(in srgb,var(--muted) 60%,transparent);scrollbar-width:thin;scrollbar-color:var(--sb) transparent}
+*{--sb:color-mix(in srgb,var(--muted) 60%,var(--bg));scrollbar-width:thin;scrollbar-color:var(--sb) transparent}
 ::-webkit-scrollbar{width:10px;height:10px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--sb);border-radius:99px;border:2px solid var(--bg)}
@@ -1255,8 +1257,9 @@ function scrollToToday(smooth, delay = 0) {
   if (!row) return;
   const board = $("#board");
   scrollToMonth(CUR);
-  const top = Math.max(0, row.offsetTop - board.clientHeight / 2);
-  setTimeout(() => glide(() => ($("#board") || board).scrollTop, v => { const el = $("#board"); if (el) el.scrollTop = v; }, top, dur, () => flashToday($(`#view [data-row="${TODAY}"]`))), delay);
+  const box = row.closest(".mbox") || board;
+  const top = Math.max(0, Math.min(vMax(), row.offsetTop - box.clientHeight / 2));
+  setTimeout(() => glide(() => VTOP, v => vSet(v), top, dur, () => flashToday($(`#view [data-row="${TODAY}"]`))), delay);
 }
 function openAddMenu(anchor) {
   const html = TYPE_ORDER.map(t => `<button class="pop-item" data-type="${t}" role="menuitem">${ti(t)}<span>${TYPES[t].label}</span></button>`).join("");
@@ -1314,6 +1317,47 @@ $("#period").addEventListener("click", e => {
     changeMonth(d); if (isMobile()) animateSlide(".pane.cur", d);
   }
 });
+/* PC: os dias de todos os meses rolam juntos (cada mês rola dentro do próprio quadro) */
+let VTOP = 0;
+const vBoxes = () => $$("#board .mbox");
+const vMax = () => Math.max(0, ...vBoxes().map(b => b.scrollHeight - b.clientHeight));
+function vSet(v) { VTOP = v; for (const b of vBoxes()) b.scrollTop = v; const p = $("#vbar"); if (p && Math.abs(p.scrollTop - v) >= 1) p.scrollTop = v; }
+/* barra de rolagem vertical única, na direita, que controla todos os meses */
+function placeVBar() {
+  const v = $("#view"), p = $("#vbar"), b = $("#board .mbox");
+  if (!v || !p) return;
+  if (!b) { p.hidden = true; return; }
+  const vr = v.getBoundingClientRect(), br = b.getBoundingClientRect();
+  const max = vMax();
+  p.hidden = max < 1;
+  p.style.top = (br.top - vr.top) + "px"; p.style.height = br.height + "px";
+  p.firstElementChild.style.height = (br.height + max) + "px";
+  p.scrollTop = VTOP;
+}
+function bindVBar() {
+  const p = $("#vbar"); if (!p) return;
+  p.addEventListener("scroll", () => {
+    if (Math.abs(p.scrollTop - VTOP) < 1) return;
+    const max = p.scrollHeight - p.clientHeight;
+    vSet(p.scrollTop >= max - 1 ? vMax() : p.scrollTop);
+  }, { passive: true });
+}
+addEventListener("resize", () => { if ($("#vbar")) placeVBar(); });
+function bindVScroll(board) {
+  board.addEventListener("scroll", e => {
+    const b = e.target;
+    if (!b.classList || !b.classList.contains("mbox")) return;
+    const t = b.scrollTop, max = b.scrollHeight - b.clientHeight;
+    if (Math.abs(t - VTOP) < 1 || (t >= max - 1 && VTOP > t)) return; // já sincronizado ou mês mais curto no fim
+    if (t >= max - 1) { for (const o of vBoxes()) if (o !== b) o.scrollTop = o.scrollHeight; VTOP = vMax(); } // chegou no fim: todos os meses vão pro último dia
+    else { VTOP = t; for (const o of vBoxes()) if (o !== b) o.scrollTop = t; }
+    const p = $("#vbar"); if (p) p.scrollTop = VTOP;
+  }, { capture: true, passive: true });
+  board.addEventListener("wheel", e => { // rolar com o mouse no espaço entre os meses
+    if (e.target.closest(".mbox") || !e.deltaY || e.shiftKey) return;
+    e.preventDefault(); vSet(Math.max(0, Math.min(vMax(), VTOP + e.deltaY)));
+  }, { passive: false });
+}
 let extending = false;
 function onBoardScroll() {
   const board = $("#board"); if (!board || extending) return;
@@ -1481,6 +1525,12 @@ function renderAll() {
   if (board) {
     if (!keep) { const c = $(`.mcard[data-mi="${CUR}"]`, board); if (c) board.scrollLeft = c.offsetLeft - 24; }
     board.addEventListener("scroll", onBoardScroll, { passive: true });
+    bindVScroll(board);
+    v.insertAdjacentHTML("beforeend", `<div class="vbar" id="vbar" aria-hidden="true"><div></div></div>`);
+    bindVBar();
+    if (!keep) VTOP = 0;
+    VTOP = Math.min(VTOP, vMax());
+    placeVBar(); vSet(VTOP);
     const lab = $("#vis-label"); if (lab) lab.textContent = rangeLabel(visibleMi());
     const sb = $("#scroll-back"); if (sb) sb.disabled = visibleMi() <= MIN_MI;
   }
@@ -2230,7 +2280,7 @@ function openRefer() {
 }
 
 function openNews() {
-  const N = [["29/09/2026", ["repetição mensal com dia útil: escolha \"dia X ou próximo dia útil\" (ex.: pagamento do dia 5) ou \"Nº dia útil do mês\" (ex.: salário no 5º dia útil)", "sem sugestões do navegador nos campos de texto e valor", "no computador, o mês e o ano ficam fixos no topo junto com o título das colunas", "número de repetições começa em 2 (mínimo 2)", "horizonte no computador igual ao do celular: mês no título e sem os blocos vazios no fim", "barras do topo mais baixas e com a mesma altura em todas as telas", "cantos arredondados sempre visíveis no título das colunas e na linha de totais", "título das colunas não se mexe mais ao rolar", "linha de totais colada no último dia de cada mês, com uma linha de destaque acima"]], ["27/09/2026", ["primeira versão do FLUX no computador", "abreviação do horizonte padronizada (sempre com 2 casas, ex.: 1.90K)", "agora dá pra mudar a repetição ao editar um lançamento", "menu adicionar ajustado para telas baixas"]]];
+  const N = [["29/09/2026", ["repetição mensal com dia útil: escolha \"dia X ou próximo dia útil\" (ex.: pagamento do dia 5) ou \"Nº dia útil do mês\" (ex.: salário no 5º dia útil)", "sem sugestões do navegador nos campos de texto e valor", "no computador, o mês e o ano ficam fixos no topo junto com o título das colunas", "número de repetições começa em 2 (mínimo 2)", "horizonte no computador igual ao do celular: mês no título e sem os blocos vazios no fim", "barras do topo mais baixas e com a mesma altura em todas as telas", "cantos arredondados sempre visíveis no título das colunas e na linha de totais", "no computador, só os dias rolam: mês, título das colunas e totais ficam parados, com uma barra de rolagem na direita que move todos os meses juntos", "linha de totais colada no último dia de cada mês, com uma linha de destaque acima", "barras de rolagem sólidas e iguais na vertical e na horizontal"]], ["27/09/2026", ["primeira versão do FLUX no computador", "abreviação do horizonte padronizada (sempre com 2 casas, ex.: 1.90K)", "agora dá pra mudar a repetição ao editar um lançamento", "menu adicionar ajustado para telas baixas"]]];
   openModal({ title: "o que há de novo", body: N.map(([d, l]) => `<div class="card" style="padding:16px"><div class="hint num" style="font-weight:600">${d}</div><ul style="margin:8px 0 0;padding-left:18px;line-height:1.7">${l.map(x => `<li>${x}</li>`).join("")}</ul></div>`).join("") });
 }
 const TERMS = `<p>o FLUX é uma ferramenta de organização financeira pessoal. as previsões mostradas são feitas a partir do que você cadastra e não são recomendação financeira.</p><p>você é responsável pelas informações que cadastra. a gente pode mudar funcionalidades com o tempo e avisa em "o que há de novo".</p><p>texto provisório: substitua pelos termos oficiais antes de divulgar o app.</p>`;
