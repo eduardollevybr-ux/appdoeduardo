@@ -150,8 +150,8 @@ button.frow:hover{background:var(--surface2)}
 .mcard{background:transparent!important;border:0!important;overflow:visible!important;border-radius:0!important}
 .mhead{font-size:17px;font-weight:700;padding:4px 2px 12px}
 /* PC: título do mês fixo no topo junto com o título das colunas */
-@media (min-width:701px){.board .board-row{padding-top:0}.mhead{position:sticky;top:0;z-index:4;background:var(--bg);line-height:24px;padding:12px 2px 12px}.mbox .mtable thead{top:48px}.mbox{border-top:0;overflow-clip-margin:1px}
-  .mcard:not(.hcard) .mbox{border-bottom:0}
+@media (min-width:701px){.board .board-row{padding-top:0}.board .board-row:not(:has(.hcard)){padding-bottom:0}.mhead{position:sticky;top:0;z-index:4;background:var(--bg);line-height:24px;padding:12px 2px 12px}.mbox .mtable thead{top:48px}.board .mbox{border-top:0;overflow-clip-margin:1px}
+  .board .mcard:not(.hcard) .mbox{border-bottom:0}
   .mtable thead th{position:relative;box-shadow:inset 0 1px 0 var(--line2)}
   .mtable tfoot td{position:relative;box-shadow:inset 0 -1px 0 var(--line2)}
   .mtable thead th:first-child::before,.mtable thead th:last-child::after,.mtable tfoot td:first-child::before,.mtable tfoot td:last-child::after{content:"";position:absolute;width:15px;height:14px;z-index:2;pointer-events:none}
