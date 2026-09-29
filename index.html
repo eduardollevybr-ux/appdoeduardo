@@ -1296,10 +1296,24 @@ function onBoardScroll() {
 function pagerHTML(kind, keys, fn) {
   return `<div class="page page-flush"><div class="pager" data-pager="${kind}" data-prev="${keys[0] != null ? 1 : 0}" data-next="${keys[2] != null ? 1 : 0}"><div class="track">${keys.map((k, i) => `<div class="pane ${i === 1 ? "cur" : ""}" ${i !== 1 ? 'aria-hidden="true" inert' : ""}>${k == null ? "" : fn(k)}</div>`).join("")}</div></div></div>`;
 }
+/* os painéis do lado nunca ficam mais altos que o atual: senão sobra rolagem e a tela fica em branco */
+function fitPanes(root) {
+  $$(".pager", root).forEach(pg => {
+    const cur = $(".pane.cur", pg); if (!cur) return;
+    const h = cur.offsetHeight;
+    $$(".pane:not(.cur)", pg).forEach(p => { p.style.maxHeight = h + "px"; p.style.overflow = "hidden"; });
+  });
+}
+function rowAnchor() {
+  const pg = $("#view .page"), cur = $("#view .pane.cur"); if (!pg || !cur) return null;
+  const top = pg.getBoundingClientRect().top, hd = $(".m-headrow", cur), hh = hd ? hd.offsetHeight : 0;
+  for (const r of $$("[data-row]", cur)) { const b = r.getBoundingClientRect(); if (b.bottom > top + hh + 1) return { d: r.dataset.row, off: b.top - top }; }
+  return null;
+}
 function applyPager(kind, dir) {
   if (kind === "hz") { const s = hzStart(); UI.tMonth = Math.max(CUR, Math.min(MAX_MI - 2, s + dir * 3)); }
   else if (kind === "tot") UI.tMonth = Math.max(MIN_MI, Math.min(MAX_MI, UI.tMonth + dir));
-  else { const i = COL_ORDER.indexOf(UI.mCol), L = COL_ORDER.length; UI.mCol = COL_ORDER[(i + dir + L) % L]; }
+  else { UI.keepRow = rowAnchor(); const i = COL_ORDER.indexOf(UI.mCol), L = COL_ORDER.length; UI.mCol = COL_ORDER[(i + dir + L) % L]; }
   renderAll();
 }
 function slidePager(pg, dir, then, dur) {
@@ -1405,8 +1419,14 @@ function renderAll() {
   v.dataset.tab = vkey;
   const isBoard = UI.tab === "saldos" || UI.tab === "horizonte";
   v.innerHTML = isBoard ? (mob ? (UI.tab === "horizonte" ? mobileHorizonHTML() : mobileMonthHTML()) : saldosHTML(UI.tab === "horizonte")) : UI.tab === "totais" ? totaisHTML() : menuHTML();
+  fitPanes(v);
   const sc2 = $(".board,.page", v);
   if (pos && sc2) { sc2.scrollLeft = pos[0]; sc2.scrollTop = pos[1]; }
+  if (UI.keepRow && sc2) { // trocou de coluna: mantém o mesmo dia no topo
+    const { d, off } = UI.keepRow; UI.keepRow = null;
+    const row = $(`.pane.cur [data-row="${d}"]`, v);
+    if (row) sc2.scrollTop += row.getBoundingClientRect().top - sc2.getBoundingClientRect().top - off;
+  }
   const board = $("#board", v);
   if (board) {
     if (!keep) { const c = $(`.mcard[data-mi="${CUR}"]`, board); if (c) board.scrollLeft = c.offsetLeft - 24; }
@@ -1582,7 +1602,7 @@ $("#view").addEventListener("click", e => {
   const b = e.target.closest("#m-col"); if (!b) return;
   const opt = (k, lbl, ic) => `<button class="pop-item" data-col="${k}" ${UI.mCol === k ? 'style="color:var(--accent)"' : ""}>${ic}${lbl}</button>`;
   openPopover(b, `<div role="menu" aria-label="escolher coluna">${opt("all", "todas", '<span class="ti" style="color:var(--muted)">•</span>')}${TYPE_ORDER.map(t => opt(t, TYPES[t].col, ti(t))).join("")}</div>`, {
-    width: 230, onMount: el => el.addEventListener("click", ev => { const o = ev.target.closest("[data-col]"); if (o) { UI.mCol = o.dataset.col; closePopover(); renderAll(); } })
+    width: 230, onMount: el => el.addEventListener("click", ev => { const o = ev.target.closest("[data-col]"); if (o) { UI.keepRow = rowAnchor(); UI.mCol = o.dataset.col; closePopover(); renderAll(); } })
   });
 });
 
