@@ -1820,11 +1820,11 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
     const pi = perInst && inst;
     m.setBody(`
       <div class="f-money"><span class="flabel sr-only" id="lbl-val">${pi ? "valor da parcela" : inst ? "valor total" : "valor"}</span>
-        <span class="f-cur">R$</span><input id="f-val" inputmode="numeric" aria-labelledby="lbl-val" class="num" placeholder="0,00" value="${f.value ? fmt(f.value) : ""}"></div>
+        <span class="f-cur">R$</span><input id="f-val" autocomplete="off" inputmode="numeric" aria-labelledby="lbl-val" class="num" placeholder="0,00" value="${f.value ? fmt(f.value) : ""}"></div>
       ${inst ? `<p class="f-hint num">${pi ? `valor de cada parcela` : `${f.installments}x de ${brl(f.value / f.installments)}`}</p>` : ""}
       <div class="frows">
         <button class="frow" id="f-type" aria-haspopup="dialog" aria-label="tipo: ${TYPES[f.type].label}. mudar">${ti(f.type, true)}<span class="fr-main">${TYPES[f.type].label}</span>${CHEV}</button>
-        <label class="frow"><span class="fr-ico">${PEN}</span><input class="fr-input" id="f-desc" maxlength="80" placeholder="descrição" aria-label="descrição" value="${esc(f.desc)}"></label>
+        <label class="frow"><span class="fr-ico">${PEN}</span><input class="fr-input" id="f-desc" autocomplete="off" maxlength="80" placeholder="descrição" aria-label="descrição" value="${esc(f.desc)}"></label>
         <button class="frow" id="f-date" aria-haspopup="dialog" aria-label="data: ${dBR(f.date)}. mudar"><span class="fr-ico">${CAL}</span><span class="fr-main">data</span><span class="fr-val num">${dNum(f.date)}</span>${CHEV}</button>
         <button class="frow" id="f-rep" aria-haspopup="dialog" aria-label="repetição: ${REP_LABEL[f.rep]}. mudar"><span class="fr-ico">${REP_ICO}</span><span class="fr-main">${REP_LABEL[f.rep]}</span>${CHEV}</button>
         ${repeats ? `<button class="frow" id="f-until" aria-haspopup="dialog"><span class="fr-ico">${I.horizonte.replace("<svg", '<svg width="22" height="22"')}</span><span class="fr-main">até quando</span><span class="fr-val num">${f.until === "count" ? `${f.count} vezes` : "a perder de vista"}</span>${CHEV}</button>` : ""}
@@ -1954,9 +1954,9 @@ function cardPicker(anchor, f, draw) {
   });
 }
 function cardFields(p, c = {}) {
-  return `<div class="field"><label for="${p}-name">nome do cartão</label><input class="input" id="${p}-name" maxlength="40" value="${esc(c.name || "")}" placeholder="ex.: nubank"></div>
-    <div class="two"><div class="field"><label for="${p}-cl">dia do fechamento</label><input class="input num" id="${p}-cl" type="number" min="1" max="31" value="${c.closing || ""}"></div>
-    <div class="field"><label for="${p}-due">dia do vencimento</label><input class="input num" id="${p}-due" type="number" min="1" max="31" value="${c.due || ""}"></div></div>`;
+  return `<div class="field"><label for="${p}-name">nome do cartão</label><input class="input" id="${p}-name" autocomplete="off" maxlength="40" value="${esc(c.name || "")}" placeholder="ex.: nubank"></div>
+    <div class="two"><div class="field"><label for="${p}-cl">dia do fechamento</label><input class="input num" id="${p}-cl" autocomplete="off" type="number" min="1" max="31" value="${c.closing || ""}"></div>
+    <div class="field"><label for="${p}-due">dia do vencimento</label><input class="input num" id="${p}-due" autocomplete="off" type="number" min="1" max="31" value="${c.due || ""}"></div></div>`;
 }
 function readCardFields(el, p) {
   const name = $(`#${p}-name`, el).value.trim(), closing = +$(`#${p}-cl`, el).value, due = +$(`#${p}-due`, el).value;
@@ -2001,8 +2001,8 @@ function openProfile() {
   const p = prof();
   const m = openModal({
     title: "editar perfil", body: `
-    <div class="two"><div class="field"><label for="pf-n">nome</label><input class="input" id="pf-n" maxlength="40" value="${esc(p.nome)}"></div>
-    <div class="field"><label for="pf-s">sobrenome</label><input class="input" id="pf-s" maxlength="60" value="${esc(p.sobrenome)}"></div></div>
+    <div class="two"><div class="field"><label for="pf-n">nome</label><input class="input" id="pf-n" autocomplete="off" maxlength="40" value="${esc(p.nome)}"></div>
+    <div class="field"><label for="pf-s">sobrenome</label><input class="input" id="pf-s" autocomplete="off" maxlength="60" value="${esc(p.sobrenome)}"></div></div>
     <div class="field"><label for="pf-e">e-mail</label><input class="input" id="pf-e" value="${esc(p.email)}" readonly></div>
     <button class="btn primary block" data-savep>salvar perfil</button>
     <div style="border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;gap:14px"><h3 style="margin:0;font-size:15px">trocar senha</h3>
@@ -2037,8 +2037,8 @@ function openPrevModal() {
     m.setBody(`<p class="muted" style="margin:0;line-height:1.55">cadastre quanto você costuma gastar por mês com coisas do dia a dia (mercado, transporte, lanche). o total é dividido por 30 e aparece como previsão no diário, de amanhã em diante.</p>
       <div class="list">${S.prev.length ? S.prev.map(p => `<div class="row">${ti("prev", true)}<span class="grow ellip">${esc(p.desc)}</span><span class="val num">${brl(p.value)}</span><button class="dots" data-delprev="${p.id}" aria-label="apagar ${esc(p.desc)}" style="color:var(--c-saida)">${I.trash.replace("<svg", '<svg width="16" height="16"')}</button></div>`).join("") : `<div class="row muted">nenhum gasto cadastrado ainda</div>`}</div>
       ${pd ? `<p class="hint num" style="margin:0">previsão atual: ${brl(pd)} por dia</p>` : ""}
-      <div class="inline-box"><div class="two"><div class="field"><label for="pv-v">valor por mês</label><input class="input num" id="pv-v" inputmode="numeric" value="${fmt(draft.value)}"></div>
-      <div class="field"><label for="pv-d">descrição</label><input class="input" id="pv-d" maxlength="60" placeholder="ex.: mercado" value="${esc(draft.desc)}"></div></div>
+      <div class="inline-box"><div class="two"><div class="field"><label for="pv-v">valor por mês</label><input class="input num" id="pv-v" autocomplete="off" inputmode="numeric" value="${fmt(draft.value)}"></div>
+      <div class="field"><label for="pv-d">descrição</label><input class="input" id="pv-d" autocomplete="off" maxlength="60" placeholder="ex.: mercado" value="${esc(draft.desc)}"></div></div>
       <button class="btn primary" data-addprev>adicionar gasto</button></div>`);
   };
   draw();
@@ -2152,7 +2152,7 @@ function openRefer() {
     title: "indicar a escola do eduardo", body: `<p class="muted" style="margin:0;line-height:1.55">mande seu link pra quem você quiser. quando a pessoa assinar, a indicação conta como convertida.</p>
     <div class="field"><span class="flabel">seu link de indicação</span><div style="display:flex;gap:8px"><input class="input" id="rf-l" value="${esc(link)}" readonly aria-label="link de indicação"><button class="btn" data-copy>copiar</button></div></div>
     <div class="stat-pair"><div class="stat"><span class="hint">indicações recebidas</span><b class="num">0</b></div><div class="stat"><span class="hint">indicações convertidas</span><b class="num">0</b></div></div>
-    <div class="field"><label for="rf-pix">chave pix pra receber</label><input class="input" id="rf-pix" maxlength="80" value="${esc(p.pix || "")}" placeholder="cpf, e-mail, celular ou chave aleatória"></div>
+    <div class="field"><label for="rf-pix">chave pix pra receber</label><input class="input" id="rf-pix" autocomplete="off" maxlength="80" value="${esc(p.pix || "")}" placeholder="cpf, e-mail, celular ou chave aleatória"></div>
     <button class="btn primary block" data-savepix>salvar chave pix</button><p class="hint" style="margin:0">simulação: o link e os contadores ainda não estão ligados a um sistema real.</p>`
   });
   m.el.addEventListener("click", async e => {
@@ -2291,5 +2291,10 @@ initStore().then(() => {
   render();
 });
 
+// sem sugestões do navegador em campos de texto e valor (login/cadastro mantêm o autocomplete próprio)
+document.addEventListener("focusin", e => {
+  const t = e.target;
+  if (t && t.tagName === "INPUT" && !t.hasAttribute("autocomplete") && /^(text|number|search|tel|)$/.test(t.getAttribute("type") || "")) t.setAttribute("autocomplete", "off");
+}, true);
 </script>
 </body></html>
