@@ -149,6 +149,8 @@ button.frow:hover{background:var(--surface2)}
 /* quadro no estilo da referência */
 .mcard{background:transparent!important;border:0!important;overflow:visible!important;border-radius:0!important}
 .mhead{font-size:17px;font-weight:700;padding:4px 2px 12px}
+/* PC: título do mês fixo no topo junto com o título das colunas */
+@media (min-width:701px){.board-row{padding-top:0}.mhead{position:sticky;top:0;z-index:4;background:var(--bg);line-height:24px;padding:12px 2px 12px}.mbox .mtable thead{top:48px}}
 .mbox{background:var(--surface);border:1px solid var(--line2);border-radius:14px;overflow:clip}
 .mtable th,.mtable td{border-right:1px solid var(--line)}
 .mtable th:last-child,.mtable td:last-child{border-right:0}
@@ -1826,9 +1828,9 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
   const perInst = edit && tx.rep === "installment";
   const f = edit ? {
     value: perInst ? (oi ? oi.value : r2(tx.value / (tx.installments || 1))) : tx.value, type: tx.type, desc: tx.desc, date: occD, rep: tx.rep || "none", until: tx.until || "forever",
-    count: tx.count || 12, installments: tx.installments || 2, tags: [...(tx.tags || [])], cardId: tx.cardId || "",
+    count: tx.count || 2, installments: tx.installments || 2, tags: [...(tx.tags || [])], cardId: tx.cardId || "",
     mday: tx.rep === "monthly" && tx.mday ? tx.mday : "same", nth: tx.nth || 5, aday: tx.aday || (tx.date ? +tx.date.slice(8) : 1),
-  } : { value: 0, type, desc: "", date, rep: "none", until: "forever", count: 12, installments: 2, tags: [], cardId: "", mday: "same", nth: 5, aday: +date.slice(8) };
+  } : { value: 0, type, desc: "", date, rep: "none", until: "forever", count: 2, installments: 2, tags: [], cardId: "", mday: "same", nth: 5, aday: +date.slice(8) };
   const isRule = () => f.rep === "monthly" && f.mday !== "same";
   /* data real conforme a regra do dia (usa o mês da data escolhida) */
   const effDate = ds => { if (f.rep !== "monthly" || f.mday === "same") return ds; const d = parse(ds); return ymd(monthDate(f.mday, d.getFullYear(), d.getMonth(), f.aday, f.nth)); };
@@ -1901,12 +1903,12 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
       const s = openSheet({ title: "até quando", body: `<div class="slist">
           <button class="sitem ${f.until === "forever" ? "on" : ""}" data-u="forever"><span class="si-txt"><b>a perder de vista</b><span>repete sem data pra acabar</span></span></button>
           <div class="sitem ${f.until === "count" ? "on" : ""}" data-u="count" role="button" tabindex="0"><span class="si-txt"><b>número de repetições</b><span>escolha quantas vezes</span></span>
-            <span class="stepper"><button class="icon-btn" data-c="-1" aria-label="menos uma">−</button><b class="num" id="u-n">${f.count}</b><button class="icon-btn" data-c="1" aria-label="mais uma">+</button></span></div>
+            <span class="stepper"><button class="icon-btn" data-c="-1" aria-label="menos uma" ${f.count <= 2 ? "disabled" : ""}>−</button><b class="num" id="u-n">${f.count}</b><button class="icon-btn" data-c="1" aria-label="mais uma">+</button></span></div>
         </div><button class="btn block primary" data-usave>salvar</button>` });
       let mode = f.until, cnt = f.count;
       s.el.addEventListener("click", ev => {
         const c = ev.target.closest("[data-c]");
-        if (c) { cnt = Math.max(1, Math.min(999, cnt + +c.dataset.c)); $("#u-n", s.el).textContent = cnt; mode = "count"; }
+        if (c) { cnt = Math.max(2, Math.min(999, cnt + +c.dataset.c)); $("#u-n", s.el).textContent = cnt; $('[data-c="-1"]', s.el).disabled = cnt <= 2; mode = "count"; }
         const u = ev.target.closest("[data-u]"); if (u && !c) mode = u.dataset.u;
         $$("[data-u]", s.el).forEach(x => x.classList.toggle("on", x.dataset.u === mode));
         if (ev.target.closest("[data-usave]")) { f.until = mode; f.count = cnt; s.close(); draw(); }
@@ -1945,7 +1947,7 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
     } else {
       const cut = s === "from" ? occD : nd;
       const done = s === "from" ? n - 1 : n;
-      const cnt = f.rep === tx.rep && f.until === "count" && f.count === (tx.count || 12) ? Math.max(1, f.count - done) : f.count;
+      const cnt = f.rep === tx.rep && f.until === "count" && f.count === (tx.count || 2) ? Math.max(1, f.count - done) : f.count;
       const ins = f.rep === "installment" && tx.rep === "installment" && f.installments === (tx.installments || 2) ? Math.max(1, f.installments - done) : f.installments;
       await saveTx(tx.id, { ...old, endBefore: cut });
       await saveTx(uid("t"), { ...base, count: cnt, installments: ins, value: stored(f.value, f.rep, ins), date: rule ? effDate(shiftDate(cut, delta)) : shiftDate(cut, delta), createdAt: now, skip: (tx.skip || []).filter(x => x > cut) });
@@ -2211,7 +2213,7 @@ function openRefer() {
 }
 
 function openNews() {
-  const N = [["29/09/2026", ["repetição mensal com dia útil: escolha \"dia X ou próximo dia útil\" (ex.: pagamento do dia 5) ou \"Nº dia útil do mês\" (ex.: salário no 5º dia útil)", "sem sugestões do navegador nos campos de texto e valor"]], ["27/09/2026", ["primeira versão do FLUX no computador", "abreviação do horizonte padronizada (sempre com 2 casas, ex.: 1.90K)", "agora dá pra mudar a repetição ao editar um lançamento", "menu adicionar ajustado para telas baixas"]]];
+  const N = [["29/09/2026", ["repetição mensal com dia útil: escolha \"dia X ou próximo dia útil\" (ex.: pagamento do dia 5) ou \"Nº dia útil do mês\" (ex.: salário no 5º dia útil)", "sem sugestões do navegador nos campos de texto e valor", "no computador, o mês e o ano ficam fixos no topo junto com o título das colunas", "número de repetições começa em 2 (mínimo 2)"]], ["27/09/2026", ["primeira versão do FLUX no computador", "abreviação do horizonte padronizada (sempre com 2 casas, ex.: 1.90K)", "agora dá pra mudar a repetição ao editar um lançamento", "menu adicionar ajustado para telas baixas"]]];
   openModal({ title: "o que há de novo", body: N.map(([d, l]) => `<div class="card" style="padding:16px"><div class="hint num" style="font-weight:600">${d}</div><ul style="margin:8px 0 0;padding-left:18px;line-height:1.7">${l.map(x => `<li>${x}</li>`).join("")}</ul></div>`).join("") });
 }
 const TERMS = `<p>o FLUX é uma ferramenta de organização financeira pessoal. as previsões mostradas são feitas a partir do que você cadastra e não são recomendação financeira.</p><p>você é responsável pelas informações que cadastra. a gente pode mudar funcionalidades com o tempo e avisa em "o que há de novo".</p><p>texto provisório: substitua pelos termos oficiais antes de divulgar o app.</p>`;
