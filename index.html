@@ -824,7 +824,7 @@ async function initSupabase() {
   S.mode = "supabase";
   try { await loadScript("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"); }
   catch { toast("não deu pra conectar agora. confere sua internet", true); initLocal(); return; }
-  SB = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
+  SB = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: "flux-auth" } });
   let saveT = null, saving = false, pending = false, lastSaved = null;
   const push = async () => {
     if (!SB_USER) return;
@@ -835,7 +835,7 @@ async function initSupabase() {
     if (error) { console.warn(error); toast("não deu pra salvar agora. tenta de novo em instantes", true); } else lastSaved = row.updated_at;
   };
   backend = memBackend(() => { pending = true; clearTimeout(saveT); saveT = setTimeout(async () => { await push(); pending = false; }, 600); });
-  backend.signOut = async () => { clearTimeout(saveT); await push(); await SB.auth.signOut(); };
+  backend.signOut = async () => { clearTimeout(saveT); await push(); await SB.auth.signOut({ scope: "local" }); };
   backend.setPassword = async pw => { const { error } = await SB.auth.updateUser({ password: pw }); if (error) throw error; };
   const load = async () => {
     const { data, error } = await SB.from(SB_TABLE).select("data,updated_at").eq("user_id", SB_USER.id).maybeSingle();
@@ -2225,7 +2225,7 @@ function openConfig() {
       if (S.mode === "supabase") {
         const { error } = await SB.from(SB_TABLE).delete().eq("user_id", SB_USER.id);
         if (error) { console.warn(error); toast("não deu pra apagar agora", true); return; }
-        applyData(null); await SB.auth.signOut(); toast("seus dados foram apagados"); return;
+        applyData(null); await SB.auth.signOut({ scope: "local" }); toast("seus dados foram apagados"); return;
       }
       await wipe(["tx", "cards", "prev"]); backend.putCheckins({}); await backend.putProfile({ ...DEFAULT_PROFILE, deleted: true });
       UI.signedOut = "deleted"; render();
