@@ -224,14 +224,14 @@ button.frow:hover{background:var(--surface2)}
 
 /* ---------- type icons ---------- */
 .ti{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:700;flex:none;line-height:1}
-.ti svg{width:13px;height:13px}
+.ti svg{display:block;width:100%;height:100%;overflow:visible}
 .ti-entrada{color:var(--c-entrada);background:color-mix(in srgb,var(--c-entrada) 18%,transparent)} .ti-saida{color:var(--c-saida);background:color-mix(in srgb,var(--c-saida) 18%,transparent)}
 .ti-diario{color:var(--c-diario);background:color-mix(in srgb,var(--c-diario) 18%,transparent)}
 .ti-economia{color:var(--c-economia);background:color-mix(in srgb,var(--c-economia) 18%,transparent)}
 .ti-cartao{color:var(--c-cartao);background:color-mix(in srgb,var(--c-cartao) 18%,transparent)}
 .ti-prev{color:var(--c-diario);border:1.5px dashed var(--c-diario)}
 .ti{font-style:normal}
-.ti.lg{width:30px;height:30px;border-radius:50%;font-size:14px}.ti.lg svg{width:18px;height:18px}
+.ti.lg{width:30px;height:30px;border-radius:50%}
 
 /* ---------- saldos board ---------- */
 .board{position:absolute;inset:0;overflow:auto;padding:0 24px}
@@ -522,7 +522,6 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .m-cell.z{color:var(--zero)}
 .m-cell.z .ti{filter:grayscale(1);opacity:.45}
 .m-cell .ti{width:16px;height:16px}
-.ti.g svg{display:block;width:100%;height:100%;overflow:visible}
 .m-saldo{display:flex;justify-content:flex-end;align-items:flex-start;padding:10px 14px 9px;font-size:15px;font-weight:600;min-height:40px}
 .m-pos{background:var(--m-pos);color:var(--m-pos-fg)}
 .m-zero{background:var(--m-zero);color:var(--m-zero-fg)}
@@ -777,8 +776,6 @@ const TYPES = {
   economia: { label: "economia", col: "economias", btn: "adicionar economia" },
   cartao: { label: "gastos com cartão", col: "cartão", btn: "adicionar gasto com cartão" },
 };
-const ARROW_IN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7L7 17M7 17h9M7 17V8"/></svg>';
-const ARROW_OUT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>';
 const GLYPH = (() => {
   // glifos desenhados num grid 48×48 = círculo inteiro; o desenho ocupa o quadrado central 12–36 (50% do diâmetro), traço 6u
   const st = d => `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="butt" stroke-linejoin="miter"/></svg>`;
@@ -791,11 +788,10 @@ const GLYPH = (() => {
     cartao: fl("M33 12H27A12 12 0 0 0 27 36H33V30H27A6 6 0 0 1 27 18H33Z")
   };
 })();
-function ti(type, lg, g) {
-  if (g && type !== "prev") return `<span class="ti ti-${type} g" role="img" aria-label="${TYPES[type].label}">${GLYPH[type]}</span>`;
+function ti(type, lg) {
   const c = "ti ti-" + type + (lg ? " lg" : "");
   const lbl = type === "prev" ? "previsão de diário" : TYPES[type].label;
-  const inner = type === "entrada" ? ARROW_IN : type === "saida" ? ARROW_OUT : type === "prev" ? "" : type === "diario" ? "D" : type === "economia" ? "E" : "C";
+  const inner = type === "prev" ? "" : GLYPH[type];
   return `<span class="${c}" role="img" aria-label="${lbl}">${inner}</span>`;
 }
 const REP_LABEL = { none: "não repete", monthly: "mensalmente", weekly: "semanalmente", daily: "diariamente", yearly: "anualmente", installment: "parcelado" };
@@ -1758,7 +1754,7 @@ function mMonthInner(horizon, col) {
       h += `<div class="m-vals">`;
       for (const t of cols) {
         const { v, real, fc } = cellVal(o, t, ds); tot[t] = r2(tot[t] + v);
-        h += `<button class="m-cell num ${v ? "" : "z"} ${fc ? "fc" : ""}" data-act="cell" data-d="${ds}" data-t="${t}" aria-label="${TYPES[t].col} no dia ${d}: ${fmt(v)}${fc ? " (com previsão)" : ""}${real ? ", ver detalhes" : ", adicionar"}">${ti(fc && !real ? "prev" : t, false, true)}<span>${brl(v)}</span></button>`;
+        h += `<button class="m-cell num ${v ? "" : "z"} ${fc ? "fc" : ""}" data-act="cell" data-d="${ds}" data-t="${t}" aria-label="${TYPES[t].col} no dia ${d}: ${fmt(v)}${fc ? " (com previsão)" : ""}${real ? ", ver detalhes" : ", adicionar"}">${ti(fc && !real ? "prev" : t)}<span>${brl(v)}</span></button>`;
       }
       h += `</div>`;
     }
