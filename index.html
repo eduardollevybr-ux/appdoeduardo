@@ -16,10 +16,12 @@
   --overlay:rgba(5,4,8,.65);
   --logo-a:#FFFFFF; --logo-b:#FFFFFF;
   --r-lg:20px; --r-md:14px; --r-sm:10px;
+  --screen:#000000; /* fundo das telas cheias: preto no escuro, branco no claro */
   --font:"DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 :root.light{
   color-scheme: light;
+  --screen:var(--surface);
   --bg:#F3F3F5; --surface:#FFFFFF; --surface2:#F1F1F4; --surface3:#E7E8EC;
   --line:rgba(29,31,35,.09); --line2:rgba(29,31,35,.16);
   --text:#1D1F23; --muted:#686D76; --zero:#B8BCC4;
@@ -63,7 +65,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .dt-btn:hover{background:var(--surface2)}
 .dt-btn svg{flex:none;color:var(--muted)}
 /* tela do dia / do mês */
-.drawer.screen{width:min(480px,100%)}
+.drawer.screen{width:min(480px,100%);background:var(--screen)}
 .ph{display:grid!important;grid-template-columns:48px 1fr auto;align-items:center;padding:calc(12px + env(safe-area-inset-top,0px)) 12px 8px;border-bottom:0}
 .ph-mid{display:flex;align-items:center;justify-content:center;gap:10px;min-width:0}
 .ph-right{display:flex;justify-content:flex-end;gap:4px;min-width:48px}
@@ -74,8 +76,9 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .icon-btn.flat:hover{background:var(--surface2)}
 .icon-btn.flat svg{width:22px;height:22px}
 .pb{padding:0!important;gap:0!important}
-.pbar{padding:6px 16px 16px;border-bottom:1px solid var(--line2)}
-.pill-dd{display:flex;align-items:center;gap:10px;width:100%;height:48px;padding:0 18px;border:2px solid var(--line2);border-radius:999px;font-weight:600;font-size:16px}
+.pbar{padding:4px 16px 14px;border-bottom:1px solid var(--line2)}
+.pill-dd{display:flex;align-items:center;gap:10px;width:100%;height:38px;padding:0 16px;border:2px solid var(--line2);border-radius:999px;font-weight:600;font-size:15px}
+.pill-dd>svg{width:16px;height:16px}
 .pill-dd span:not(.ti){flex:1;text-align:left}
 .pill-dd>svg{color:var(--muted);flex:none}
 .lrows{display:flex;flex-direction:column}
@@ -114,7 +117,7 @@ button.frow:hover{background:var(--surface2)}
 .fr-input::placeholder{color:var(--muted)}
 @media (max-width:700px){
   .overlay:has(.form-modal),.overlay.ov-form{padding:0}
-  .modal.form-modal{width:100%;height:100%;max-height:none;border-radius:0;border:0}
+  .modal.form-modal{width:100%;height:100%;max-height:none;border-radius:0;border:0;background:var(--screen)}
   .form-modal .modal-head{display:none}
   .form-modal .modal-body{flex:0 0 auto;padding-top:calc(24px + env(safe-area-inset-top,0px))!important}
   .form-modal .modal-foot{padding-top:24px}
@@ -233,6 +236,34 @@ button.frow:hover{background:var(--surface2)}
 .ti{font-style:normal}
 .ti.lg{width:16px;height:16px;border-radius:50%}
 
+/* ---------- cards de totais clicáveis + telas de cálculo ---------- */
+button.card.calc{width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer}
+@media (min-width:701px){ button.card.calc:hover{border-color:var(--line2)} }
+button.card.calc:active{transform:scale(.98)}
+.ph-mid.start{justify-content:flex-start;padding-left:4px}
+.ph-mid.start .ph-title{font-size:24px}
+.pill-nav{display:grid;grid-template-columns:36px 1fr 36px;align-items:center;height:38px;padding:0 2px;border:2px solid var(--line2);border-radius:999px}
+.pill-nav span{text-align:center;font-weight:700;font-size:15px}
+.pill-nav .icon-btn{width:32px;height:32px;background:transparent}
+.pill-nav .icon-btn svg{width:18px;height:18px}
+.pill-nav .icon-btn:disabled{opacity:.3;cursor:default}
+.cs-total{display:flex;flex-direction:column;gap:12px;padding:22px 16px 6px}
+.cs-total .cs-big{font-size:34px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.cs-label{margin:0;padding:22px 16px 12px;color:var(--muted);font-weight:600;font-size:15px;border-bottom:1px solid var(--line)}
+.cs-k{color:var(--muted);font-weight:600;font-size:14px}
+.cs-pair{display:flex;justify-content:space-between;gap:12px}
+.cs-pair>div{display:flex;flex-direction:column;gap:2px}
+.cs-pair>div:last-child{text-align:right}
+.cs-pair b{font-weight:500;font-size:16px}
+.crow{display:flex;flex-direction:column;gap:10px;padding:18px 16px;border-bottom:1px solid var(--line)}
+.crow-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.crow-top b{font-size:17px;font-weight:600}
+.crow-top .num{font-size:17px;white-space:nowrap}
+.crow-top .crow-v{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.crow-sub{color:var(--muted);font-size:14px;white-space:nowrap}
+.crow.cur .crow-top b::after{content:"";display:inline-block;width:6px;height:6px;border-radius:99px;background:var(--accent);margin-left:8px;vertical-align:middle}
+.crow .neg{color:var(--c-saida)}
+
 /* ---------- saldos board ---------- */
 .board{position:absolute;inset:0;overflow:auto;padding:0 24px}
 .board-row{display:flex;gap:32px;width:max-content;padding-block:16px}
@@ -296,8 +327,10 @@ tr.blank .c-saldo{background:transparent}
 /* barra de progresso padrão: contorno no tom escuro, fina margem do fundo, preenchimento no tom claro */
 .bar{--bar-line:var(--c-entrada);--bar-fill:var(--c-economia);box-sizing:border-box;height:14px;padding:2px;border:2px solid var(--bar-line);border-radius:99px;background:transparent;overflow:hidden}
 .bar i{display:block;height:100%;width:0;border-radius:99px;background:var(--bar-fill);transition:width .9s cubic-bezier(.2,.8,.2,1)}
-.formula.ecbar{gap:8px;width:100%}
-.formula.ecbar .bar{flex:1;min-width:60px}
+.formula.ecbar{gap:8px}
+.formula.ecbar .bar{flex:0 1 112px;min-width:60px}
+.formula.ecbar.full{width:100%}
+.formula.ecbar.full .bar{flex:1}
 .sub{color:var(--muted);font-size:12.5px}
 .list{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden}
 .row{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);width:100%;text-align:left}
@@ -364,6 +397,7 @@ textarea.input{height:auto;min-height:120px;padding:12px 14px;resize:vertical}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--surface);z-index:41;border-left:1px solid var(--line);display:flex;flex-direction:column;box-shadow:var(--shadow);animation:slide .22s cubic-bezier(.2,.8,.2,1)}
 @keyframes slide{from{transform:translateX(100%)}}
 .drawer-head{display:flex;align-items:center;gap:8px;padding:0 16px;min-height:56px;border-bottom:1px solid var(--line)}
+.drawer-head.ph{border-bottom:0}
 .drawer-head .dt{flex:1;text-align:center;font-weight:700;font-size:15px}
 .drawer-body{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
 .filters{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center;padding:10px 14px;border:1px solid var(--line);border-radius:var(--r-md)}
@@ -481,7 +515,8 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .page{padding:0 0 24px}
   .page-inner{gap:20px}
   .section-title{padding:18px 16px 0;margin:0 0 10px;color:var(--muted);font-weight:600;font-size:15px}
-  .list{border-radius:0;border-left:0;border-right:0}
+  .list{border-radius:0;border-left:0;border-right:0;background:var(--screen)}
+  .topbar{border-bottom:0}
   .calc-grid{grid-template-columns:1fr;gap:0;border-top:1px solid var(--line)}
   .card.calc{border:0;border-radius:0;border-bottom:1px solid var(--line);background:transparent;display:grid;grid-template-columns:1fr auto;grid-template-areas:"h big" "f st" "bar bar";gap:6px 12px;padding:18px 16px;align-items:center}
   .calc h3{grid-area:h;font-size:17px}
@@ -717,6 +752,18 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": 
 const r2 = n => Math.round((n + Number.EPSILON) * 100) / 100;
 const MONTHS = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
 const MON3 = MONTHS.map(m => m.slice(0, 3));
+const pctFmt = v => (Math.round(v * 100) / 100).toLocaleString("pt-BR", { maximumFractionDigits: 2 }) + "%";
+// cálculos de totais: nome, rótulo da lista e explicação (usados nos cards, nas telas e na ajuda)
+const CALCS = {
+  performance: { t: "performance", list: "total por mês",
+    help: `<p>é quanto sobrou (ou faltou) no mês: entradas menos saídas, diários, economias, cartão e a previsão de diário.</p><p>se der negativo, aparece "faltou dinheiro". zero é "zerado".</p>` },
+  economizado: { t: "economizado", list: "total por mês",
+    help: `<p>é a parte das suas entradas que foi pra economia, em porcentagem: economias ÷ entradas.</p><p>abaixo de 20% aparece "abaixo do ideal", de 20% a 30% "dentro do ideal" e acima de 30% "acima do ideal". sem nada guardado, aparece "nada guardado".</p>` },
+  custo: { t: "custo de vida", list: "total por mês",
+    help: `<p>é quanto custa manter o mês: saídas + diários + cartão + previsão de diário.</p><p>se ficar igual ou menor que as entradas, está "dentro da renda".</p>` },
+  diarioMedio: { t: "diário médio", list: "média por mês",
+    help: `<p>é a média do que você gastou em diários por dia: diários ÷ dias já passados no mês.</p><p>nos meses que ainda não começaram, não tem média.</p>` },
+};
 const WD = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
 const pad = n => String(n).padStart(2, "0");
 const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -1097,7 +1144,7 @@ function monthStats(mi) {
     performance: r2(pf.entrada - pf.saida - pf.diario - pf.economia - pf.cartao - P),
     econPct: ec.entrada > 0 ? (ec.economia / ec.entrada) * 100 : 0, econVal: ec.economia, econBase: ec.entrada,
     custo: r2(cv.saida + cv.diario + cv.cartao + P), custoBase: cv.entrada,
-    diarioMedio: passed ? r2(dm.diario / passed) : null,
+    diarioMedio: passed ? r2(dm.diario / passed) : null, diarioTot: dm.diario,
   };
 }
 
@@ -1821,6 +1868,8 @@ $("#view").addEventListener("click", e => {
 });
 
 /* ================= totais ================= */
+// barra economias ÷ entradas (padrão de barra do site); "full" ocupa a largura toda
+const ecBar = (pct, full) => `<div class="formula ecbar ${full ? "full" : ""}">${ti("economia")}<div class="bar" role="progressbar" aria-label="economias sobre entradas" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct)}"><i data-w="${Math.min(100, Math.max(0, pct))}"></i></div>${ti("entrada")}</div>`;
 function fx(...parts) { return `<div class="formula" aria-hidden="true">${parts.join("")}</div>`; }
 const op = s => `<span>${s}</span>`;
 function totaisHTML() {
@@ -1836,18 +1885,20 @@ function totaisInner(mi) {
   const ecS = st.econVal <= 0 ? ["nada guardado", ""] : pct < 20 ? ["abaixo do ideal", "bad"] : pct <= 30 ? ["dentro do ideal", "good"] : ["acima do ideal", "good"];
   const cvS = Math.abs(st.custo) < 0.005 ? ["zerado", ""] : st.custo <= st.custoBase ? ["dentro da renda", "good"] : ["acima da renda", "bad"];
   const dmS = [`previsão ${brl(st.perDay)}/dia`, ""];
-  const calcCard = (title, formula, value, s, extra = "", num) => `<div class="card calc" aria-label="${title}"><h3>${title}</h3>${formula}<div class="big num" ${num != null ? `data-count="${num}"` : ""}>${value}</div>${extra}<span class="status ${s[1]}">${s[0]}</span></div>`;
+  const calcCard = (key, formula, value, s, extra = "", num) => { const title = CALCS[key].t; return `<button class="card calc" data-calc="${key}" aria-label="${title}"><h3>${title}</h3>${formula}<div class="big num" ${num != null ? `data-count="${num}"` : ""}>${value}</div>${extra}<span class="status ${s[1]}">${s[0]}</span></button>`; };
   let h = `<div class="page-inner"><div><h2 class="section-title">cálculos do mês</h2><div class="calc-grid">`;
   h += calcCard("performance", fx(ti("entrada"), op("−"), ti("saida"), op("−"), ti("diario"), op("−"), ti("economia"), op("−"), ti("cartao"), op("−"), ti("prev")), brl(perf), perfS, "", perf);
-  h += calcCard("economizado", `<div class="formula ecbar">${ti("economia")}<div class="bar" role="progressbar" aria-label="economia sobre entradas" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct)}"><i data-w="${Math.min(100, Math.max(0, pct))}"></i></div>${ti("entrada")}</div>`, `${pct.toFixed(1).replace(".", ",")}%`, ecS);
-  h += calcCard("custo de vida", fx(ti("saida"), op("+"), ti("diario"), op("+"), ti("cartao"), op("+"), ti("prev")), brl(st.custo), cvS, "", st.custo);
-  h += calcCard("diário médio", fx(ti("diario"), op("÷"), op(`dias (${st.passed})`)), st.diarioMedio == null ? "—" : brl(st.diarioMedio), dmS);
+  h += calcCard("economizado", ecBar(pct), pctFmt(pct), ecS);
+  h += calcCard("custo", fx(ti("saida"), op("+"), ti("diario"), op("+"), ti("cartao"), op("+"), ti("prev")), brl(st.custo), cvS, "", st.custo);
+  h += calcCard("diarioMedio", fx(ti("diario"), op("÷"), op(`dias (${st.passed})`)), st.diarioMedio == null ? "—" : brl(st.diarioMedio), dmS);
   h += `</div></div><div><h2 class="section-title">movimentações do mês</h2><div class="list">`;
   for (const t of TYPE_ORDER) h += `<button class="row" data-mlist="${t}">${ti(t, true)}<span class="grow">${TYPES[t].label}</span><span class="val num">${brl(st.all[t])}</span>${I.chev}</button>`;
   h += `<button class="row" data-mlist="all"><span class="grow" style="color:var(--accent);font-weight:600">ver todas</span><span class="muted">${st.list.length} ${st.list.length === 1 ? "movimentação" : "movimentações"}</span>${I.chev}</button></div></div>`;
   return h + `</div>`;
 }
 $("#view").addEventListener("click", e => {
+  const cc = e.target.closest("[data-calc]");
+  if (cc) return openCalcScreen(cc.dataset.calc, miY(UI.tMonth));
   const ml = e.target.closest("[data-mlist]");
   if (ml) openMonthList(UI.tMonth, ml.dataset.mlist);
   if (e.target.closest("[data-goprev]")) openPrevModal();
@@ -1858,12 +1909,42 @@ function openMonthList(mi, type) { openMonthScreen(mi, type); }
 /* ================= painel do dia / movimentações do mês (tela cheia) ================= */
 const PANEL = { open: false, mode: "day", date: TODAY, mi: CUR, filter: null, detail: null };
 function openPanel(date, types, detail) {
-  Object.assign(PANEL, { open: true, mode: "day", date, filter: types && types.length === 1 ? types[0] : null, detail: detail || null });
+  Object.assign(PANEL, { open: true, mode: "day", calc: null, date, filter: types && types.length === 1 ? types[0] : null, detail: detail || null });
   renderPanel();
 }
 function openMonthScreen(mi, type) {
-  Object.assign(PANEL, { open: true, mode: "month", mi, filter: type === "all" ? null : type, detail: null });
+  Object.assign(PANEL, { open: true, mode: "month", calc: null, mi, filter: type === "all" ? null : type, detail: null });
   renderPanel();
+}
+function openCalcScreen(key, year) {
+  Object.assign(PANEL, { open: true, mode: "calc", calc: key, year, detail: null });
+  renderPanel();
+}
+function calcScreen() {
+  const key = PANEL.calc, C = CALCS[key], Y = PANEL.year;
+  const minY = miY(MIN_MI), maxY = miY(MAX_MI);
+  const mis = []; for (let m = 0; m < 12; m++) { const mi = Y * 12 + m; if (mi >= MIN_MI && mi <= MAX_MI) mis.push(mi); }
+  const stats = mis.map(mi => [mi, monthStats(mi)]);
+  const money = v => `<span class="num ${v < -0.004 ? "neg" : ""}">${brl(v)}</span>`;
+  let total = "";
+  if (key === "economizado") {
+    const ec = r2(stats.reduce((a, [, s]) => a + s.econVal, 0)), en = r2(stats.reduce((a, [, s]) => a + s.econBase, 0)), p = en > 0 ? ec / en * 100 : 0;
+    total = `<div class="cs-total"><span class="cs-k">total no ano</span><span class="cs-big num">${pctFmt(p)}</span>${ecBar(p, true)}
+      <div class="cs-pair"><div><span class="cs-k">economias</span><b class="num">${brl(ec)}</b></div><div><span class="cs-k">entradas</span><b class="num">${brl(en)}</b></div></div></div>`;
+  } else if (key === "custo") {
+    total = `<div class="cs-total"><span class="cs-k">total no ano</span><span class="cs-big num">${brl(r2(stats.reduce((a, [, s]) => a + s.custo, 0)))}</span></div>`;
+  }
+  const rows = stats.map(([mi, s]) => {
+    const name = `<b>${MONTHS[miM(mi)]}</b>`, cur = mi === CUR ? "cur" : "";
+    if (key === "economizado") return `<div class="crow ${cur}"><div class="crow-top">${name}<span class="num">${pctFmt(s.econPct)}</span></div>${ecBar(s.econPct, true)}
+      <div class="cs-pair"><div><span class="cs-k">economias</span><b class="num">${brl(s.econVal)}</b></div><div><span class="cs-k">entradas</span><b class="num">${brl(s.econBase)}</b></div></div></div>`;
+    if (key === "diarioMedio") return `<div class="crow ${cur}"><div class="crow-top">${name}<span class="crow-v">${s.diarioMedio == null ? `<span class="num">—</span><span class="crow-sub">ainda não começou</span>` : `<span class="num">${brl(s.diarioMedio)}</span><span class="crow-sub num">${brl(s.diarioTot)} / ${s.passed}</span>`}</span></div></div>`;
+    return `<div class="crow ${cur}"><div class="crow-top">${name}${money(key === "performance" ? s.performance : s.custo)}</div></div>`;
+  }).join("");
+  const head = `<button class="icon-btn flat" data-pclose aria-label="voltar">${I.back}</button><div class="ph-mid start"><span class="ph-title">${C.t}</span></div><div class="ph-right"></div>`;
+  const body = `<div class="pbar"><div class="pill-nav" role="group" aria-label="ano"><button class="icon-btn flat" data-cy="-1" aria-label="ano anterior" ${Y > minY ? "" : "disabled"}>${I.left}</button><span class="num">${Y}</span><button class="icon-btn flat" data-cy="1" aria-label="próximo ano" ${Y < maxY ? "" : "disabled"}>${I.right}</button></div></div>
+    <div class="cs">${total}<h3 class="cs-label">${C.list}</h3><div class="crows">${rows}</div></div>`;
+  return { head, body, label: C.t };
 }
 function closePanel() { PANEL.open = false; $("#drawer-root").innerHTML = ""; }
 function repText(x) {
@@ -1883,8 +1964,10 @@ function itemHTML(x) {
 function filterLabel() { const f = PANEL.filter; return f ? `${ti(f)}<span>${TYPES[f].col}</span>` : `<span class="ti" style="color:var(--muted)">•</span><span>todas</span>`; }
 function renderPanel() {
   const root = $("#drawer-root");
-  let head, body;
-  if (PANEL.detail) {
+  let head, body, label;
+  if (PANEL.mode === "calc") {
+    ({ head, body, label } = calcScreen());
+  } else if (PANEL.detail) {
     const tx = S.txs.find(t => t.id === PANEL.detail.tx);
     const occ = tx ? occInfo(tx, PANEL.detail.date) : null;
     if (!occ) { PANEL.detail = null; return renderPanel(); }
@@ -1923,8 +2006,15 @@ function renderPanel() {
     body = `<div class="pbar">${dd}</div>${items}`;
   }
   const fresh = !root.firstChild;
-  root.innerHTML = `<div class="drawer-ov" data-pclose ${fresh ? "" : 'style="animation:none"'}></div><aside class="drawer screen" role="dialog" aria-label="${PANEL.mode === "day" ? "movimentações do dia" : "movimentações do mês"}" ${fresh ? "" : 'style="animation:none"'}><div class="drawer-head ph">${head}</div><div class="drawer-body pb">${body}</div></aside>`;
+  root.innerHTML = `<div class="drawer-ov" data-pclose ${fresh ? "" : 'style="animation:none"'}></div><aside class="drawer screen" role="dialog" aria-label="${label || (PANEL.mode === "day" ? "movimentações do dia" : "movimentações do mês")}" ${fresh ? "" : 'style="animation:none"'}><div class="drawer-head ph">${head}</div><div class="drawer-body pb">${body}</div></aside>`;
+  if (PANEL.mode === "calc") requestAnimationFrame(() => $$("#drawer-root .bar i").forEach(b => b.style.width = b.dataset.w + "%"));
 }
+$("#drawer-root").addEventListener("click", e => {
+  const cy = e.target.closest("[data-cy]");
+  if (!cy || cy.disabled || PANEL.mode !== "calc") return;
+  const d = +cy.dataset.cy; PANEL.year += d; renderPanel();
+  const el = $("#drawer-root .cs"); if (el) animateSlideEl(el, d);
+});
 $("#drawer-root").addEventListener("click", e => {
   const t = e.target;
   if (t.closest("[data-pclose]")) return closePanel();
@@ -2366,10 +2456,10 @@ function openSuggest() {
 
 function openHelp() {
   const Q = [
-    ["o que é a performance?", `<p>é quanto sobrou (ou faltou) no mês: entradas menos saídas, diários, economias, cartão e a previsão de diário.</p><p>se der negativo, aparece "faltou dinheiro". zero é "zerado".</p>`],
-    ["o que é o economizado?", `<p>é a parte das suas entradas que foi pra economia, em porcentagem: economias ÷ entradas.</p><p>abaixo de 20% aparece "abaixo do ideal", de 20% a 30% "dentro do ideal" e acima de 30% "acima do ideal". sem nada guardado, aparece "nada guardado".</p>`],
-    ["o que é o custo de vida?", `<p>é quanto custa manter o mês: saídas + diários + cartão + previsão de diário.</p><p>se ficar igual ou menor que as entradas, está "dentro da renda".</p>`],
-    ["o que é o diário médio?", `<p>é a média do que você gastou em diários por dia até agora: diários ÷ dias já passados no mês.</p><p>do lado aparece a previsão por dia, pra você comparar.</p>`],
+    ["o que é a performance?", CALCS.performance.help],
+    ["o que é o economizado?", CALCS.economizado.help],
+    ["o que é o custo de vida?", CALCS.custo.help],
+    ["o que é o diário médio?", CALCS.diarioMedio.help],
     ["qual movimentação eu uso?", `<p>${ti("entrada")} <b>entrada</b>: dinheiro que chega (salário, comissão, vales).</p><p>${ti("saida")} <b>saída</b>: gastos fixos e contas (boletos, aluguel).</p><p>${ti("diario")} <b>diário</b>: gastos variáveis do dia a dia (compras, mercado).</p><p>${ti("economia")} <b>economia</b>: o que vai pra reserva ou investimento. sai do saldo, como se fosse pra outra caixinha.</p><p>${ti("cartao")} <b>gastos com cartão</b>: gastos no cartão ou o total da fatura.</p>`],
     ["como o saldo é calculado?", `<p>saldo do dia = saldo do dia anterior + entradas − saídas − diários − economias − cartão. o saldo passa de um mês pro outro sem zerar.</p><p>tags marcadas como "ignorar" em saldos não entram nessa conta.</p>`],
   ];
