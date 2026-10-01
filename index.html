@@ -21,8 +21,8 @@
 }
 :root.light{
   color-scheme: light;
-  --screen:var(--surface);
-  --bg:#F3F3F5; --surface:#FFFFFF; --surface2:#F1F1F4; --surface3:#E7E8EC;
+  --screen:#FFFFFF;
+  --bg:#FFFFFF; --surface:#F3F3F5; --surface2:#EBEBEF; --surface3:#E1E2E7;
   --line:rgba(29,31,35,.09); --line2:rgba(29,31,35,.16);
   --text:#1D1F23; --muted:#686D76; --zero:#B8BCC4;
   --weekend:#E4E5E9; --today-bg:#1D1F23; --today-fg:#FFFFFF; --today-line:#1D1F23;
@@ -94,7 +94,8 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .lrow-top .ti{border-radius:99px}
 .lrow-top b{flex:1;min-width:0;font-size:17px}
 .lrow-val{font-size:17px;white-space:nowrap}
-.lrow-sub{color:var(--muted);font-size:14px;padding-left:34px}
+.lrow-sub{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--muted);font-size:14px;padding-left:28px;min-width:0}
+.lrow-rep{white-space:nowrap;text-align:right}
 .pb .detail-grid{padding:16px}
 .pb .skel{margin:12px 16px}
 .form-err{margin:0;padding:10px 14px;border-radius:var(--r-sm);background:color-mix(in srgb,var(--c-saida) 14%,transparent);color:var(--c-saida);font-weight:600;font-size:13px}
@@ -196,7 +197,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .ti-entrada{background:var(--c-entrada)!important}.ti-saida{background:var(--c-saida)!important}.ti-diario{background:var(--c-diario)!important}.ti-economia{background:var(--c-economia)!important}.ti-cartao{background:var(--c-cartao)!important}
 .cell.z .ti,.m-cell.z .ti,.m-chip.z .ti{background:var(--zero)!important;color:var(--surface)!important;filter:none!important;opacity:.7!important}
 .m-cell{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;transition:background .15s}
-.m-cell.pressing{background:var(--accent-soft)}
+.m-cell.pressing{background:var(--surface2)}
 .scope-list{display:flex;flex-direction:column;gap:8px}
 .scope{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px 16px;border-radius:var(--r-md);border:1px solid var(--line2);background:var(--surface2);text-align:left;width:100%}
 @media (hover:hover){.scope:hover{border-color:var(--accent)}}
@@ -238,7 +239,8 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .ti-diario{color:var(--c-diario);background:color-mix(in srgb,var(--c-diario) 18%,transparent)}
 .ti-economia{color:var(--c-economia);background:color-mix(in srgb,var(--c-economia) 18%,transparent)}
 .ti-cartao{color:var(--c-cartao);background:color-mix(in srgb,var(--c-cartao) 18%,transparent)}
-.ti-all{color:var(--surface);background:var(--muted)}
+.ti-all{color:#000000;background:#FFFFFF}
+:root.light .ti-all{color:#FFFFFF;background:#000000}
 .ti-prev{color:var(--c-diario);border:1.5px dashed var(--c-diario)}
 .ti{font-style:normal}
 .ti.lg{width:16px;height:16px;border-radius:50%}
@@ -331,6 +333,7 @@ tr.blank .c-saldo{background:transparent}
 .calc .big{font-size:26px;font-weight:700;letter-spacing:-.01em}
 .status{align-self:flex-start;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--surface2);color:var(--muted)}
 .status.good{background:color-mix(in srgb,var(--c-entrada) 16%,transparent);color:var(--c-entrada)}
+.status.pv{display:inline-flex;align-items:center;gap:6px}
 .status.bad{background:color-mix(in srgb,var(--c-saida) 16%,transparent);color:var(--c-saida)}
 /* barra de progresso padrão: contorno no tom escuro, fina margem do fundo, preenchimento no tom claro */
 .bar{--bar-line:var(--c-entrada);--bar-fill:var(--c-economia);box-sizing:border-box;height:14px;padding:2px;border:2px solid var(--bar-line);border-radius:99px;background:transparent;overflow:hidden}
@@ -442,6 +445,23 @@ textarea.input{height:auto;min-height:120px;padding:12px 14px;resize:vertical}
 .tag-pop .opts{max-height:240px;overflow:auto;display:flex;flex-direction:column}
 .inline-box{border:1px dashed var(--line2);border-radius:var(--r-md);padding:14px;display:flex;flex-direction:column;gap:12px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* padrão das janelas do menu (o mesmo do editar perfil): grupos com cara de campo e seções com título */
+.msec{display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--line);padding-top:18px}
+.msec>h3{margin:0;font-size:15px}
+.mintro{margin:0;color:var(--muted);line-height:1.55}
+.mgroup{border:1px solid var(--line2);border-radius:var(--r-md);background:var(--surface2);overflow:hidden}
+.mrow{display:flex;align-items:center;gap:12px;width:100%;min-height:46px;padding:10px 14px;border-bottom:1px solid var(--line);text-align:left;color:inherit}
+.mrow:last-child{border-bottom:0}
+.mrow .grow{flex:1;min-width:0}
+.mrow b{display:block;font-weight:600}
+.mrow .hint{display:block;margin-top:2px}
+.mrow .val{font-weight:600}
+.mrow>svg.chev{width:18px;height:18px;color:var(--muted);flex:none}
+.mrow.empty-row{color:var(--muted)}
+label.mrow{cursor:pointer}
+.mrow input[type=radio]{accent-color:var(--accent);width:18px;height:18px;margin:0;flex:none}
+@media (hover:hover){button.mrow:hover,label.mrow:hover{background:var(--surface3)}}
+@media (hover:none){button.mrow:active,label.mrow:active{background:var(--surface3)}}
 .toasts{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:90;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
 .toast{background:var(--text);color:var(--bg);padding:12px 18px;border-radius:999px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow);animation:pop .2s ease}
 .toast.err{background:var(--c-saida);color:#fff}
@@ -523,7 +543,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .page{padding:0 0 24px}
   .page-inner{gap:20px}
   .section-title{padding:18px 16px 0;margin:0 0 10px;color:var(--muted);font-weight:600;font-size:15px}
-  .list{border-radius:0;border-left:0;border-right:0;background:var(--screen)}
+  .page .list{border-radius:0;border-left:0;border-right:0;background:var(--screen)}
   .topbar{border-bottom:0}
   .calc-grid{grid-template-columns:1fr;gap:0;border-top:1px solid var(--line)}
   .card.calc{border:0;border-radius:0;border-bottom:1px solid var(--line);background:transparent;display:grid;grid-template-columns:1fr auto;grid-template-areas:"h big" "f st" "bar bar";gap:6px 12px;padding:18px 16px;align-items:center}
@@ -533,6 +553,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .calc .status{grid-area:st;justify-self:end;background:none!important;padding:0;font-size:13px;font-weight:500}
   .calc > .bar{grid-area:bar}
   .profile-card{margin:16px 16px 0;flex-wrap:wrap}
+  .menu-page .list{margin:0 16px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface)}
   .page-inner>.hint{padding:0 16px}
 }
 .m-cal{position:relative;width:34px;height:37px;display:block;padding:0}
@@ -786,7 +807,7 @@ const CALCS = {
   custo: { t: "custo de vida", list: "total por mês",
     help: `<p>é quanto custa manter o mês: saídas + diários + cartão + previsão de diário.</p><p>se ficar igual ou menor que as entradas, está "dentro da renda".</p>` },
   diarioMedio: { t: "diário médio", list: "média por mês",
-    help: `<p>é a média do que você gastou em diários por dia: diários ÷ dias já passados no mês.</p><p>nos meses que ainda não começaram, não tem média.</p>` },
+    help: `<p>é a média do que você gastou em diários por dia: diários ÷ dias já passados no mês.</p><p>nos meses que ainda não começaram, conta com todos os dias do mês.</p>` },
 };
 const WD = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
 const pad = n => String(n).padStart(2, "0");
@@ -1169,7 +1190,7 @@ function monthStats(mi) {
     performance: r2(pf.entrada - pf.saida - pf.diario - pf.economia - pf.cartao - P),
     econPct: ec.entrada > 0 ? (ec.economia / ec.entrada) * 100 : 0, econVal: ec.economia, econBase: ec.entrada,
     custo: r2(cv.saida + cv.diario + cv.cartao + P), custoBase: cv.entrada,
-    diarioMedio: passed ? r2(dm.diario / passed) : null, diarioTot: dm.diario,
+    diarioMedio: r2(dm.diario / (passed || days)), diarioTot: dm.diario, diarioDias: passed || days,
   };
 }
 
@@ -1372,7 +1393,7 @@ function applyTheme() {
   document.documentElement.classList.toggle("light", t === "light");
   let tc = document.querySelector('meta[name="theme-color"]');
   if (!tc) { tc = document.createElement("meta"); tc.name = "theme-color"; document.head.appendChild(tc); }
-  tc.content = t === "light" ? "#F3F3F5" : "#000000";
+  tc.content = t === "light" ? "#FFFFFF" : "#000000";
 }
 matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", applyTheme);
 new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
@@ -1924,13 +1945,13 @@ function totaisInner(mi) {
   const pct = st.econPct;
   const ecS = st.econVal <= 0 ? ["nada guardado", ""] : pct < 20 ? ["abaixo do ideal", "bad"] : pct <= 30 ? ["dentro do ideal", "good"] : ["acima do ideal", "good"];
   const cvS = Math.abs(st.custo) < 0.005 ? ["zerado", ""] : st.custo <= st.custoBase ? ["dentro da renda", "good"] : ["acima da renda", "bad"];
-  const dmS = [`previsão ${brl(st.perDay)}/dia`, ""];
+  const dmS = [`${ti("prev")}<span class="num">${brl(st.perDay)}</span>`, "pv"];
   const calcCard = (key, formula, value, s, extra = "", num) => { const title = CALCS[key].t; return `<button class="card calc" data-calc="${key}" aria-label="${title}"><h3>${title}</h3>${formula}<div class="big num" ${num != null ? `data-count="${num}"` : ""}>${value}</div>${extra}<span class="status ${s[1]}">${s[0]}</span></button>`; };
   let h = `<div class="page-inner"><div><h2 class="section-title">cálculos do mês</h2><div class="calc-grid">`;
   h += calcCard("performance", fx(ti("entrada"), op("−"), ti("saida"), op("−"), ti("diario"), op("−"), ti("economia"), op("−"), ti("cartao"), op("−"), ti("prev")), brl(perf), perfS, "", perf);
   h += calcCard("economizado", ecBar(pct), pctFmt(pct), ecS);
   h += calcCard("custo", fx(ti("saida"), op("+"), ti("diario"), op("+"), ti("cartao"), op("+"), ti("prev")), brl(st.custo), cvS, "", st.custo);
-  h += calcCard("diarioMedio", fx(ti("diario"), op("/"), op(`${st.passed}`)), st.diarioMedio == null ? "—" : brl(st.diarioMedio), dmS);
+  h += calcCard("diarioMedio", fx(ti("diario"), op("/"), op(`${st.diarioDias}`)), brl(st.diarioMedio), dmS);
   h += `</div></div><div><h2 class="section-title">movimentações do mês</h2><div class="list">`;
   for (const t of TYPE_ORDER) h += `<button class="row" data-mlist="${t}">${ti(t, true)}<span class="grow">${TYPES[t].label}</span><span class="val num">${brl(st.all[t])}</span>${I.chev}</button>`;
   h += `<button class="row" data-mlist="all"><span class="grow" style="color:var(--accent);font-weight:600">ver todas</span><span class="muted">${st.list.length} ${st.list.length === 1 ? "movimentação" : "movimentações"}</span>${I.chev}</button></div></div>`;
@@ -1978,7 +1999,7 @@ function calcScreen() {
     const name = `<b>${MONTHS[miM(mi)]}</b>`;
     if (key === "economizado") return `<button class="crow" data-cmonth="${mi}" aria-label="${MONTHS[miM(mi)]} de ${miY(mi)}: ver movimentações"><div class="crow-top">${name}<span class="num">${pctFmt(s.econPct)}</span></div>${ecBar(s.econPct, true)}
       <div class="cs-pair"><div><span class="cs-k">economias</span><b class="num">${brl(s.econVal)}</b></div><div><span class="cs-k">entradas</span><b class="num">${brl(s.econBase)}</b></div></div></button>`;
-    if (key === "diarioMedio") return `<button class="crow" data-cmonth="${mi}" aria-label="${MONTHS[miM(mi)]} de ${miY(mi)}: ver movimentações"><div class="crow-top">${name}<span class="crow-v">${s.diarioMedio == null ? `<span class="num">—</span><span class="crow-sub">ainda não começou</span>` : `<span class="num">${brl(s.diarioMedio)}</span><span class="crow-sub num">${brl(s.diarioTot)} / ${s.passed}</span>`}</span></div></button>`;
+    if (key === "diarioMedio") return `<button class="crow" data-cmonth="${mi}" aria-label="${MONTHS[miM(mi)]} de ${miY(mi)}: ver movimentações"><div class="crow-top">${name}<span class="crow-v"><span class="num">${brl(s.diarioMedio)}</span><span class="crow-sub num">${brl(s.diarioTot)} / ${s.diarioDias}</span></span></div></button>`;
     return `<button class="crow" data-cmonth="${mi}" aria-label="${MONTHS[miM(mi)]} de ${miY(mi)}: ver movimentações"><div class="crow-top">${name}${money(key === "performance" ? s.performance : s.custo)}</div></button>`;
   }).join("");
   const head = `<button class="icon-btn flat" data-pclose aria-label="voltar">${I.back}</button><div class="ph-mid start"><span class="ph-title">${C.t}</span></div><div class="ph-right"></div>`;
@@ -1997,6 +2018,15 @@ function calcFilterBar(key) {
   return `<div class="pbar pfilt" role="note" aria-label="filtro: ${CALCS[key].t}"><span class="pf-l">filtro:</span><span class="pf-i">${ics}</span></div>`;
 }
 function closePanel() { PANEL.open = false; $("#drawer-root").innerHTML = ""; }
+// repetição em versão curta, para as listas (cabe embaixo do valor)
+function repShort(x) {
+  const r = x.tx.rep || "none";
+  if (r === "none") return "";
+  if (r === "installment") return `${x.n}/${x.total} mensais`;
+  if (r === "monthly" && x.tx.mday === "nth") return `${x.tx.nth || 5}º dia útil`;
+  if (r === "monthly" && x.tx.mday === "biz") return `dia ${x.tx.aday || +x.tx.date.slice(8)} ou próx. útil`;
+  return REP_LABEL[r];
+}
 function repText(x) {
   const r = x.tx.rep || "none";
   if (r === "installment") return `${x.n}/${x.total} mensais`;
@@ -2006,10 +2036,10 @@ function repText(x) {
 }
 const ddmm = s => s.slice(8, 10) + "/" + s.slice(5, 7);
 function itemHTML(x) {
-  const r = repText(x);
+  const r = repShort(x);
   return `<button class="lrow" data-item="${x.tx.id}" data-date="${x.date}" aria-label="${esc(TYPES[x.tx.type].label)}: ${esc(x.tx.desc)}, ${brl(x.value)}, ${dBR(x.date)}. ver detalhes">
     <span class="lrow-top">${ti(x.tx.type, true)}<b class="ellip">${esc(x.tx.desc)}</b><span class="lrow-val num">${brl(x.value)}</span></span>
-    <span class="lrow-sub num">${ddmm(x.date)}${r ? ` · ${r}` : ""}</span></button>`;
+    <span class="lrow-sub"><span class="num">${ddmm(x.date)}</span>${r ? `<span class="lrow-rep num">${r}</span>` : ""}</span></button>`;
 }
 function filterLabel() { const f = PANEL.filter; return f ? `${ti(f)}<span>${TYPES[f].col}</span>` : `${ti("all")}<span>todas</span>`; }
 function renderPanel() {
@@ -2362,7 +2392,7 @@ const MENU = [
 function menuHTML() {
   const p = prof();
   const ini = ((p.nome || "?")[0] + ((p.sobrenome || "")[0] || "")).toUpperCase();
-  let h = `<div class="page"><div class="page-inner" style="max-width:720px">
+  let h = `<div class="page menu-page"><div class="page-inner" style="max-width:720px">
     <div class="card profile-card"><div class="avatar" aria-hidden="true">${esc(ini)}</div><div style="min-width:0;flex:1">
       <div style="font-weight:700;font-size:18px" class="ellip">${esc(p.nome)} ${esc(p.sobrenome)}</div><div class="muted ellip">${esc(p.email)}</div></div></div><div class="list">`;
   for (const [k, lbl, ic] of MENU) {
@@ -2391,7 +2421,7 @@ function openProfile() {
     <div class="field"><label for="pf-s">sobrenome</label><input class="input" id="pf-s" autocomplete="off" maxlength="60" value="${esc(p.sobrenome)}"></div></div>
     <div class="field"><label for="pf-e">e-mail</label><input class="input" id="pf-e" value="${esc(p.email)}" readonly></div>
     <button class="btn primary block" data-savep>salvar perfil</button>
-    <div style="border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;gap:14px"><h3 style="margin:0;font-size:15px">trocar senha</h3>
+    <div class="msec"><h3>trocar senha</h3>
     ${pwField("pw1", "nova senha")}${pwField("pw2", "repetir senha")}
     <button class="btn block" data-savepw>trocar senha</button></div>`
   });
@@ -2415,17 +2445,17 @@ function openProfile() {
 }
 
 function openPrevModal() {
-  const m = openModal({ title: "previsão de diário", body: "", wide: true });
+  const m = openModal({ title: "previsão de diário", body: "" });
   let draft = { value: 0, desc: "" };
   const draw = () => {
     const tot = prevTotal(), y = miY(CUR), mo = miM(CUR);
     const pd = perDayPrev();
-    m.setBody(`<p class="muted" style="margin:0;line-height:1.55">cadastre quanto você costuma gastar por mês com coisas do dia a dia (mercado, transporte, lanche). o total é dividido por 30 e aparece como previsão no diário, de amanhã em diante.</p>
-      <div class="list">${S.prev.length ? S.prev.map(p => `<div class="row">${ti("prev", true)}<span class="grow ellip">${esc(p.desc)}</span><span class="val num">${brl(p.value)}</span><button class="dots" data-delprev="${p.id}" aria-label="apagar ${esc(p.desc)}" style="color:var(--c-saida)">${I.trash.replace("<svg", '<svg width="16" height="16"')}</button></div>`).join("") : `<div class="row muted">nenhum gasto cadastrado ainda</div>`}</div>
-      ${pd ? `<p class="hint num" style="margin:0">previsão atual: ${brl(pd)} por dia</p>` : ""}
-      <div class="inline-box"><div class="two"><div class="field"><label for="pv-v">valor por mês</label><input class="input num" id="pv-v" autocomplete="off" inputmode="numeric" value="${fmt(draft.value)}"></div>
+    m.setBody(`<p class="mintro">quanto você gasta por mês no dia a dia. o total ÷ 30 vira a previsão diária, de amanhã em diante.</p>
+      <div class="field"><span class="flabel">gastos cadastrados</span><div class="mgroup">${S.prev.length ? S.prev.map(p => `<div class="mrow">${ti("prev")}<span class="grow ellip">${esc(p.desc)}</span><span class="val num">${brl(p.value)}</span><button class="dots" data-delprev="${p.id}" aria-label="apagar ${esc(p.desc)}" style="color:var(--c-saida)">${I.trash.replace("<svg", '<svg width="16" height="16"')}</button></div>`).join("") : `<div class="mrow empty-row">nenhum gasto cadastrado ainda</div>`}</div>
+      ${pd ? `<span class="hint num">previsão atual: ${brl(pd)} por dia</span>` : ""}</div>
+      <div class="msec"><h3>adicionar gasto</h3><div class="two"><div class="field"><label for="pv-v">valor por mês</label><input class="input num" id="pv-v" autocomplete="off" inputmode="numeric" value="${fmt(draft.value)}"></div>
       <div class="field"><label for="pv-d">descrição</label><input class="input" id="pv-d" autocomplete="off" maxlength="60" placeholder="ex.: mercado" value="${esc(draft.desc)}"></div></div>
-      <button class="btn primary" data-addprev>adicionar gasto</button></div>`);
+      <button class="btn primary block" data-addprev>adicionar gasto</button></div>`);
   };
   draw();
   m.el.addEventListener("input", e => {
@@ -2447,8 +2477,8 @@ function openCards() {
   const m = openModal({ title: "cartões de crédito", body: "" });
   let editing = null;
   const draw = () => {
-    m.setBody(`<div class="list">${S.cards.length ? S.cards.map(c => `<div class="row">${I.card.replace("<svg", '<svg width="20" height="20" style="flex:none;color:var(--c-cartao)"')}<span class="grow"><span class="ellip" style="display:block;font-weight:600">${esc(c.name)}</span><span class="hint">fecha dia ${c.closing} · vence dia ${c.due}</span></span>
-      <button class="dots" data-editcard="${c.id}" aria-label="editar ${esc(c.name)}">${I.pencil.replace("<svg", '<svg width="16" height="16"')}</button><button class="dots" data-delcard="${c.id}" aria-label="apagar ${esc(c.name)}" style="color:var(--c-saida)">${I.trash.replace("<svg", '<svg width="16" height="16"')}</button></div>`).join("") : `<div class="row muted">nenhum cartão cadastrado ainda</div>`}</div>
+    m.setBody(`<div class="mgroup">${S.cards.length ? S.cards.map(c => `<div class="mrow">${I.card.replace("<svg", '<svg width="20" height="20" style="flex:none;color:var(--c-cartao)"')}<span class="grow"><span class="ellip" style="display:block;font-weight:600">${esc(c.name)}</span><span class="hint">fecha dia ${c.closing} · vence dia ${c.due}</span></span>
+      <button class="dots" data-editcard="${c.id}" aria-label="editar ${esc(c.name)}">${I.pencil.replace("<svg", '<svg width="16" height="16"')}</button><button class="dots" data-delcard="${c.id}" aria-label="apagar ${esc(c.name)}" style="color:var(--c-saida)">${I.trash.replace("<svg", '<svg width="16" height="16"')}</button></div>`).join("") : `<div class="mrow empty-row">nenhum cartão cadastrado ainda</div>`}</div>
       <div class="inline-box"><strong>${editing ? "editar cartão" : "novo cartão"}</strong>${cardFields("cc", editing ? S.cards.find(c => c.id === editing) : {})}
       <div style="display:flex;gap:8px">${editing ? `<button class="btn" data-cancelcard>cancelar</button>` : ""}<button class="btn primary" data-savecc style="flex:1">${editing ? "salvar edição" : "adicionar cartão"}</button></div></div>`);
   };
@@ -2470,20 +2500,20 @@ function openConfig() {
   const m = openModal({ title: "configurações", body: "" });
   const draw = () => {
     const th = prof().theme || lsGet("ae.theme", null) || "dark";
-    m.setBody(`<div class="field"><span class="flabel">aparência</span><div class="list">${[["light", "modo claro"], ["dark", "modo escuro"], ["system", "usar configuração do sistema"]].map(([k, l]) => `<label class="row" style="cursor:pointer"><input type="radio" name="theme" value="${k}" ${th === k ? "checked" : ""} style="accent-color:var(--accent);width:18px;height:18px;margin:0"><span class="grow">${l}</span></label>`).join("")}</div></div>
-      <div class="field"><span class="flabel">conta</span><div class="list">
-        <button class="row" data-zerar><span class="grow"><span style="display:block;font-weight:600">zerar minha conta</span><span class="hint">apaga todas as movimentações. cartões, previsão e perfil continuam.</span></span>${I.chev}</button>
-        <button class="row" data-apagar><span class="grow"><span style="display:block;font-weight:600;color:var(--c-saida)">apagar minha conta</span><span class="hint">exclui tudo de vez: movimentações, cartões, previsão e perfil.</span></span>${I.chev}</button></div></div>`);
+    m.setBody(`<div class="field"><span class="flabel">aparência</span><div class="mgroup">${[["light", "modo claro"], ["dark", "modo escuro"], ["system", "usar configuração do sistema"]].map(([k, l]) => `<label class="mrow"><input type="radio" name="theme" value="${k}" ${th === k ? "checked" : ""}><span class="grow">${l}</span></label>`).join("")}</div></div>
+      <div class="msec"><h3>conta</h3><div class="mgroup">
+        <button class="mrow" data-zerar><span class="grow"><b>zerar minha conta</b><span class="hint">apaga todos os seus lançamentos</span></span>${I.chev}</button>
+        <button class="mrow" data-apagar><span class="grow"><b style="color:var(--c-saida)">apagar minha conta</b><span class="hint">exclui sua conta e todos os seus dados</span></span>${I.chev}</button></div></div>`);
   };
   draw();
   m.el.addEventListener("change", e => { if (e.target.name === "theme") { lsSet("ae.theme", e.target.value); saveProfile({ theme: e.target.value }); toast("aparência alterada"); } });
   m.el.addEventListener("click", async e => {
     if (e.target.closest("[data-zerar]")) {
-      if (!(await confirmBox({ title: "zerar minha conta?", text: `todas as ${S.txs.length} movimentações vão ser apagadas.`, ok: "zerar conta" }))) return;
+      if (!(await confirmBox({ title: "zerar minha conta?", text: `${S.txs.length === 1 ? "o seu lançamento vai ser apagado" : `todos os seus ${S.txs.length} lançamentos vão ser apagados`}. o resto continua como está.`, ok: "zerar conta" }))) return;
       await wipe(["tx"]); S.checkins = {}; backend.putCheckins({}); toast("conta zerada");
     }
     if (e.target.closest("[data-apagar]")) {
-      if (!(await confirmBox({ title: "apagar minha conta?", text: "tudo o que você cadastrou vai ser excluído de vez.", ok: "apagar conta" }))) return;
+      if (!(await confirmBox({ title: "apagar minha conta?", text: "sua conta e todos os seus dados vão ser excluídos de vez.", ok: "apagar conta" }))) return;
       m.close();
       if (S.mode === "supabase") {
         if (!SB || !isOnline()) { toast("sem internet. conecte pra apagar a conta", true); return; }
