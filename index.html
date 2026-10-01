@@ -51,7 +51,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .nav-label{font-size:11px;letter-spacing:.08em;color:var(--muted);padding:14px 26px 6px;white-space:nowrap}
 .collapsed .nav-label{visibility:hidden}
 .nav-btn{position:relative;display:flex;align-items:center;gap:13px;height:44px;padding:0 24px;color:var(--muted);font-weight:500;white-space:nowrap;text-align:left;width:100%}
-.nav-btn:hover{color:var(--text);background:var(--surface2)}
+@media (hover:hover){.nav-btn:hover{color:var(--text);background:var(--surface2)}}
 .nav-btn svg{flex:none;width:22px;height:22px}
 .nav-btn.active{color:var(--accent)}
 .nav-btn.active::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--accent)}
@@ -62,28 +62,34 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .logo .t{letter-spacing:.06em;color:var(--logo-a)}
 .drawer-head .dt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .dt-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;border-radius:999px;padding:0 12px}
-.dt-btn:hover{background:var(--surface2)}
+@media (hover:hover){.dt-btn:hover{background:var(--surface2)}}
 .dt-btn svg{flex:none;color:var(--muted)}
 /* tela do dia / do mês */
 .drawer.screen{width:min(480px,100%);background:var(--screen)}
+@media (max-width:700px){ #drawer-root .drawer{border-left:0} }
 .ph{display:grid!important;grid-template-columns:48px 1fr auto;align-items:center;padding:calc(12px + env(safe-area-inset-top,0px)) 12px 8px;border-bottom:0}
 .ph-mid{display:flex;align-items:center;justify-content:center;gap:10px;min-width:0}
 .ph-right{display:flex;justify-content:flex-end;gap:4px;min-width:48px}
 .ph-title{font-size:26px;font-weight:700;white-space:nowrap}
 .ph-date{border-radius:12px;padding:2px 8px}
-.ph-date:hover{background:var(--surface2)}
+@media (hover:hover){.ph-date:hover{background:var(--surface2)}}
 .icon-btn.flat{background:transparent}
-.icon-btn.flat:hover{background:var(--surface2)}
+@media (hover:hover){.icon-btn.flat:hover{background:var(--surface2)}}
 .icon-btn.flat svg{width:22px;height:22px}
 .pb{padding:0!important;gap:0!important}
 .pbar{padding:4px 16px 14px;border-bottom:1px solid var(--line2)}
+.pfilt{display:flex;align-items:center;gap:10px}
+.pfilt>*{min-height:38px;display:flex;align-items:center}
+.pf-l{color:var(--muted);font-weight:600;font-size:15px}
+.pf-i{display:flex;align-items:center;gap:8px}
 .pill-dd{display:flex;align-items:center;gap:10px;width:100%;height:38px;padding:0 16px;border:2px solid var(--line2);border-radius:999px;font-weight:600;font-size:15px}
 .pill-dd>svg{width:16px;height:16px}
 .pill-dd span:not(.ti){flex:1;text-align:left}
 .pill-dd>svg{color:var(--muted);flex:none}
 .lrows{display:flex;flex-direction:column}
 .lrow{display:flex;flex-direction:column;gap:6px;padding:18px 16px;border-bottom:1px solid var(--line);text-align:left;width:100%}
-.lrow:hover{background:var(--surface2)}
+@media (hover:hover){.lrow:hover{background:var(--surface2)}}
+.lrow.static{cursor:default}@media (hover:hover){.lrow.static:hover{background:none}}.lrow.static:active{transform:none}
 .lrow-top{display:flex;align-items:center;gap:12px;min-width:0}
 .lrow-top .ti{border-radius:99px}
 .lrow-top b{flex:1;min-width:0;font-size:17px}
@@ -103,11 +109,11 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .form-modal .modal-foot{flex-direction:column;gap:4px;border-top:0}
 .form-modal #f-submit{height:54px;font-size:16px}
 .btn-link{height:48px;width:100%;font-weight:600;font-size:16px;border-radius:999px;color:var(--text)}
-.btn-link:hover{background:var(--surface2)}
+@media (hover:hover){.btn-link:hover{background:var(--surface2)}}
 .f-hint{margin:-12px 20px 12px;color:var(--muted);font-size:13px}
 .frows{border-top:1px solid var(--line2)}
 .frow{display:flex;align-items:center;gap:14px;width:100%;min-height:66px;padding:0 20px;border-bottom:1px solid var(--line2);text-align:left;cursor:pointer}
-button.frow:hover{background:var(--surface2)}
+@media (hover:hover){button.frow:hover{background:var(--surface2)}}
 .frow .ti.lg{border-radius:99px}
 .fr-ico{width:28px;display:grid;place-items:center;color:var(--text);flex:none}
 .fr-main{flex:1;font-weight:600;font-size:17px;min-width:0}
@@ -134,7 +140,7 @@ button.frow:hover{background:var(--surface2)}
 .sheet .modal-body>.btn{margin:8px 20px 0;width:calc(100% - 40px);height:52px}
 .slist{display:flex;flex-direction:column}
 .sitem{display:flex;align-items:center;gap:14px;width:100%;padding:18px 20px;border-bottom:1px solid var(--line2);text-align:left;cursor:pointer}
-.sitem:hover{background:var(--surface2)}
+@media (hover:hover){.sitem:hover{background:var(--surface2)}}
 .sitem.on .si-txt b{color:var(--accent)}
 .si-txt{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}
 .si-txt b{font-size:17px}
@@ -145,7 +151,7 @@ button.frow:hover{background:var(--surface2)}
 .cal2-grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:4px;text-align:center}
 .cal2-grid .wd{font-size:13px;color:var(--text);padding:6px 0}
 .cal2-grid button{height:48px;width:48px;margin:0 auto;border-radius:99px;font-size:16px}
-.cal2-grid button:hover{background:var(--surface2)}
+@media (hover:hover){.cal2-grid button:hover{background:var(--surface2)}}
 .cal2-grid button.out{color:var(--zero)}
 .cal2-grid button.tdy{box-shadow:inset 0 0 0 1.5px var(--line2)}
 .cal2-grid button.sel{background:var(--accent);color:#fff;font-weight:700}
@@ -193,7 +199,7 @@ button.frow:hover{background:var(--surface2)}
 .m-cell.pressing{background:var(--accent-soft)}
 .scope-list{display:flex;flex-direction:column;gap:8px}
 .scope{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px 16px;border-radius:var(--r-md);border:1px solid var(--line2);background:var(--surface2);text-align:left;width:100%}
-.scope:hover{border-color:var(--accent)}
+@media (hover:hover){.scope:hover{border-color:var(--accent)}}
 .scope b{font-size:15px}
 .scope span{font-size:12.5px;color:var(--muted)}
 .scope:disabled{opacity:.45;cursor:default;border-color:var(--line2)}
@@ -210,7 +216,7 @@ button.frow:hover{background:var(--surface2)}
 .cal-ico b{position:absolute;left:0;right:0;top:8px;text-align:center;font-size:9.5px;font-weight:700}
 .side-foot{margin-top:auto;padding:0 16px}
 .collapse-btn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:var(--muted);margin-left:auto}
-.collapse-btn:hover{background:var(--surface2);color:var(--text)}
+@media (hover:hover){.collapse-btn:hover{background:var(--surface2);color:var(--text)}}
 .collapsed .collapse-btn{margin:0 auto;transform:rotate(180deg)}
 .main{flex:1;min-width:0;display:flex;flex-direction:column}
 .topbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:8px 24px;border-bottom:1px solid var(--line);min-height:56px}
@@ -218,7 +224,7 @@ button.frow:hover{background:var(--surface2)}
 .top-right{justify-self:end;display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px}
 .period{display:flex;align-items:center;gap:6px}
 .icon-btn{width:36px;height:36px;border-radius:999px;display:grid;place-items:center;color:var(--text);background:var(--surface2)}
-.icon-btn:hover{background:var(--surface3)}
+@media (hover:hover){.icon-btn:hover{background:var(--surface3)}}
 .icon-btn:disabled{opacity:.28;cursor:default;background:var(--surface2)}
 .icon-btn svg{width:18px;height:18px}
 .pill-select{appearance:none;background:var(--surface2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239A9FA8' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center;border:1px solid var(--line);border-radius:999px;height:36px;padding:0 36px 0 16px;font-weight:500;cursor:pointer}
@@ -232,13 +238,14 @@ button.frow:hover{background:var(--surface2)}
 .ti-diario{color:var(--c-diario);background:color-mix(in srgb,var(--c-diario) 18%,transparent)}
 .ti-economia{color:var(--c-economia);background:color-mix(in srgb,var(--c-economia) 18%,transparent)}
 .ti-cartao{color:var(--c-cartao);background:color-mix(in srgb,var(--c-cartao) 18%,transparent)}
+.ti-all{color:var(--surface);background:var(--muted)}
 .ti-prev{color:var(--c-diario);border:1.5px dashed var(--c-diario)}
 .ti{font-style:normal}
 .ti.lg{width:16px;height:16px;border-radius:50%}
 
 /* ---------- cards de totais clicáveis + telas de cálculo ---------- */
 button.card.calc{width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer}
-@media (min-width:701px){ button.card.calc:hover{border-color:var(--line2)} }
+@media (min-width:701px){ @media (hover:hover){button.card.calc:hover{border-color:var(--line2)}} }
 button.card.calc:active{transform:scale(.98)}
 .ph-mid.start{justify-content:flex-start;padding-left:4px}
 .ph-mid.start .ph-title{font-size:24px}
@@ -255,13 +262,14 @@ button.card.calc:active{transform:scale(.98)}
 .cs-pair>div{display:flex;flex-direction:column;gap:2px}
 .cs-pair>div:last-child{text-align:right}
 .cs-pair b{font-weight:500;font-size:16px}
-.crow{display:flex;flex-direction:column;gap:10px;padding:18px 16px;border-bottom:1px solid var(--line)}
+.crow{display:flex;flex-direction:column;gap:10px;width:100%;padding:18px 16px;border-bottom:1px solid var(--line);text-align:left;color:inherit;font:inherit;cursor:pointer}
+@media (hover:hover){.crow:hover{background:var(--surface2)}}
+.crow:active{transform:scale(.98)}
 .crow-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
 .crow-top b{font-size:17px;font-weight:600}
 .crow-top .num{font-size:17px;white-space:nowrap}
 .crow-top .crow-v{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
 .crow-sub{color:var(--muted);font-size:14px;white-space:nowrap}
-.crow.cur .crow-top b::after{content:"";display:inline-block;width:6px;height:6px;border-radius:99px;background:var(--accent);margin-left:8px;vertical-align:middle}
 .crow .neg{color:var(--c-saida)}
 
 /* ---------- saldos board ---------- */
@@ -274,26 +282,26 @@ button.card.calc:active{transform:scale(.98)}
 .mtitle th{text-align:left;padding:14px 14px 8px;font-size:15px;font-weight:700!important}
 .mtitle .yr{color:var(--muted);font-weight:500;margin-left:6px}
 .mcols th{padding:6px 14px 10px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--line2);white-space:nowrap;cursor:pointer;user-select:none;text-align:right}
-.mcols th:hover{color:var(--text)}
+@media (hover:hover){.mcols th:hover{color:var(--text)}}
 .mcols th .h{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%}
 .mcols th.c-dia{cursor:default;text-align:center}
 .mtable td{height:38px;padding:0 14px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}
 .mtable td.c-dia{width:46px;text-align:center;font-weight:600;cursor:pointer;position:relative;color:var(--muted);padding:0}
-.mtable td.c-dia:hover{color:var(--text)}
+@media (hover:hover){.mtable td.c-dia:hover{color:var(--text)}}
 .mtable tr.we td.c-dia{background:var(--weekend)}
 .mtable tr.today td.c-dia{background:var(--today-bg);color:var(--today-fg)}
 .mtable tr.today td{border-bottom:1.5px solid var(--today-line)}
 .mtable tr.blank td{cursor:default;color:transparent}
 .mtable tr.blank td.c-dia{background:transparent}
 .cell{min-width:128px;cursor:pointer}
-.cell:hover{background:var(--surface2)}
+@media (hover:hover){.cell:hover{background:var(--surface2)}}
 .cell .in{display:flex;align-items:center;gap:12px;justify-content:space-between;width:100%}
 .cell.z{color:var(--zero)}
 .cell.z .ti{filter:grayscale(1);opacity:.4}
 .c-saldo{min-width:132px;font-weight:600;cursor:pointer;color:var(--on-color)}
 .s-pos{background:var(--pos);color:var(--pos-fg)} .s-zero{background:var(--zero-s);color:var(--zero-fg)}
 .mtable tfoot td.s-pos{background:linear-gradient(var(--pos),var(--pos)) var(--surface2)} .mtable tfoot td.s-zero{background:linear-gradient(var(--zero-s),var(--zero-s)) var(--surface2)} .mtable tfoot td.s-neg1{background:linear-gradient(var(--neg1),var(--neg1)) var(--surface2)} .mtable tfoot td.s-neg2{background:linear-gradient(var(--neg2),var(--neg2)) var(--surface2)} .m-foot .m-saldo.m-pos{background:linear-gradient(var(--m-pos),var(--m-pos)) var(--surface)} .m-foot .m-saldo.m-zero{background:linear-gradient(var(--m-zero),var(--m-zero)) var(--surface)} .m-foot .m-saldo.m-neg{background:linear-gradient(var(--m-neg),var(--m-neg)) var(--surface)} .s-neg1{background:var(--neg1);color:var(--neg1-fg)} .s-neg2{background:var(--neg2);color:var(--neg2-fg)}
-.c-saldo:hover{filter:brightness(1.12)}
+@media (hover:hover){.c-saldo:hover{filter:brightness(1.12)}}
 tr.blank .c-saldo{background:transparent}
 .mtable tfoot{position:static}
 .mtable tfoot td{background:var(--surface2);font-weight:700;height:40px;border-bottom:0;border-top:1.5px solid var(--today-line);cursor:default}
@@ -335,7 +343,7 @@ tr.blank .c-saldo{background:transparent}
 .list{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden}
 .row{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);width:100%;text-align:left}
 .row:last-child{border-bottom:0}
-button.row:hover{background:var(--surface2)}
+@media (hover:hover){button.row:hover{background:var(--surface2)}}
 .row .grow{flex:1;min-width:0}
 .row .val{font-weight:600}
 .chev{color:var(--muted);width:16px;height:16px;flex:none}
@@ -344,9 +352,9 @@ button.row:hover{background:var(--surface2)}
 
 /* buttons & inputs */
 .btn{height:44px;padding:0 22px;border-radius:999px;font-weight:600;background:var(--surface2);border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
-.btn:hover{background:var(--surface3)}
+@media (hover:hover){.btn:hover{background:var(--surface3)}}
 .btn.primary{background:var(--accent);border-color:transparent;color:#fff}
-.btn.primary:hover{filter:brightness(1.08)}
+@media (hover:hover){.btn.primary:hover{filter:brightness(1.08)}}
 .btn.danger{color:var(--c-saida)}
 .btn.solid-danger{background:var(--c-saida);color:#fff;border-color:transparent}
 .btn.block{width:100%}
@@ -403,31 +411,31 @@ textarea.input{height:auto;min-height:120px;padding:12px 14px;resize:vertical}
 .filters{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center;padding:10px 14px;border:1px solid var(--line);border-radius:var(--r-md)}
 .filters .chk-row{padding:4px 0;font-size:13px}
 .item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:var(--r-md);background:var(--surface2);cursor:pointer;text-align:left;width:100%}
-.item:hover{background:var(--surface3)}
+@media (hover:hover){.item:hover{background:var(--surface3)}}
 .item .grow{flex:1;min-width:0}
 .item .nm{font-weight:600}
 .item .meta{font-size:12px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
 .item .val{font-weight:700;white-space:nowrap}
 .dots{width:32px;height:32px;border-radius:99px;display:grid;place-items:center;color:var(--muted);flex:none}
-.dots:hover{background:var(--surface);color:var(--text)}
+@media (hover:hover){.dots:hover{background:var(--surface);color:var(--text)}}
 .skel{height:62px;border-radius:var(--r-md);background:linear-gradient(90deg,var(--surface2),var(--surface3),var(--surface2));background-size:200% 100%;animation:sh 1.2s linear infinite}
 @keyframes sh{to{background-position:-200% 0}}
 .empty{display:flex;flex-direction:column;align-items:center;gap:14px;padding:48px 0;color:var(--muted)}
 .empty .plus{width:64px;height:64px;border-radius:99px;border:2px dashed var(--line2);display:grid;place-items:center;color:var(--accent)}
-.empty .plus:hover{border-color:var(--accent)}
+@media (hover:hover){.empty .plus:hover{border-color:var(--accent)}}
 .detail-grid{display:grid;grid-template-columns:auto 1fr;gap:14px 18px;align-items:center}
 .detail-grid dt{color:var(--muted);font-size:12.5px}
 .detail-grid dd{margin:0;font-weight:600;display:flex;align-items:center;gap:8px;min-width:0;overflow-wrap:anywhere}
 .popover{position:fixed;z-index:70;background:var(--surface);border:1px solid var(--line2);border-radius:16px;box-shadow:var(--shadow);padding:6px;overflow:auto;animation:fade .12s ease}
 .pop-item{display:flex;align-items:center;gap:12px;width:100%;padding:0 14px;height:46px;border-radius:10px;font-weight:500;white-space:nowrap;text-align:left}
-.pop-item:hover{background:var(--surface2)}
+@media (hover:hover){.pop-item:hover{background:var(--surface2)}}
 .pop-item.red{color:var(--c-saida)}
 .calendar{width:292px;padding:10px}
 .cal-head{display:flex;align-items:center;justify-content:space-between;padding:4px 4px 10px;font-weight:700}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
 .cal-grid .wd{font-size:11px;color:var(--muted);padding:4px 0}
 .cal-grid button{height:36px;border-radius:99px;font-size:13px;font-weight:500}
-.cal-grid button:hover{background:var(--surface2)}
+@media (hover:hover){.cal-grid button:hover{background:var(--surface2)}}
 .cal-grid button.tdy{box-shadow:inset 0 0 0 1px var(--line2)}
 .cal-grid button.sel{background:var(--accent);color:#fff;font-weight:700}
 .tag-pop{width:300px;padding:10px;display:flex;flex-direction:column;gap:8px}
@@ -475,7 +483,7 @@ textarea.input{height:auto;min-height:120px;padding:12px 14px;resize:vertical}
 .past-btn[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
 #title-extra{display:flex;align-items:center}
 #title-extra .icon-btn{width:32px;height:32px;background:transparent;color:var(--muted);border:1px solid transparent}
-#title-extra .icon-btn:hover{background:var(--surface2);color:var(--text)}
+@media (hover:hover){#title-extra .icon-btn:hover{background:var(--surface2);color:var(--text)}}
 #title-extra .past-btn[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);border-color:transparent}
 @media (max-width:700px){ #title-extra{display:none} }
 /* barra de rolagem no tom do app */
@@ -483,7 +491,7 @@ textarea.input{height:auto;min-height:120px;padding:12px 14px;resize:vertical}
 ::-webkit-scrollbar{width:10px;height:10px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--sb);border-radius:99px;border:2px solid var(--bg)}
-::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+@media (hover:hover){::-webkit-scrollbar-thumb:hover{background:var(--muted)}}
 ::-webkit-scrollbar-corner{background:transparent}
 ::-webkit-scrollbar-button{display:none;width:0;height:0}
 /* celular: sem zoom de toque duplo nem zoom ao focar campos */
@@ -647,6 +655,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .pane{flex:0 0 100%;min-width:0}
 .pager.dragging .pane{pointer-events:none}
 .pager.dragging .pane:not(.cur){opacity:1}
+.pager:not(.dragging):not([data-anim]) .pane:not(.cur){visibility:hidden}
 @keyframes rise{from{opacity:0;transform:translateY(22px) scale(.97)}}
 .rise{animation:rise .62s var(--ease-out) both;animation-delay:calc(var(--i,0) * 38ms)}
 .mcard.rise{animation-name:riseX;animation-duration:.7s}
@@ -662,8 +671,8 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .m-cell,.m-saldo,.m-dia,.hz-d,.hz-v{transition:transform .2s var(--spring),background-color .2s}
 .m-cell:active,.m-saldo:active,.hz-v:active{transform:scale(.97)}
 .cell,.c-saldo{transition:background-color .18s,filter .18s,box-shadow .18s}
-.cell:hover{box-shadow:inset 0 0 0 1px var(--line2)}
-.btn.primary:hover,.btn[class*="btn-t-"]:hover{transform:translateY(-1px);box-shadow:0 8px 22px color-mix(in srgb,var(--accent) 30%,transparent)}
+@media (hover:hover){.cell:hover{box-shadow:inset 0 0 0 1px var(--line2)}}
+@media (hover:hover){.btn.primary:hover,.btn[class*="btn-t-"]:hover{transform:translateY(-1px);box-shadow:0 8px 22px color-mix(in srgb,var(--accent) 30%,transparent)}}
 /* barra de baixo: indicador desliza */
 .bottom-nav{position:relative}
 .bn-ind{position:absolute;top:-1px;left:0;width:33.3333%;height:3px;background:var(--accent);border-radius:0 0 3px 3px;transition:transform .5s var(--spring)}
@@ -674,10 +683,11 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 @keyframes barIn{from{transform:scaleY(0)}}
 .nav-btn.active::before{animation:barIn .45s var(--spring);transform-origin:center}
 .nav-btn svg{transition:transform .3s var(--spring)}
-.nav-btn:hover svg{transform:scale(1.12) rotate(-4deg)}
+@media (hover:hover){.nav-btn:hover svg{transform:scale(1.12) rotate(-4deg)}}
 /* botão flutuante */
 @keyframes fabIn{from{transform:scale(0) rotate(-120deg);opacity:0}}
-.fab:not([hidden]){animation:fabIn .6s var(--spring)}
+.fab:not(.ready){visibility:hidden}
+.fab.ready:not([hidden]){animation:fabIn .6s var(--spring)}
 .fab svg{transition:transform .35s var(--spring)}
 .fab:active svg{transform:rotate(90deg)}
 /* janelas e folhas com mola */
@@ -710,6 +720,12 @@ input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:tex
 @supports not (overflow-x: clip){ .pager{overflow:hidden} .page.page-flush{overflow-x:hidden} }
 #net-pill{position:fixed;top:calc(env(safe-area-inset-top,0px) + 8px);left:50%;transform:translateX(-50%);z-index:95;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;pointer-events:none;background:var(--surface3);color:var(--muted);border:1px solid var(--line2);box-shadow:var(--shadow);animation:pop .2s ease}
 #net-pill.sync{background:var(--accent-soft);color:var(--text);border-color:transparent}
+
+/* toque: destaque só enquanto o dedo está pressionando (nada de cinza "preso" depois de soltar) */
+@media (hover:none){
+  .lrow:not(.static):active,button.row:active,.crow:active,.pop-item:active,.sitem:active,button.frow:active,.nav-btn:active,.dt-btn:active,.cal2-grid button:active,.cal-grid button:active,.btn-link:active,.item:active{background:var(--surface2)}
+  .icon-btn.flat:active,#title-extra .icon-btn:active{background:var(--surface2)}
+}
 </style>
 
 <div id="app" class="app">
@@ -754,6 +770,14 @@ const MONTHS = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "jul
 const MON3 = MONTHS.map(m => m.slice(0, 3));
 const pctFmt = v => (Math.round(v * 100) / 100).toLocaleString("pt-BR", { maximumFractionDigits: 2 }) + "%";
 // cálculos de totais: nome, rótulo da lista e explicação (usados nos cards, nas telas e na ajuda)
+// tipos que entram em cada cálculo (mesma ordem das fórmulas); prev = previsão de diário
+const CALC_TYPES = {
+  performance: ["entrada", "saida", "diario", "economia", "cartao"],
+  economizado: ["economia", "entrada"],
+  custo: ["saida", "diario", "cartao"],
+  diarioMedio: ["diario"],
+};
+const CALC_PREV = { performance: true, custo: true };
 const CALCS = {
   performance: { t: "performance", list: "total por mês",
     help: `<p>é quanto sobrou (ou faltou) no mês: entradas menos saídas, diários, economias, cartão e a previsão de diário.</p><p>se der negativo, aparece "faltou dinheiro". zero é "zerado".</p>` },
@@ -834,12 +858,13 @@ const GLYPH = (() => {
     saida: st("M33 27V15H21M33 15L14.121 33.879"),
     diario: fl("M14 12H22A12 12 0 0 1 22 36H14ZM20 18V30H22A6 6 0 0 0 22 18Z"),
     economia: fl("M15 12H33V17.5H21V21.25H31.5V26.75H21V30.5H33V36H15Z"),
+    all: fl("M27 15A3 3 0 1 1 21 15A3 3 0 1 1 27 15ZM18 24A3 3 0 1 1 12 24A3 3 0 1 1 18 24ZM36 24A3 3 0 1 1 30 24A3 3 0 1 1 36 24ZM27 33A3 3 0 1 1 21 33A3 3 0 1 1 27 33Z"),
     cartao: fl("M33 12H27A12 12 0 0 0 27 36H33V30H27A6 6 0 0 1 27 18H33Z")
   };
 })();
 function ti(type, lg) {
   const c = "ti ti-" + type + (lg ? " lg" : "");
-  const lbl = type === "prev" ? "previsão de diário" : TYPES[type].label;
+  const lbl = type === "prev" ? "previsão de diário" : type === "all" ? "todas" : TYPES[type].label;
   const inner = type === "prev" ? "" : GLYPH[type];
   return `<span class="${c}" role="img" aria-label="${lbl}">${inner}</span>`;
 }
@@ -1294,7 +1319,7 @@ const EDGE_W = 24;
 function backTarget() {
   if (popClose) return { el: null, go: closePopover };
   if (modals.length) { const m = modals[modals.length - 1]; return { el: m.el, go: () => m.close() }; }
-  if (PANEL.open) return { el: $("#drawer-root .drawer"), go: () => { if (PANEL.detail) { PANEL.detail = null; renderPanel(); } else closePanel(); } };
+  if (PANEL.open) return { el: $("#drawer-root .drawer"), go: () => { if (PANEL.detail) { PANEL.detail = null; renderPanel(); } else if (PANEL.calcF) backToCalc(); else closePanel(); } };
   if (isMobile() && UI.tab === "horizonte") return { el: $("#view"), go: () => goTab("saldos") };
   return null;
 }
@@ -1646,6 +1671,7 @@ function renderMobileChrome() {
   let fab = $("#fab");
   if (!fab) { fab = document.createElement("button"); fab.id = "fab"; fab.className = "fab"; fab.setAttribute("aria-label", "adicionar movimentação"); fab.setAttribute("aria-haspopup", "menu"); fab.innerHTML = I.plus; fab.onclick = () => openAddMenu(fab); document.body.appendChild(fab); }
   fab.hidden = !(mob && (UI.tab === "saldos" || UI.tab === "totais")) || !!UI.signedOut;
+  if (fab.hidden) fab.classList.remove("ready");
 }
 $("#bottom-nav").addEventListener("click", e => {
   const t = e.target.closest("[data-tab]"); if (t) { goTab(t.dataset.tab); return; }
@@ -1728,11 +1754,20 @@ function countUp(root, force) {
     requestAnimationFrame(step);
   });
 }
+// o + fica sempre 14px acima do fim da área de conteúdo (acima da barra de totais do mês, quando ela existe).
+// só aparece depois que dados e fontes assentaram, já na posição certa, para não "pular" ao abrir o app
+let FAB_FONTS = !document.fonts || document.fonts.status === "loaded";
+if (!FAB_FONTS) document.fonts.ready.then(() => { FAB_FONTS = true; placeFab(); });
 function placeFab() {
   const fab = $("#fab"); if (!fab || fab.hidden) return;
-  const nav = $("#bottom-nav"), foot = $("#view .m-foot");
-  fab.style.bottom = ((nav ? nav.offsetHeight : 0) + (foot ? foot.offsetHeight : 0) + 14) + "px";
+  const view = $("#view"), foot = $("#view .m-foot");
+  if (!view || !S.loaded || !FAB_FONTS) { fab.classList.remove("ready"); return; }
+  const b = Math.max(0, Math.round(window.innerHeight - view.getBoundingClientRect().bottom)) + (foot ? foot.offsetHeight : 0) + 14;
+  fab.style.bottom = b + "px";
+  if (!fab.classList.contains("ready")) requestAnimationFrame(() => fab.classList.add("ready"));
 }
+if (window.ResizeObserver) { const ro = new ResizeObserver(() => placeFab()); requestAnimationFrame(() => { const n = $("#bottom-nav"); if (n) ro.observe(n); ro.observe($("#view")); }); }
+window.addEventListener("resize", () => placeFab());
 
 /* ================= saldos / horizonte ================= */
 function saldosHTML(horizon) {
@@ -1754,7 +1789,7 @@ function monthCard(mi, horizon) {
     body += `<tr class="${cls}" data-row="${ds}"><td class="c-dia num" data-act="check" data-d="${ds}" role="button" tabindex="0" aria-label="dia ${d} de ${MONTHS[m]}: ${S.checkins[ds] ? "desmarcar" : "marcar"} check-in">${d}${S.checkins[ds] ? `<span class="check ${UI.popCheck === ds ? "pop" : ""}" aria-hidden="true">${I.checkW}</span>` : ""}</td>`;
     for (const t of cols) {
       const { v, real, fc } = cellVal(o, t, ds); tot[t] = r2(tot[t] + v);
-      body += `<td class="cell num ${v ? "" : "z"} ${fc ? "fc" : ""} ${hid[t] ? "col-min" : ""}" data-act="cell" data-d="${ds}" data-t="${t}" role="button" tabindex="0" aria-label="${TYPES[t].col} em ${d} de ${MONTHS[m]}: ${fmt(v)}${fc ? " (com previsão)" : ""}${real ? ", ver detalhes" : ", adicionar"}"><span class="in">${ti(fc && !real ? "prev" : t)}<span class="v">${brl(v)}</span></span></td>`;
+      body += `<td class="cell num ${v ? "" : "z"} ${fc ? "fc" : ""} ${hid[t] ? "col-min" : ""}" data-act="cell" data-d="${ds}" data-t="${t}" role="button" tabindex="0" aria-label="${TYPES[t].col} em ${d} de ${MONTHS[m]}: ${fmt(v)}${fc ? " (com previsão)" : ""}. clique para ver, botão direito para lançar"><span class="in">${ti(fc && !real ? "prev" : t)}<span class="v">${brl(v)}</span></span></td>`;
     }
     body += `<td class="c-saldo num ${saldoCls(s)}" data-act="saldo" data-d="${ds}" role="button" tabindex="0" aria-label="saldo em ${d} de ${MONTHS[m]}: ${fmt(s)}">${horizon ? abbr(s) : brl(s)}</td></tr>`;
   }
@@ -1766,7 +1801,7 @@ function monthCard(mi, horizon) {
 function boardAct(el) {
   const act = el.dataset.act, d = el.dataset.d;
   if (act === "check") toggleCheckin(d);
-  else if (act === "cell") { const v = calc().day[d]?.[el.dataset.t] || 0; v ? openPanel(d, [el.dataset.t]) : openForm({ type: el.dataset.t, date: d }); }
+  else if (act === "cell") openPanel(d, [el.dataset.t]);
   else if (act === "saldo") openPanel(d, null);
 }
 $("#view").addEventListener("click", e => {
@@ -1774,6 +1809,11 @@ $("#view").addEventListener("click", e => {
   if (th) { UI.hiddenCols = { ...UI.hiddenCols, [th.dataset.col]: !UI.hiddenCols[th.dataset.col] }; lsSet("ae.cols", UI.hiddenCols); render(); return; }
   const a = e.target.closest("[data-act]");
   if (a && a.closest(".mtable tbody, .m-list, .hz")) boardAct(a);
+});
+$("#view").addEventListener("contextmenu", e => {
+  const c = e.target.closest('[data-act="cell"]');
+  if (!c || !c.closest(".mtable tbody, .m-list") || isMobile()) return;
+  e.preventDefault(); openForm({ type: c.dataset.t, date: c.dataset.d });
 });
 $("#view").addEventListener("keydown", e => {
   if (e.key !== "Enter" && e.key !== " ") return;
@@ -1793,7 +1833,7 @@ function mMonthInner(horizon, col) {
   const cols = horizon ? [] : col === "all" ? TYPE_ORDER : [col];
   const h2 = horizon ? "h2" : "";
   const tot = { entrada: 0, saida: 0, diario: 0, economia: 0, cartao: 0 };
-  const selLabel = col === "all" ? `<span class="ti" style="color:var(--muted)">${"•"}</span>todas` : `${ti(col)}${TYPES[col].col}`;
+  const selLabel = col === "all" ? `${ti("all")}todas` : `${ti(col)}${TYPES[col].col}`;
   let h = `<div class="m-list"><div class="m-headrow ${h2}"><span>dia</span>${horizon ? `<span>saldos</span>` : `<button class="m-sel" id="m-col" aria-haspopup="menu" aria-label="escolher coluna, atual: ${col === "all" ? "todas" : TYPES[col].col}">${selLabel}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button><span>saldos</span>`}</div>`;
   for (let d = 1; d <= n; d++) {
     const ds = `${y}-${pad(m + 1)}-${pad(d)}`, o = c.day[ds], wd = new Date(y, m, d).getDay(), s = c.saldo[ds] ?? 0;
@@ -1803,7 +1843,7 @@ function mMonthInner(horizon, col) {
       h += `<div class="m-vals">`;
       for (const t of cols) {
         const { v, real, fc } = cellVal(o, t, ds); tot[t] = r2(tot[t] + v);
-        h += `<button class="m-cell num ${v ? "" : "z"} ${fc ? "fc" : ""}" data-act="cell" data-d="${ds}" data-t="${t}" aria-label="${TYPES[t].col} no dia ${d}: ${fmt(v)}${fc ? " (com previsão)" : ""}${real ? ", ver detalhes" : ", adicionar"}">${ti(fc && !real ? "prev" : t)}<span>${brl(v)}</span></button>`;
+        h += `<button class="m-cell num ${v ? "" : "z"} ${fc ? "fc" : ""}" data-act="cell" data-d="${ds}" data-t="${t}" aria-label="${TYPES[t].col} no dia ${d}: ${fmt(v)}${fc ? " (com previsão)" : ""}. toque para ver, segure para lançar">${ti(fc && !real ? "prev" : t)}<span>${brl(v)}</span></button>`;
       }
       h += `</div>`;
     }
@@ -1862,7 +1902,7 @@ function hzInner(start) {
 $("#view").addEventListener("click", e => {
   const b = e.target.closest("#m-col"); if (!b) return;
   const opt = (k, lbl, ic) => `<button class="pop-item" data-col="${k}" ${UI.mCol === k ? 'style="color:var(--accent)"' : ""}>${ic}${lbl}</button>`;
-  openPopover(b, `<div role="menu" aria-label="escolher coluna">${opt("all", "todas", '<span class="ti" style="color:var(--muted)">•</span>')}${TYPE_ORDER.map(t => opt(t, TYPES[t].col, ti(t))).join("")}</div>`, {
+  openPopover(b, `<div role="menu" aria-label="escolher coluna">${opt("all", "todas", ti("all"))}${TYPE_ORDER.map(t => opt(t, TYPES[t].col, ti(t))).join("")}</div>`, {
     width: 230, onMount: el => el.addEventListener("click", ev => { const o = ev.target.closest("[data-col]"); if (o) { UI.keepRow = rowAnchor(); UI.mCol = o.dataset.col; closePopover(); renderAll(); } })
   });
 });
@@ -1890,7 +1930,7 @@ function totaisInner(mi) {
   h += calcCard("performance", fx(ti("entrada"), op("−"), ti("saida"), op("−"), ti("diario"), op("−"), ti("economia"), op("−"), ti("cartao"), op("−"), ti("prev")), brl(perf), perfS, "", perf);
   h += calcCard("economizado", ecBar(pct), pctFmt(pct), ecS);
   h += calcCard("custo", fx(ti("saida"), op("+"), ti("diario"), op("+"), ti("cartao"), op("+"), ti("prev")), brl(st.custo), cvS, "", st.custo);
-  h += calcCard("diarioMedio", fx(ti("diario"), op("÷"), op(`dias (${st.passed})`)), st.diarioMedio == null ? "—" : brl(st.diarioMedio), dmS);
+  h += calcCard("diarioMedio", fx(ti("diario"), op("/"), op(`${st.passed}`)), st.diarioMedio == null ? "—" : brl(st.diarioMedio), dmS);
   h += `</div></div><div><h2 class="section-title">movimentações do mês</h2><div class="list">`;
   for (const t of TYPE_ORDER) h += `<button class="row" data-mlist="${t}">${ti(t, true)}<span class="grow">${TYPES[t].label}</span><span class="val num">${brl(st.all[t])}</span>${I.chev}</button>`;
   h += `<button class="row" data-mlist="all"><span class="grow" style="color:var(--accent);font-weight:600">ver todas</span><span class="muted">${st.list.length} ${st.list.length === 1 ? "movimentação" : "movimentações"}</span>${I.chev}</button></div></div>`;
@@ -1909,15 +1949,15 @@ function openMonthList(mi, type) { openMonthScreen(mi, type); }
 /* ================= painel do dia / movimentações do mês (tela cheia) ================= */
 const PANEL = { open: false, mode: "day", date: TODAY, mi: CUR, filter: null, detail: null };
 function openPanel(date, types, detail) {
-  Object.assign(PANEL, { open: true, mode: "day", calc: null, date, filter: types && types.length === 1 ? types[0] : null, detail: detail || null });
+  Object.assign(PANEL, { open: true, mode: "day", calc: null, calcF: null, date, filter: types && types.length === 1 ? types[0] : null, detail: detail || null });
   renderPanel();
 }
 function openMonthScreen(mi, type) {
-  Object.assign(PANEL, { open: true, mode: "month", calc: null, mi, filter: type === "all" ? null : type, detail: null });
+  Object.assign(PANEL, { open: true, mode: "month", calc: null, calcF: null, mi, filter: type === "all" ? null : type, detail: null });
   renderPanel();
 }
 function openCalcScreen(key, year) {
-  Object.assign(PANEL, { open: true, mode: "calc", calc: key, year, detail: null });
+  Object.assign(PANEL, { open: true, mode: "calc", calc: key, year, calcF: null, filter: null, detail: null });
   renderPanel();
 }
 function calcScreen() {
@@ -1935,16 +1975,26 @@ function calcScreen() {
     total = `<div class="cs-total"><span class="cs-k">total no ano</span><span class="cs-big num">${brl(r2(stats.reduce((a, [, s]) => a + s.custo, 0)))}</span></div>`;
   }
   const rows = stats.map(([mi, s]) => {
-    const name = `<b>${MONTHS[miM(mi)]}</b>`, cur = mi === CUR ? "cur" : "";
-    if (key === "economizado") return `<div class="crow ${cur}"><div class="crow-top">${name}<span class="num">${pctFmt(s.econPct)}</span></div>${ecBar(s.econPct, true)}
-      <div class="cs-pair"><div><span class="cs-k">economias</span><b class="num">${brl(s.econVal)}</b></div><div><span class="cs-k">entradas</span><b class="num">${brl(s.econBase)}</b></div></div></div>`;
-    if (key === "diarioMedio") return `<div class="crow ${cur}"><div class="crow-top">${name}<span class="crow-v">${s.diarioMedio == null ? `<span class="num">—</span><span class="crow-sub">ainda não começou</span>` : `<span class="num">${brl(s.diarioMedio)}</span><span class="crow-sub num">${brl(s.diarioTot)} / ${s.passed}</span>`}</span></div></div>`;
-    return `<div class="crow ${cur}"><div class="crow-top">${name}${money(key === "performance" ? s.performance : s.custo)}</div></div>`;
+    const name = `<b>${MONTHS[miM(mi)]}</b>`;
+    if (key === "economizado") return `<button class="crow" data-cmonth="${mi}" aria-label="${MONTHS[miM(mi)]} de ${miY(mi)}: ver movimentações"><div class="crow-top">${name}<span class="num">${pctFmt(s.econPct)}</span></div>${ecBar(s.econPct, true)}
+      <div class="cs-pair"><div><span class="cs-k">economias</span><b class="num">${brl(s.econVal)}</b></div><div><span class="cs-k">entradas</span><b class="num">${brl(s.econBase)}</b></div></div></button>`;
+    if (key === "diarioMedio") return `<button class="crow" data-cmonth="${mi}" aria-label="${MONTHS[miM(mi)]} de ${miY(mi)}: ver movimentações"><div class="crow-top">${name}<span class="crow-v">${s.diarioMedio == null ? `<span class="num">—</span><span class="crow-sub">ainda não começou</span>` : `<span class="num">${brl(s.diarioMedio)}</span><span class="crow-sub num">${brl(s.diarioTot)} / ${s.passed}</span>`}</span></div></button>`;
+    return `<button class="crow" data-cmonth="${mi}" aria-label="${MONTHS[miM(mi)]} de ${miY(mi)}: ver movimentações"><div class="crow-top">${name}${money(key === "performance" ? s.performance : s.custo)}</div></button>`;
   }).join("");
   const head = `<button class="icon-btn flat" data-pclose aria-label="voltar">${I.back}</button><div class="ph-mid start"><span class="ph-title">${C.t}</span></div><div class="ph-right"></div>`;
   const body = `<div class="pbar"><div class="pill-nav" role="group" aria-label="ano"><button class="icon-btn flat" data-cy="-1" aria-label="ano anterior" ${Y > minY ? "" : "disabled"}>${I.left}</button><span class="num">${Y}</span><button class="icon-btn flat" data-cy="1" aria-label="próximo ano" ${Y < maxY ? "" : "disabled"}>${I.right}</button></div></div>
     <div class="cs">${total}<h3 class="cs-label">${C.list}</h3><div class="crows">${rows}</div></div>`;
   return { head, body, label: C.t };
+}
+function openCalcMonth(key, mi) {
+  Object.assign(PANEL, { open: true, mode: "month", mi, calc: key, calcF: key, filter: null, detail: null });
+  renderPanel();
+}
+function backToCalc() { const key = PANEL.calcF; openCalcScreen(key, miY(PANEL.mi)); }
+// filtro de cálculo: só os ícones dos tipos que entram na conta
+function calcFilterBar(key) {
+  const ics = CALC_TYPES[key].map(t => ti(t)).join("") + (CALC_PREV[key] ? ti("prev") : "");
+  return `<div class="pbar pfilt" role="note" aria-label="filtro: ${CALCS[key].t}"><span class="pf-l">filtro:</span><span class="pf-i">${ics}</span></div>`;
 }
 function closePanel() { PANEL.open = false; $("#drawer-root").innerHTML = ""; }
 function repText(x) {
@@ -1961,7 +2011,7 @@ function itemHTML(x) {
     <span class="lrow-top">${ti(x.tx.type, true)}<b class="ellip">${esc(x.tx.desc)}</b><span class="lrow-val num">${brl(x.value)}</span></span>
     <span class="lrow-sub num">${ddmm(x.date)}${r ? ` · ${r}` : ""}</span></button>`;
 }
-function filterLabel() { const f = PANEL.filter; return f ? `${ti(f)}<span>${TYPES[f].col}</span>` : `<span class="ti" style="color:var(--muted)">•</span><span>todas</span>`; }
+function filterLabel() { const f = PANEL.filter; return f ? `${ti(f)}<span>${TYPES[f].col}</span>` : `${ti("all")}<span>todas</span>`; }
 function renderPanel() {
   const root = $("#drawer-root");
   let head, body, label;
@@ -1995,15 +2045,26 @@ function renderPanel() {
       mid = `<span class="ph-title num">${MON3[miM(mi)]}/${String(miY(mi)).slice(2)}</span>`;
       list = occs(miFirst(mi), miLast(mi)).sort((a, b) => b.date.localeCompare(a.date) || TYPE_ORDER.indexOf(a.tx.type) - TYPE_ORDER.indexOf(b.tx.type));
     }
-    if (PANEL.filter) list = list.filter(x => x.tx.type === PANEL.filter);
-    head = `<button class="icon-btn flat" data-pclose aria-label="voltar">${I.back}</button>
+    let prevRow = "";
+    if (PANEL.calcF) {
+      const key = PANEL.calcF, ok = CALC_TYPES[key], tm = tagMap();
+      list = list.filter(x => ok.includes(x.tx.type) && !ignores(x.tx, key, tm));
+      const P = CALC_PREV[key] ? r2(perDayPrev() * prevDaysIn(PANEL.mi)) : 0;
+      if (P > 0.004) prevRow = `<div class="lrow static" role="group" aria-label="previsão de diário: ${brl(P)}"><span class="lrow-top">${ti("prev")}<b class="ellip">previsão de diário</b><span class="lrow-val num">${brl(P)}</span></span><span class="lrow-sub">dias que ainda vão chegar</span></div>`;
+    } else {
+      if (PANEL.filter) list = list.filter(x => x.tx.type === PANEL.filter);
+      const pd = perDayPrev();
+      if (day && PANEL.date > TODAY && pd > 0.004 && (!PANEL.filter || PANEL.filter === "diario"))
+        prevRow = `<div class="lrow static" role="group" aria-label="previsão de diário: ${brl(pd)}"><span class="lrow-top">${ti("prev")}<b class="ellip">previsão de diário</b><span class="lrow-val num">${brl(pd)}</span></span><span class="lrow-sub">previsão para o dia</span></div>`;
+    }
+    head = `<button class="icon-btn flat" ${PANEL.calcF ? "data-pcalcback" : "data-pclose"} aria-label="voltar">${I.back}</button>
       <div class="ph-mid"><button class="icon-btn flat" data-pstep="-1" aria-label="${day ? "dia anterior" : "mês anterior"}" ${prevOk ? "" : "disabled"}>${I.left}</button>${mid}<button class="icon-btn flat" data-pstep="1" aria-label="${day ? "próximo dia" : "próximo mês"}" ${nextOk ? "" : "disabled"}>${I.right}</button></div>
       <div class="ph-right"><button class="icon-btn flat" data-padd aria-label="adicionar movimentação" aria-haspopup="menu">${I.plus}</button></div>`;
     const dd = `<button class="pill-dd" data-pfilter aria-haspopup="menu" aria-label="filtrar por tipo, atual: ${PANEL.filter ? TYPES[PANEL.filter].col : "todas"}">${filterLabel()}<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>`;
     const items = !S.loaded ? `<div class="skel"></div><div class="skel"></div><div class="skel"></div>`
-      : list.length ? `<div class="lrows">${list.map(itemHTML).join("")}</div>`
+      : list.length || prevRow ? `<div class="lrows">${list.map(itemHTML).join("")}${prevRow}</div>`
       : `<div class="empty"><button class="plus" data-padd aria-label="adicionar movimentação">${I.plus.replace("<svg", '<svg width="26" height="26"')}</button><span>sem movimentações por aqui</span></div>`;
-    body = `<div class="pbar">${dd}</div>${items}`;
+    body = `${PANEL.calcF ? calcFilterBar(PANEL.calcF) : `<div class="pbar">${dd}</div>`}${items}`;
   }
   const fresh = !root.firstChild;
   root.innerHTML = `<div class="drawer-ov" data-pclose ${fresh ? "" : 'style="animation:none"'}></div><aside class="drawer screen" role="dialog" aria-label="${label || (PANEL.mode === "day" ? "movimentações do dia" : "movimentações do mês")}" ${fresh ? "" : 'style="animation:none"'}><div class="drawer-head ph">${head}</div><div class="drawer-body pb">${body}</div></aside>`;
@@ -2017,6 +2078,8 @@ $("#drawer-root").addEventListener("click", e => {
 });
 $("#drawer-root").addEventListener("click", e => {
   const t = e.target;
+  if (t.closest("[data-pcalcback]")) return backToCalc();
+  const cm = t.closest("[data-cmonth]"); if (cm) return openCalcMonth(PANEL.calc, +cm.dataset.cmonth);
   if (t.closest("[data-pclose]")) return closePanel();
   const st = t.closest("[data-pstep]");
   if (st) {
@@ -2028,7 +2091,7 @@ $("#drawer-root").addEventListener("click", e => {
   const pf = t.closest("[data-pfilter]");
   if (pf) {
     const opt = (k, lbl, ic) => `<button class="pop-item" data-fk="${k}" ${(PANEL.filter || "all") === k ? 'style="color:var(--accent)"' : ""}>${ic}${lbl}</button>`;
-    openPopover(pf, `<div role="menu" aria-label="filtrar por tipo">${opt("all", "todas", '<span class="ti" style="color:var(--muted)">•</span>')}${TYPE_ORDER.map(k => opt(k, TYPES[k].col, ti(k))).join("")}</div>`, {
+    openPopover(pf, `<div role="menu" aria-label="filtrar por tipo">${opt("all", "todas", ti("all"))}${TYPE_ORDER.map(k => opt(k, TYPES[k].col, ti(k))).join("")}</div>`, {
       width: pf.offsetWidth, onMount: el => el.addEventListener("click", ev => { const b = ev.target.closest("[data-fk]"); if (b) { PANEL.filter = b.dataset.fk === "all" ? null : b.dataset.fk; closePopover(); renderPanel(); } })
     });
     return;
@@ -2036,8 +2099,9 @@ $("#drawer-root").addEventListener("click", e => {
   const add = t.closest("[data-padd]");
   if (add) {
     const date = PANEL.mode === "day" ? PANEL.date : (PANEL.mi === CUR ? TODAY : miFirst(PANEL.mi));
-    if (PANEL.filter) return openForm({ type: PANEL.filter, date });
-    openPopover(add, `<div role="menu" aria-label="escolha o tipo">${TYPE_ORDER.map(k => `<button class="pop-item" data-nt="${k}">${ti(k)}<span>${TYPES[k].label}</span></button>`).join("")}</div>`, {
+    const types = PANEL.calcF ? CALC_TYPES[PANEL.calcF] : PANEL.filter ? [PANEL.filter] : TYPE_ORDER;
+    if (types.length === 1) return openForm({ type: types[0], date });
+    openPopover(add, `<div role="menu" aria-label="escolha o tipo">${types.map(k => `<button class="pop-item" data-nt="${k}">${ti(k)}<span>${TYPES[k].label}</span></button>`).join("")}</div>`, {
       width: 240, onMount: el => el.addEventListener("click", ev => { const b = ev.target.closest("[data-nt]"); if (b) { closePopover(); openForm({ type: b.dataset.nt, date }); } })
     });
     return;
@@ -2048,6 +2112,8 @@ $("#drawer-root").addEventListener("click", e => {
   const it = t.closest("[data-item]");
   if (it) { PANEL.detail = { tx: it.dataset.item, date: it.dataset.date }; renderPanel(); }
 });
+// iOS só aplica :active em toques quando existe um ouvinte de toque na página
+document.addEventListener("touchstart", () => { }, { passive: true });
 function animateSlideEl(el, dir) { el.classList.remove("slide-l", "slide-r"); void el.offsetWidth; el.classList.add(dir > 0 ? "slide-l" : "slide-r"); }
 
 /* ===== repetições: escolher o alcance (só este, este e os próximos, só os próximos, todos) ===== */
