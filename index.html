@@ -521,9 +521,8 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .m-cell:last-child{border-bottom:0}
 .m-cell.z{color:var(--zero)}
 .m-cell.z .ti{filter:grayscale(1);opacity:.45}
-.m-cell .ti{width:16px;height:16px;font-size:12.5px;font-weight:800;overflow:visible}
-.m-cell .ti svg{width:19px;height:19px;overflow:visible}
-.m-cell .ti-prev{border-width:1.5px}
+.m-cell .ti{width:16px;height:16px}
+.ti.g svg{display:block;width:100%;height:100%;overflow:visible}
 .m-saldo{display:flex;justify-content:flex-end;align-items:flex-start;padding:10px 14px 9px;font-size:15px;font-weight:600;min-height:40px}
 .m-pos{background:var(--m-pos);color:var(--m-pos-fg)}
 .m-zero{background:var(--m-zero);color:var(--m-zero-fg)}
@@ -780,7 +779,20 @@ const TYPES = {
 };
 const ARROW_IN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7L7 17M7 17h9M7 17V8"/></svg>';
 const ARROW_OUT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>';
-function ti(type, lg) {
+const GLYPH = (() => {
+  // glifos desenhados num grid 48×48 = círculo inteiro; o desenho ocupa o quadrado central 12–36 (50% do diâmetro), traço 6u
+  const st = d => `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="butt" stroke-linejoin="miter"/></svg>`;
+  const fl = d => `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="${d}" fill="currentColor" fill-rule="evenodd"/></svg>`;
+  return {
+    entrada: st("M15 21V33H27M15 33L33.879 14.121"),
+    saida: st("M33 27V15H21M33 15L14.121 33.879"),
+    diario: fl("M14 12H22A12 12 0 0 1 22 36H14ZM20 18V30H22A6 6 0 0 0 22 18Z"),
+    economia: fl("M15 12H33V17.5H21V21.25H31.5V26.75H21V30.5H33V36H15Z"),
+    cartao: fl("M33 12H27A12 12 0 0 0 27 36H33V30H27A6 6 0 0 1 27 18H33Z")
+  };
+})();
+function ti(type, lg, g) {
+  if (g && type !== "prev") return `<span class="ti ti-${type} g" role="img" aria-label="${TYPES[type].label}">${GLYPH[type]}</span>`;
   const c = "ti ti-" + type + (lg ? " lg" : "");
   const lbl = type === "prev" ? "previsão de diário" : TYPES[type].label;
   const inner = type === "entrada" ? ARROW_IN : type === "saida" ? ARROW_OUT : type === "prev" ? "" : type === "diario" ? "D" : type === "economia" ? "E" : "C";
@@ -1746,7 +1758,7 @@ function mMonthInner(horizon, col) {
       h += `<div class="m-vals">`;
       for (const t of cols) {
         const { v, real, fc } = cellVal(o, t, ds); tot[t] = r2(tot[t] + v);
-        h += `<button class="m-cell num ${v ? "" : "z"} ${fc ? "fc" : ""}" data-act="cell" data-d="${ds}" data-t="${t}" aria-label="${TYPES[t].col} no dia ${d}: ${fmt(v)}${fc ? " (com previsão)" : ""}${real ? ", ver detalhes" : ", adicionar"}">${ti(fc && !real ? "prev" : t)}<span>${brl(v)}</span></button>`;
+        h += `<button class="m-cell num ${v ? "" : "z"} ${fc ? "fc" : ""}" data-act="cell" data-d="${ds}" data-t="${t}" aria-label="${TYPES[t].col} no dia ${d}: ${fmt(v)}${fc ? " (com previsão)" : ""}${real ? ", ver detalhes" : ", adicionar"}">${ti(fc && !real ? "prev" : t, false, true)}<span>${brl(v)}</span></button>`;
       }
       h += `</div>`;
     }
