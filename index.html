@@ -120,7 +120,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .fr-main{flex:1;font-weight:600;font-size:17px;min-width:0}
 .fr-val{font-size:16px;color:var(--text)}
 .fr-chev{color:var(--muted);flex:none}
-.fr-input{flex:1;border:0;background:none;outline:none;font-size:17px;min-width:0;height:64px}
+.fr-input{flex:1;border:0;background:none;outline:none;font-size:17px!important;min-width:0;height:64px;padding:0;margin:0;text-indent:0;-webkit-appearance:none;appearance:none;border-radius:0}
 .fr-input::placeholder{color:var(--muted)}
 @media (max-width:700px){
   .overlay:has(.form-modal),.overlay.ov-form{padding:0}
@@ -556,6 +556,8 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .calc > .bar{grid-area:bar}
   .profile-card{margin:16px 16px 0;flex-wrap:wrap}
   .menu-page .list{margin:0 16px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface)}
+  .row{padding-left:16px;padding-right:16px}
+  .menu-page .row{padding-left:20px;padding-right:20px}
   .page-inner>.hint{padding:0 16px}
 }
 .m-cal{position:relative;width:34px;height:37px;display:block;padding:0}
@@ -2234,7 +2236,7 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
         <span class="f-cur">R$</span><input id="f-val" autocomplete="off" inputmode="numeric" aria-labelledby="lbl-val" class="num" placeholder="0,00" value="${f.value ? fmt(f.value) : ""}"></div>
       ${inst ? `<p class="f-hint num">${pi ? `valor de cada parcela` : `${f.installments}x de ${brl(f.value / f.installments)}`}</p>` : ""}
       <div class="frows">
-        <button class="frow" id="f-type" aria-haspopup="dialog" aria-label="tipo: ${TYPES[f.type].label}. mudar">${ti(f.type, true)}<span class="fr-main">${TYPES[f.type].label}</span>${CHEV}</button>
+        <button class="frow" id="f-type" aria-haspopup="dialog" aria-label="tipo: ${TYPES[f.type].label}. mudar"><span class="fr-ico">${ti(f.type, true)}</span><span class="fr-main">${TYPES[f.type].label}</span>${CHEV}</button>
         <label class="frow"><span class="fr-ico">${PEN}</span><input class="fr-input" id="f-desc" autocomplete="off" maxlength="80" placeholder="descrição" aria-label="descrição" value="${esc(f.desc)}"></label>
         ${f.type === "cartao" ? `<button class="frow" id="f-card" aria-haspopup="dialog" aria-label="cartão: ${f.cardId && cardName(f.cardId) ? esc(cardName(f.cardId)) : "escolher"}. mudar"><span class="fr-ico">${I.card.replace("<svg", '<svg width="22" height="22"')}</span><span class="fr-main">cartão</span><span class="fr-val ellip ${f.cardId && cardName(f.cardId) ? "" : "muted"}">${f.cardId && cardName(f.cardId) ? esc(cardName(f.cardId)) : "escolher"}</span>${CHEV}</button>` : ""}
         <button class="frow" id="f-date" aria-haspopup="dialog" aria-label="data: ${dBR(f.date)}. mudar"><span class="fr-ico">${CAL}</span><span class="fr-main">data</span><span class="fr-val num">${dNum(effDate(f.date))}</span>${CHEV}</button>
