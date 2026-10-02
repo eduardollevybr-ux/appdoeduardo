@@ -2083,9 +2083,9 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
   const perInst = edit && tx.rep === "installment";
   const f = edit ? {
     value: perInst ? (oi ? oi.value : r2(tx.value / (tx.installments || 1))) : tx.value, type: tx.type, desc: tx.desc, date: occD, rep: tx.rep || "none", until: tx.until || "forever",
-    count: tx.count || 2, installments: tx.installments || 2, tags: [...(tx.tags || [])], cardId: tx.cardId || defaultCardId(),
+    count: tx.count || 2, installments: tx.installments || 2, tags: [...(tx.tags || [])], cardId: tx.cardId || "",
     mday: tx.rep === "monthly" && tx.mday ? tx.mday : "same", nth: tx.nth || 5, aday: tx.aday || (tx.date ? +tx.date.slice(8) : 1),
-  } : { value: 0, type, desc: "", date, rep: "none", until: "forever", count: 2, installments: 2, tags: [], cardId: defaultCardId(), mday: "same", nth: 5, aday: +date.slice(8) };
+  } : { value: 0, type, desc: "", date, rep: "none", until: "forever", count: 2, installments: 2, tags: [], cardId: "", mday: "same", nth: 5, aday: +date.slice(8) };
   const isRule = () => f.rep === "monthly" && f.mday !== "same";
   /* data real conforme a regra do dia (usa o mês da data escolhida) */
   const effDate = ds => { if (f.rep !== "monthly" || f.mday === "same") return ds; const d = parse(ds); return ymd(monthDate(f.mday, d.getFullYear(), d.getMonth(), f.aday, f.nth)); };
@@ -2258,13 +2258,6 @@ function cardSheet(cur, onPick) {
 }
 const cardsSorted = () => [...S.cards].sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
 const cardName = id => (S.cards.find(c => c.id === id) || {}).name || "";
-/* cartão pré-selecionado: o último usado (que ainda existe) ou, se só houver um, ele */
-function defaultCardId() {
-  let best = null;
-  for (const t of S.txs) if (t.type === "cartao" && t.cardId && cardName(t.cardId) && (!best || (t.createdAt || 0) > (best.createdAt || 0))) best = t;
-  if (best) return best.cardId;
-  return S.cards.length === 1 ? S.cards[0].id : "";
-}
 
 
 /* ================= menu ================= */
