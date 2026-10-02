@@ -116,6 +116,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .fr-chev{color:var(--muted);flex:none}
 .fr-input{flex:1;border:0;background:none;outline:none;font-size:17px!important;min-width:0;height:64px;padding:0;margin:0;text-indent:0;-webkit-appearance:none;appearance:none;border-radius:0}
 .fr-input::placeholder{color:var(--muted)}
+.fr-main.fr-ph{color:var(--muted);font-weight:400}
 @media (max-width:700px){
   .overlay:has(.form-modal),.overlay.ov-form{padding:0}
   .modal.form-modal{width:100%;height:100%;max-height:none;border-radius:0;border:0;background:var(--screen)}
@@ -1703,7 +1704,7 @@ function monthCard(mi, horizon) {
     body += `<td class="c-saldo num ${saldoCls(s)}" data-act="saldo" data-d="${ds}" role="button" tabindex="0" aria-label="saldo em ${d} de ${MONTHS[m]}: ${fmt(s)}">${horizon ? abbr(s) : brl(s)}</td></tr>`;
   }
   const endS = c.saldo[miLast(mi)] ?? 0;
-  const head = horizon ? `<thead><tr class="mcols"><th colspan="2" class="hz-mth ${mi === CUR ? "cur" : ""}" aria-label="${MONTHS[m]} de ${y}">${MON3[m]}/${String(y).slice(2)}</th></tr></thead>` : `<thead><tr class="mcols"><th class="c-dia">dia</th>${cols.map(t => `<th data-col="${t}" class="${hid[t] ? "col-min" : ""}" title="${hid[t] ? "mostrar" : "recolher"} coluna" aria-label="${hid[t] ? "mostrar" : "recolher"} coluna ${TYPES[t].col}"><span class="h">${ti(t)}<span class="lbl">${TYPES[t].col}</span></span></th>`).join("")}<th class="c-sh" style="cursor:default;text-align:${horizon ? "center" : "right"};padding-right:8px">saldo</th></tr></thead>`;
+  const head = horizon ? `<thead><tr class="mcols"><th colspan="2" class="hz-mth ${mi === CUR ? "cur" : ""}" aria-label="${MONTHS[m]} de ${y}">${MON3[m]}/${String(y).slice(2)}</th></tr></thead>` : `<thead><tr class="mcols"><th class="c-dia">dia</th>${cols.map(t => `<th data-col="${t}" class="${hid[t] ? "col-min" : ""}" title="${hid[t] ? "mostrar" : "recolher"} coluna" aria-label="${hid[t] ? "mostrar" : "recolher"} coluna ${TYPES[t].col}"><span class="h">${ti(t)}<span class="lbl">${TYPES[t].col}</span></span></th>`).join("")}<th class="c-sh" style="cursor:default;text-align:${horizon ? "center" : "right"};padding-right:8px">saldos</th></tr></thead>`;
   const foot = horizon ? "" : `<tfoot><tr><td class="c-dia" aria-label="total do mês"></td>${cols.map(t => `<td class="cell num tot ${hid[t] ? "col-min" : ""}"><span class="in">${ti(t)}<span class="v">${brl(tot[t])}</span></span></td>`).join("")}<td class="c-saldo foot-blank" aria-label="saldo final: ${fmt(endS)}"></td></tr></tfoot>`;
   return `<div class="mcard ${horizon ? "hcard" : ""}" data-mi="${mi}"><div class="mhead">${horizon ? "" : `${MONTHS[m]} de ${y}`}</div><div class="mbox"><table class="mtable">${head}<tbody>${body}</tbody>${foot}</table></div></div>`;
 }
@@ -1743,7 +1744,7 @@ function mMonthInner(horizon, col) {
   const h2 = horizon ? "h2" : "";
   const tot = { entrada: 0, saida: 0, diario: 0, economia: 0, cartao: 0 };
   const selLabel = col === "all" ? `${ti("all")}todas` : `${ti(col)}${TYPES[col].col}`;
-  let h = `<div class="m-list"><div class="m-headrow ${h2}"><span>dia</span>${horizon ? `<span>saldo</span>` : `<button class="m-sel" id="m-col" aria-haspopup="menu" aria-label="escolher coluna, atual: ${col === "all" ? "todas" : TYPES[col].col}">${selLabel}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button><span>saldo</span>`}</div>`;
+  let h = `<div class="m-list"><div class="m-headrow ${h2}"><span>dia</span>${horizon ? `<span>saldos</span>` : `<button class="m-sel" id="m-col" aria-haspopup="menu" aria-label="escolher coluna, atual: ${col === "all" ? "todas" : TYPES[col].col}">${selLabel}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button><span>saldos</span>`}</div>`;
   for (let d = 1; d <= n; d++) {
     const ds = `${y}-${pad(m + 1)}-${pad(d)}`, o = c.day[ds], wd = new Date(y, m, d).getDay(), s = c.saldo[ds] ?? 0;
     const cls = [(wd === 0 || wd === 6) ? "we" : "", ds === TODAY ? "today" : ""].join(" ");
@@ -2082,9 +2083,9 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
   const perInst = edit && tx.rep === "installment";
   const f = edit ? {
     value: perInst ? (oi ? oi.value : r2(tx.value / (tx.installments || 1))) : tx.value, type: tx.type, desc: tx.desc, date: occD, rep: tx.rep || "none", until: tx.until || "forever",
-    count: tx.count || 2, installments: tx.installments || 2, tags: [...(tx.tags || [])], cardId: tx.cardId || "",
+    count: tx.count || 2, installments: tx.installments || 2, tags: [...(tx.tags || [])], cardId: tx.cardId || defaultCardId(),
     mday: tx.rep === "monthly" && tx.mday ? tx.mday : "same", nth: tx.nth || 5, aday: tx.aday || (tx.date ? +tx.date.slice(8) : 1),
-  } : { value: 0, type, desc: "", date, rep: "none", until: "forever", count: 2, installments: 2, tags: [], cardId: "", mday: "same", nth: 5, aday: +date.slice(8) };
+  } : { value: 0, type, desc: "", date, rep: "none", until: "forever", count: 2, installments: 2, tags: [], cardId: defaultCardId(), mday: "same", nth: 5, aday: +date.slice(8) };
   const isRule = () => f.rep === "monthly" && f.mday !== "same";
   /* data real conforme a regra do dia (usa o mês da data escolhida) */
   const effDate = ds => { if (f.rep !== "monthly" || f.mday === "same") return ds; const d = parse(ds); return ymd(monthDate(f.mday, d.getFullYear(), d.getMonth(), f.aday, f.nth)); };
@@ -2106,7 +2107,7 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
       <div class="frows">
         <button class="frow" id="f-type" aria-haspopup="dialog" aria-label="tipo: ${TYPES[f.type].label}. mudar"><span class="fr-ico">${ti(f.type, true)}</span><span class="fr-main">${TYPES[f.type].label}</span>${CHEV}</button>
         <label class="frow"><span class="fr-ico">${PEN}</span><input class="fr-input" id="f-desc" autocomplete="off" maxlength="80" placeholder="descrição" aria-label="descrição" value="${esc(f.desc)}"></label>
-        ${f.type === "cartao" ? `<button class="frow" id="f-card" aria-haspopup="dialog" aria-label="cartão: ${f.cardId && cardName(f.cardId) ? esc(cardName(f.cardId)) : "escolher"}. mudar"><span class="fr-ico">${I.card.replace("<svg", '<svg width="22" height="22"')}</span><span class="fr-main">cartão</span><span class="fr-val ellip ${f.cardId && cardName(f.cardId) ? "" : "muted"}">${f.cardId && cardName(f.cardId) ? esc(cardName(f.cardId)) : "escolher"}</span>${CHEV}</button>` : ""}
+        ${f.type === "cartao" ? `<button class="frow" id="f-card" aria-haspopup="dialog" aria-label="cartão: ${f.cardId && cardName(f.cardId) ? esc(cardName(f.cardId)) : "nenhum escolhido"}. ${f.cardId && cardName(f.cardId) ? "mudar" : "escolher"}"><span class="fr-ico">${I.card.replace("<svg", '<svg width="22" height="22"')}</span><span class="fr-main ellip ${f.cardId && cardName(f.cardId) ? "" : "fr-ph"}">${f.cardId && cardName(f.cardId) ? esc(cardName(f.cardId)) : "qual cartão?"}</span>${CHEV}</button>` : ""}
         <button class="frow" id="f-date" aria-haspopup="dialog" aria-label="data: ${dBR(effDate(f.date))}. mudar"><span class="fr-ico">${CAL}</span><span class="fr-main">data</span><span class="fr-val num">${dBR(effDate(f.date))}</span>${CHEV}</button>
         <button class="frow" id="f-rep" aria-haspopup="dialog" aria-label="repetição: ${REP_LABEL[f.rep]}. mudar"><span class="fr-ico">${REP_ICO}</span><span class="fr-main">${REP_LABEL[f.rep]}</span>${CHEV}</button>
         ${f.rep === "monthly" ? `<button class="frow" id="f-mday" aria-haspopup="dialog" aria-label="repete no: ${MDAY_LABEL()}. mudar"><span class="fr-ico">${CAL}</span><span class="fr-main">repete no</span><span class="fr-val">${MDAY_LABEL()}</span>${CHEV}</button>` : ""}
@@ -2257,6 +2258,13 @@ function cardSheet(cur, onPick) {
 }
 const cardsSorted = () => [...S.cards].sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
 const cardName = id => (S.cards.find(c => c.id === id) || {}).name || "";
+/* cartão pré-selecionado: o último usado (que ainda existe) ou, se só houver um, ele */
+function defaultCardId() {
+  let best = null;
+  for (const t of S.txs) if (t.type === "cartao" && t.cardId && cardName(t.cardId) && (!best || (t.createdAt || 0) > (best.createdAt || 0))) best = t;
+  if (best) return best.cardId;
+  return S.cards.length === 1 ? S.cards[0].id : "";
+}
 
 
 /* ================= menu ================= */
