@@ -5,10 +5,10 @@
 <style>
 :root{
   color-scheme: dark;
-  --bg:#000000; --surface:#0F0E13; --surface2:#17161C; --surface3:#211F27;
+  --bg:#000000; --surface:#000000; --surface2:#141414; --surface3:#1F1F1F;
   --line:rgba(237,237,238,.11); --line2:rgba(237,237,238,.18);
   --text:#EDEDEE; --muted:#9C9AA6; --zero:#45434E;
-  --weekend:#0A090D; --today-bg:#FFFFFF; --today-fg:#000000; --today-line:#FFFFFF;
+  --weekend:#0D0D0D; --today-bg:#FFFFFF; --today-fg:#000000; --today-line:#FFFFFF;
   --accent:#8A3FD9; --accent-soft:rgba(138,63,217,.18);
   --pos:#223A6B; --pos-fg:#B4CFFF; --zero-s:#56400F; --zero-fg:#FFD86A; --neg1:#53222A; --neg1-fg:#FFB8BD; --neg2:#7C2330; --neg2-fg:#FFDDE0; --on-color:#FFFFFF;
   --c-entrada:#2F66E0; --c-saida:#EF4B4F; --c-diario:#EC5DA8; --c-economia:#4DB6F7; --c-cartao:#7A22C8;
@@ -22,10 +22,10 @@
 :root.light{
   color-scheme: light;
   --screen:#FFFFFF;
-  --bg:#FFFFFF; --surface:#F3F3F5; --surface2:#EBEBEF; --surface3:#E1E2E7;
+  --bg:#FFFFFF; --surface:#FFFFFF; --surface2:#F3F3F5; --surface3:#E9E9EC;
   --line:rgba(29,31,35,.09); --line2:rgba(29,31,35,.16);
   --text:#1D1F23; --muted:#686D76; --zero:#B8BCC4;
-  --weekend:#E4E5E9; --today-bg:#1D1F23; --today-fg:#FFFFFF; --today-line:#1D1F23;
+  --weekend:#F3F3F5; --today-bg:#1D1F23; --today-fg:#FFFFFF; --today-line:#1D1F23;
   --logo-a:#820AD1; --logo-b:#820AD1;
   --pos:#DCE7FA; --pos-fg:#2F5DA8; --zero-s:#FBE3A1; --zero-fg:#5C4700; --neg1:#F8DADB; --neg1-fg:#9B3336; --neg2:#F0B3B5; --neg2-fg:#7E1F22;
   --c-economia:#34A6EE; --c-entrada:#2458C9; --c-cartao:#6A14B8; --accent:#820AD1; --accent-soft:rgba(130,10,209,.10);
@@ -239,8 +239,8 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .ti-diario{color:var(--c-diario);background:color-mix(in srgb,var(--c-diario) 18%,transparent)}
 .ti-economia{color:var(--c-economia);background:color-mix(in srgb,var(--c-economia) 18%,transparent)}
 .ti-cartao{color:var(--c-cartao);background:color-mix(in srgb,var(--c-cartao) 18%,transparent)}
-.ti-all{color:#000000;background:#FFFFFF}
-:root.light .ti-all{color:#FFFFFF;background:#000000}
+.ti-all{color:#FFFFFF;background:#000000}
+:root.light .ti-all{color:#000000;background:#FFFFFF}
 .ti-prev{color:var(--c-diario);border:1.5px dashed var(--c-diario)}
 .ti{font-style:normal}
 .ti.lg{width:16px;height:16px;border-radius:50%}
@@ -680,6 +680,10 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 @keyframes rise{from{opacity:0;transform:translateY(22px) scale(.97)}}
 .rise{animation:rise .62s var(--ease-out) both;animation-delay:calc(var(--i,0) * 38ms)}
 .mcard.rise{animation-name:riseX;animation-duration:.7s}
+@keyframes hzEnter{from{opacity:0;transform:scale(.965)}}
+@keyframes hzLeave{from{opacity:0;transform:scale(1.03)}}
+.view.hz-enter{animation:hzEnter .42s var(--ease-out);transform-origin:50% 0}
+.view.hz-leave{animation:hzLeave .42s var(--ease-out);transform-origin:50% 0}
 @keyframes riseX{from{opacity:0;transform:translateX(40px) scale(.98)}}
 @keyframes slideL{from{transform:translateX(38%);opacity:0}}
 @keyframes slideR{from{transform:translateX(-38%);opacity:0}}
@@ -1421,7 +1425,17 @@ const HZ_END = CUR + 11;
 const isHz = () => UI.tab === "horizonte";
 function resetBoard() { UI.bStart = CUR; UI.bEnd = CUR + 11; UI.hzS = CUR; }
 
-function goTab(tab) { UI.tab = tab; closePopover(); resetBoard(); $("#view").dataset.tab = ""; render(); }
+function goTab(tab) {
+  const from = UI.tab;
+  UI.tab = tab; closePopover(); resetBoard(); $("#view").dataset.tab = ""; render();
+  // saldos ⇄ horizonte: a tela entra com um leve zoom e as linhas sobem em sequência
+  if ((from === "saldos" && tab === "horizonte") || (from === "horizonte" && tab === "saldos")) {
+    const v = $("#view"); v.classList.remove("hz-enter", "hz-leave"); void v.offsetWidth;
+    v.classList.add(tab === "horizonte" ? "hz-enter" : "hz-leave");
+    v.addEventListener("animationend", function done(e) { if (e.target === v) { v.classList.remove("hz-enter", "hz-leave"); v.removeEventListener("animationend", done); } });
+    stagger($$(isMobile() ? (tab === "horizonte" ? ".pane.cur .hz-row" : ".pane.cur .m-day") : ".mcard", v), 30, 14);
+  }
+}
 function goToday() {
   UI.tab = "saldos"; UI.tMonth = CUR; resetBoard(); $("#view").dataset.tab = "";
   renderAll();
