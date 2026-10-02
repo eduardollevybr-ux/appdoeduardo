@@ -140,6 +140,8 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .sheet .modal-body{padding:0 0 calc(18px + env(safe-area-inset-bottom,0px));gap:0}
 .sheet .modal-body>.btn{margin:8px 20px 0;width:calc(100% - 40px);height:52px}
 .slist{display:flex;flex-direction:column}
+.sheet-new{display:flex;flex-direction:column;gap:12px;padding:18px 20px 0}
+.sheet .modal-body>.sheet-new>.btn{margin:0;width:100%;height:52px}
 .sitem{display:flex;align-items:center;gap:14px;width:100%;padding:18px 20px;border-bottom:1px solid var(--line2);text-align:left;cursor:pointer}
 @media (hover:hover){.sitem:hover{background:var(--surface2)}}
 .sitem.on .si-txt b{color:var(--accent)}
@@ -744,7 +746,6 @@ input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:tex
 @media (max-width:700px){ .page{overflow-x:hidden} }
 @supports not (overflow-x: clip){ .pager{overflow:hidden} .page.page-flush{overflow-x:hidden} }
 #net-pill{position:fixed;top:calc(env(safe-area-inset-top,0px) + 8px);left:50%;transform:translateX(-50%);z-index:95;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;pointer-events:none;background:var(--surface3);color:var(--muted);border:1px solid var(--line2);box-shadow:var(--shadow);animation:pop .2s ease}
-#net-pill.sync{background:var(--accent-soft);color:var(--text);border-color:transparent}
 
 /* toque: destaque só enquanto o dedo está pressionando (nada de cinza "preso" depois de soltar) */
 @media (hover:none){
@@ -955,7 +956,7 @@ let NET = { offline: !isOnline(), dirty: false };
 function setNet(p) { Object.assign(NET, p); renderNet(); }
 function renderNet() {
   let el = document.getElementById("net-pill");
-  const txt = NET.offline ? "sem internet · salvo no aparelho" : (NET.dirty ? "sincronizando…" : "");
+  const txt = NET.offline ? "sem internet · salvo no aparelho" : "";
   if (!txt) { if (el) el.remove(); return; }
   if (!el) { el = document.createElement("div"); el.id = "net-pill"; el.setAttribute("role", "status"); document.body.appendChild(el); }
   el.className = NET.offline ? "off" : "sync";
@@ -2070,6 +2071,7 @@ function renderPanel() {
       <div class="ph-right"><button class="icon-btn flat" data-pedit aria-label="editar movimentação">${I.pencil}</button><button class="icon-btn flat" data-pdel aria-label="apagar movimentação" style="color:var(--c-saida)">${I.trash}</button></div>`;
     body = `<dl class="detail-grid">
       <dt>tipo</dt><dd>${ti(tx.type, true)} ${TYPES[tx.type].label}</dd>
+      ${tx.type === "cartao" ? `<dt>cartão</dt><dd>${cardName(tx.cardId) ? esc(cardName(tx.cardId)) : `<span class="muted">sem cartão</span>`}</dd>` : ""}
       <dt>nome</dt><dd>${esc(tx.desc)}</dd>
       <dt>valor</dt><dd class="num">${brl(occ.value)}</dd>
       <dt>data</dt><dd class="num">${dBR(occ.date)}</dd>
@@ -2233,6 +2235,7 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
       ${inst ? `<p class="f-hint num">${pi ? `valor de cada parcela` : `${f.installments}x de ${brl(f.value / f.installments)}`}</p>` : ""}
       <div class="frows">
         <button class="frow" id="f-type" aria-haspopup="dialog" aria-label="tipo: ${TYPES[f.type].label}. mudar">${ti(f.type, true)}<span class="fr-main">${TYPES[f.type].label}</span>${CHEV}</button>
+        ${f.type === "cartao" ? `<button class="frow" id="f-card" aria-haspopup="dialog" aria-label="cartão: ${f.cardId && cardName(f.cardId) ? esc(cardName(f.cardId)) : "escolher"}. mudar"><span class="fr-ico">${I.card.replace("<svg", '<svg width="22" height="22"')}</span><span class="fr-main">cartão</span><span class="fr-val ellip ${f.cardId && cardName(f.cardId) ? "" : "muted"}">${f.cardId && cardName(f.cardId) ? esc(cardName(f.cardId)) : "escolher"}</span>${CHEV}</button>` : ""}
         <label class="frow"><span class="fr-ico">${PEN}</span><input class="fr-input" id="f-desc" autocomplete="off" maxlength="80" placeholder="descrição" aria-label="descrição" value="${esc(f.desc)}"></label>
         <button class="frow" id="f-date" aria-haspopup="dialog" aria-label="data: ${dBR(f.date)}. mudar"><span class="fr-ico">${CAL}</span><span class="fr-main">data</span><span class="fr-val num">${dNum(effDate(f.date))}</span>${CHEV}</button>
         <button class="frow" id="f-rep" aria-haspopup="dialog" aria-label="repetição: ${REP_LABEL[f.rep]}. mudar"><span class="fr-ico">${REP_ICO}</span><span class="fr-main">${REP_LABEL[f.rep]}</span>${CHEV}</button>
@@ -2261,6 +2264,7 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
     const t = e.target;
     const ins = t.closest("[data-inst]"); if (ins) { f.installments = Math.max(2, Math.min(120, f.installments + +ins.dataset.inst)); return draw(); }
     if (t.closest("#f-type")) listSheet("tipo", TYPE_ORDER.map(k => [k, TYPES[k].label, "", ti(k, true)]), f.type, k => { f.type = k; draw(); });
+    if (t.closest("#f-card")) cardSheet(f.cardId, id => { f.cardId = id; draw(); });
     if (t.closest("#f-date")) datePicker(null, effDate(f.date), v => { f.date = v; f.aday = +v.slice(8); draw(); });
     if (t.closest("#f-mday")) {
       const day = f.mday === "biz" ? f.aday : +f.date.slice(8);
@@ -2300,10 +2304,11 @@ function openForm({ type = "saida", date = TODAY, tx = null, occ = null } = {}) 
   });
   async function submit() {
     if (!(f.value > 0)) { toast("coloca um valor maior que zero", true); $("#f-val", el)?.focus(); return; }
+    if (f.type === "cartao" && !(f.cardId && cardName(f.cardId))) { toast("escolhe o cartão desse gasto", true); cardSheet(f.cardId, id => { f.cardId = id; draw(); }); return; }
     if (f.date < miFirst(MIN_MI) || f.date > miLast(MAX_MI)) { toast("a data precisa estar dentro de 5 anos pra trás ou pra frente", true); return; }
     const desc = f.desc.trim() || TYPES[f.type].label;
     const rule = isRule();
-    const base = { type: f.type, desc, rep: f.rep, until: f.until, count: f.count, installments: f.installments, tags: [], cardId: "", skip: [], endBefore: null, mday: rule ? f.mday : "same", nth: rule && f.mday === "nth" ? f.nth : null, aday: rule && f.mday === "biz" ? f.aday : null };
+    const base = { type: f.type, desc, rep: f.rep, until: f.until, count: f.count, installments: f.installments, tags: [], cardId: f.type === "cartao" ? f.cardId : "", skip: [], endBefore: null, mday: rule ? f.mday : "same", nth: rule && f.mday === "nth" ? f.nth : null, aday: rule && f.mday === "biz" ? f.aday : null };
     const fDate = effDate(f.date);
     const stored = (v, rep, n) => rep === "installment" && perInst ? r2(v * n) : r2(v);
     const msgOk = edit ? "edição salva" : `${TYPES[f.type].label} adicionad${f.type === "entrada" || f.type === "saida" || f.type === "economia" ? "a" : "o"}`.replace("gastos com cartão adicionado", "gasto com cartão adicionado");
@@ -2368,38 +2373,30 @@ function datePicker(anchor, value, onPick) {
     if (e.target.closest("[data-dsave]")) { s.close(); onPick(sel); }
   });
 }
-function cardPicker(anchor, f, draw) {
-  const html = () => `<div style="padding:4px">${S.cards.length ? S.cards.map(c => `<button class="pop-item" data-card="${c.id}">${I.card.replace("<svg", '<svg width="18" height="18"')}<span class="grow ellip">${esc(c.name)}</span><span class="hint">fecha ${c.closing} · vence ${c.due}</span></button>`).join("") : `<div class="hint" style="padding:10px 14px">nenhum cartão cadastrado ainda</div>`}
-    <button class="pop-item" data-newcard style="color:var(--accent)">${I.plus.replace("<svg", '<svg width="18" height="18"')}criar cartão</button>
-    <div class="inline-box" id="nc" hidden style="margin:6px">${cardFields("nc")}<button class="btn primary sm" data-savecard>criar cartão</button></div></div>`;
-  openPopover(anchor, html(), {
-    width: Math.max(300, anchor.offsetWidth), onMount: el => el.addEventListener("click", async e => {
-      const c = e.target.closest("[data-card]"); if (c) { f.cardId = c.dataset.card; closePopover(); draw(); return; }
-      if (e.target.closest("[data-newcard]")) { $("#nc", el).hidden = false; $("#nc-name", el).focus(); return; }
-      if (e.target.closest("[data-savecard]")) {
-        const card = readCardFields(el, "nc"); if (!card) return;
-        const id = uid("c"); await backend.put("cards", id, card); f.cardId = id; closePopover(); draw(); toast("cartão criado");
-      }
-    })
+// escolher o cartão do lançamento (ou cadastrar um na hora, só com o nome)
+function cardSheet(cur, onPick) {
+  const s = openSheet({ title: "cartão", body: `${S.cards.length ? `<div class="slist">${cardsSorted().map(c => `<button class="sitem ${c.id === cur ? "on" : ""}" data-card="${c.id}"><span class="si-ico">${ti("cartao", true)}</span><span class="si-txt"><b class="ellip">${esc(c.name)}</b></span></button>`).join("")}</div>` : ""}
+    <div class="sheet-new"><div class="field"><label for="nc-name">${S.cards.length ? "ou cadastre um novo" : "cadastre seu primeiro cartão"}</label><input class="input" id="nc-name" autocomplete="off" maxlength="40" placeholder="nome do cartão, ex.: nubank"></div>
+    <button class="btn block primary" data-savecard>cadastrar e usar</button></div>` });
+  s.el.addEventListener("click", async e => {
+    const c = e.target.closest("[data-card]"); if (c) { s.close(); onPick(c.dataset.card); return; }
+    if (e.target.closest("[data-savecard]")) {
+      const name = $("#nc-name", s.el).value.trim();
+      if (!name) { toast("dá um nome pro cartão", true); $("#nc-name", s.el).focus(); return; }
+      if (S.cards.some(x => x.name.toLowerCase() === name.toLowerCase())) { toast("já tem um cartão com esse nome", true); return; }
+      const id = uid("c"); await backend.put("cards", id, { name, createdAt: Date.now() }); s.close(); onPick(id);
+    }
   });
 }
-function cardFields(p, c = {}) {
-  return `<div class="field"><label for="${p}-name">nome do cartão</label><input class="input" id="${p}-name" autocomplete="off" maxlength="40" value="${esc(c.name || "")}" placeholder="ex.: nubank"></div>
-    <div class="two"><div class="field"><label for="${p}-cl">dia do fechamento</label><input class="input num" id="${p}-cl" autocomplete="off" type="number" min="1" max="31" value="${c.closing || ""}"></div>
-    <div class="field"><label for="${p}-due">dia do vencimento</label><input class="input num" id="${p}-due" autocomplete="off" type="number" min="1" max="31" value="${c.due || ""}"></div></div>`;
-}
-function readCardFields(el, p) {
-  const name = $(`#${p}-name`, el).value.trim(), closing = +$(`#${p}-cl`, el).value, due = +$(`#${p}-due`, el).value;
-  if (!name) { toast("dá um nome pro cartão", true); return null; }
-  if (!(closing >= 1 && closing <= 31) || !(due >= 1 && due <= 31)) { toast("os dias precisam ser de 1 a 31", true); return null; }
-  return { name, closing, due, createdAt: Date.now() };
-}
+const cardsSorted = () => [...S.cards].sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+const cardName = id => (S.cards.find(c => c.id === id) || {}).name || "";
 
 
 /* ================= menu ================= */
 const MENU = [
   ["perfil", "editar perfil", "user"],
   ["prev", "previsão de diário", null],
+  ["cartoes", "cartões", "card"],
   ["config", "configurações", "gear"],
   ["sair", "sair", "out"],
 ];
@@ -2419,7 +2416,7 @@ $("#view").addEventListener("click", e => {
   const b = e.target.closest("[data-menu]"); if (!b) return;
   const k = b.dataset.menu;
   ({
-    perfil: openProfile, prev: openPrevModal, config: openConfig,
+    perfil: openProfile, prev: openPrevModal, cartoes: openCards, config: openConfig,
     sair: signOut,
   })[k]();
 });
@@ -2488,25 +2485,40 @@ function openPrevModal() {
 }
 
 function openCards() {
-  const m = openModal({ title: "cartões de crédito", body: "" });
-  let editing = null;
+  const m = openModal({ title: "cartões", body: "" });
+  let editing = null, draft = "";
   const draw = () => {
-    m.setBody(`<div class="mgroup">${S.cards.length ? S.cards.map(c => `<div class="mrow">${I.card.replace("<svg", '<svg width="20" height="20" style="flex:none;color:var(--c-cartao)"')}<span class="grow"><span class="ellip" style="display:block;font-weight:600">${esc(c.name)}</span><span class="hint">fecha dia ${c.closing} · vence dia ${c.due}</span></span>
-      <button class="dots" data-editcard="${c.id}" aria-label="editar ${esc(c.name)}">${I.pencil.replace("<svg", '<svg width="16" height="16"')}</button><button class="dots" data-delcard="${c.id}" aria-label="apagar ${esc(c.name)}" style="color:var(--c-saida)">${I.trash.replace("<svg", '<svg width="16" height="16"')}</button></div>`).join("") : `<div class="mrow empty-row">nenhum cartão cadastrado ainda</div>`}</div>
-      <div class="inline-box"><strong>${editing ? "editar cartão" : "novo cartão"}</strong>${cardFields("cc", editing ? S.cards.find(c => c.id === editing) : {})}
-      <div style="display:flex;gap:8px">${editing ? `<button class="btn" data-cancelcard>cancelar</button>` : ""}<button class="btn primary" data-savecc style="flex:1">${editing ? "salvar edição" : "adicionar cartão"}</button></div></div>`);
+    const ed = editing && S.cards.find(c => c.id === editing);
+    m.setBody(`<p class="mintro">cadastre seus cartões pra escolher em qual foi cada gasto com cartão.</p>
+      <div class="field"><span class="flabel">cartões cadastrados</span><div class="mgroup">${S.cards.length ? cardsSorted().map(c => {
+        const n = S.txs.filter(t => t.cardId === c.id).length;
+        return `<div class="mrow">${ti("cartao")}<span class="grow"><b class="ellip">${esc(c.name)}</b><span class="hint">${n ? `${n} ${n === 1 ? "lançamento" : "lançamentos"}` : "nenhum lançamento"}</span></span>
+        <button class="dots" data-editcard="${c.id}" aria-label="editar ${esc(c.name)}">${I.pencil.replace("<svg", '<svg width="16" height="16"')}</button><button class="dots" data-delcard="${c.id}" aria-label="apagar ${esc(c.name)}" style="color:var(--c-saida)">${I.trash.replace("<svg", '<svg width="16" height="16"')}</button></div>`;
+      }).join("") : `<div class="mrow empty-row">nenhum cartão cadastrado ainda</div>`}</div></div>
+      <div class="msec"><h3>${ed ? "editar cartão" : "adicionar cartão"}</h3>
+      <div class="field"><label for="cc-name">nome do cartão</label><input class="input" id="cc-name" autocomplete="off" maxlength="40" placeholder="ex.: nubank" value="${esc(ed ? ed.name : draft)}"></div>
+      ${ed ? `<div class="two"><button class="btn block" data-cancelcard>cancelar</button><button class="btn primary block" data-savecc>salvar</button></div>` : `<button class="btn primary block" data-savecc>adicionar cartão</button>`}</div>`);
   };
   draw();
+  m.el.addEventListener("input", e => { if (e.target.id === "cc-name" && !editing) draft = e.target.value; });
   m.el.addEventListener("click", async e => {
     if (e.target.closest("[data-savecc]")) {
-      const c = readCardFields(m.el, "cc"); if (!c) return;
-      await backend.put("cards", editing || uid("c"), editing ? { ...c, createdAt: S.cards.find(x => x.id === editing)?.createdAt || Date.now() } : c);
-      toast(editing ? "cartão salvo" : "cartão adicionado"); editing = null; setTimeout(draw, 60);
+      const name = $("#cc-name", m.el).value.trim();
+      if (!name) { toast("dá um nome pro cartão", true); $("#cc-name", m.el).focus(); return; }
+      if (S.cards.some(x => x.id !== editing && x.name.toLowerCase() === name.toLowerCase())) { toast("já tem um cartão com esse nome", true); return; }
+      const old = editing && S.cards.find(c => c.id === editing);
+      await backend.put("cards", editing || uid("c"), { name, createdAt: old ? old.createdAt || Date.now() : Date.now() });
+      editing = null; draft = ""; setTimeout(draw, 60);
     }
-    const ed = e.target.closest("[data-editcard]"); if (ed) { editing = ed.dataset.editcard; draw(); }
+    const ed = e.target.closest("[data-editcard]"); if (ed) { editing = ed.dataset.editcard; draw(); $("#cc-name", m.el)?.focus(); }
     if (e.target.closest("[data-cancelcard]")) { editing = null; draw(); }
     const d = e.target.closest("[data-delcard]");
-    if (d) { await backend.del("cards", d.dataset.delcard); toast("cartão apagado"); setTimeout(draw, 60); }
+    if (d) {
+      const c = S.cards.find(x => x.id === d.dataset.delcard); if (!c) return;
+      const n = S.txs.filter(t => t.cardId === c.id).length;
+      if (!(await confirmBox({ title: "apagar cartão?", text: n ? `"${esc(c.name)}" vai sumir. ${n === 1 ? "o gasto continua" : `os ${n} gastos continuam`}, só que sem cartão.` : `"${esc(c.name)}" vai sumir da lista.`, ok: "apagar" }))) return;
+      await backend.del("cards", c.id); if (editing === c.id) editing = null; setTimeout(draw, 60);
+    }
   });
 }
 
